@@ -4,22 +4,21 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Iniciar Sesión</title>
+    <link rel="stylesheet" href="estilosiniciosesion.css">
 </head>
 <body>
     <!-- Logo parte superior -->
-    <div id="logo-bar" style="position: absolute; top: 10px; left: 10px; display: flex; align-items: center;">
-        
-<img id="logo" src="/recursos/imagenes/logo.jpeg" alt="Logo" width="40" height="40" />
+    <div id="logo-bar">
+        <img id="logo" src="/recursos/imagenes/logo.jpeg" alt="Logo" />
         <div id="brand-name">Venta de Equipos Tecnológicos</div>
     </div>
     <br>
 
-
     <!-- Formulario de inicio de sesión -->
-    <div id="login-container" style="border: 1px solid #ccc; padding: 20px; width: 300px; margin: 30px auto; border-radius: 10px; box-shadow: 0 0 10px rgba(0,0,0,0.1);">
+    <div id="login-container">
         <h2>Inicia Sesión en <br> Nuestra Tienda</h2>
 
- <label for="username">Usuario o correo electrónico:</label>
+        <label for="username">Usuario o correo electrónico:</label>
         <input type="text" id="username" />
         <br>
 
@@ -30,7 +29,7 @@
         <input type="password" id="password" />
         <br><br>
 
-        <button id="sign-in-btn" style="display: block; margin: 0 auto;">Iniciar Sesión</button>
+        <button id="sign-in-btn">Iniciar Sesión</button>
 
         <p>¿Primera vez? <a href="/registro.html" id="crear-cuenta">Registrarme</a></p>
     </div>
