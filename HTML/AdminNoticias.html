@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Admin Noticias</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"/>
+  <link rel="stylesheet" href="/CSS/nuevoestilo.css"/>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+  <div class="d-flex dashboard-bg">
+    <!-- Sidebar -->
+    <div class="sidebar d-flex flex-column align-items-center">
+      <div class="admin-photo mb-3"></div>
+      <h5 class="text-white">Sergio Cutti</h5>
+      <nav class="mt-4 w-100 px-3">
+        <a href="#" class="nav-link active" onclick="showSection('usuarios')">Usuarios</a>
+        <a href="#" class="nav-link" onclick="showSection('juegos')">Juegos</a>
+        <a href="#" class="nav-link" onclick="showSection('noticias')">Noticias</a>
+        <a href="#" class="nav-link" onclick="showSection('estadisticas')">Estadísticas</a>
+        <a href="#" class="nav-link mt-auto">Cerrar sesión</a>
+      </nav>
+    </div>
+
+    <!-- Main Content -->
+    <div class="content flex-grow-1">
+      <!-- Sección Usuarios -->
+      <section id="usuarios" class="admin-section d-none">
+  <h2>Usuarios</h2>
+
+  <div class="row mt-4">
+    <div class="col-md-4">
+      <div class="card shadow-sm text-center">
+        <div class="card-body">
+          <h5 class="card-title">Total de Usuarios</h5>
+          <p id="userCount" class="display-6 fw-bold text-primary">0</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+      <!-- Sección Juegos -->
+      <section id="juegos" class="admin-section d-none">
+        <div class="d-flex align-items-center mb-3">
+          <h2 class="me-auto mb-0">Juegos</h2>
+          <div class="d-flex gap-2">
+            <button id="filterGamesBtn" class="btn btn-outline-secondary">Filtrar Juegos</button>
+            <button id="addGameBtn" class="btn btn-success">Añadir Juego</button>
+          </div>
+        </div>
+
+        <!-- Tabla de Juegos -->
+        <div class="table-responsive">
+          <table class="table table-bordered table-striped text-center bg-white">
+            <thead class="table-light">
+              <tr>
+                <th>Nombre</th>
+                <th>Categoría</th>
+                <th>Fecha Lanzamiento</th>
+                <th>Acciones</th>
+              </tr>
+            </thead>
+            <tbody id="gamesTableBody">
+              <!-- Juegos añadidos dinámicamente -->
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- Sección Noticias -->
+      <section id="noticias" class="admin-section d-none">
+        <div class="header-news">
+          <h2>Noticias</h2>
+          <button id="addNewsBtn" class="btn btn-success">Añadir Noticia</button>
+        </div>
+        <div class="table-responsive">
+          <table class="table table-bordered table-striped text-center bg-white">
+            <thead class="table-light">
+              <tr>
+                <th>Titulo</th>
+                <th>Fecha</th>
+                <th>Estado</th>
+                <th>Acciones</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>¡Nuevo juego lanzado!</td>
+                <td>10/05/2025</td>
+                <td>Publicada</td>
+                <td>
+                  <button class="btn btn-sm btn-primary me-2"
+                    onclick="openEditNewsModal(1, '¡Nuevo juego lanzado!', 'Contenido de la noticia sobre el nuevo juego.', this.closest('tr'))">Editar</button>
+                  <button class="btn btn-sm btn-danger"
+                    onclick="openDeleteNewsConfirmModal(1, this.closest('tr'))">Borrar</button>
+                </td>
+              </tr>
+              <tr>
+                <td>Descuentos de verano</td>
+                <td>01/05/2025</td>
+                <td>Publicada</td>
+                <td>
+                  <button class="btn btn-sm btn-primary me-2"
+                    onclick="openEditNewsModal(2, 'Descuentos de verano', 'Contenido de la noticia de descuentos de verano.', this.closest('tr'))">Editar</button>
+                  <button class="btn btn-sm btn-danger"
+                    onclick="openDeleteNewsConfirmModal(2, this.closest('tr'))">Borrar</button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- Sección Estadísticas -->
+      <section id="estadisticas" class="admin-section d-none">
+        <h2>Estadísticas</h2>
+
+        <div class="row">
+          <div class="col-md-6 mb-4">
+            <h5>Juegos por Categoría</h5>
+            <canvas id="gamesByCategoryChart" height="200"></canvas>
+          </div>
+          <div class="col-md-6 mb-4">
+            <h5>Noticias por Mes</h5>
+            <canvas id="newsByMonthChart" height="200"></canvas>
+          </div>
+        </div>
+      </section>
+    </div>
+  </div>
+
+  <!-- Modal Editar Noticia -->
+  <div id="editNewsModal" class="modal-custom" onclick="closeModal(event, 'editNewsModal')">
+    <div class="modal-content-custom" onclick="event.stopPropagation()">
+      <h3>Editar Noticia</h3>
+      <form id="editNewsForm">
+        <input type="hidden" id="editNewsId" />
+        <div class="mb-3">
+          <label for="editNewsTitle" class="form-label">Título</label>
+          <input type="text" id="editNewsTitle" class="form-control" required />
+        </div>
+        <div class="mb-3">
+          <label for="editNewsContent" class="form-label">Contenido</label>
+          <textarea id="editNewsContent" class="form-control" rows="4" required></textarea>
+        </div>
+        <button type="submit" class="btn btn-primary">Guardar Cambios</button>
+        <button type="button" class="btn btn-secondary ms-2" onclick="closeModal(null, 'editNewsModal')">Cancelar</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- Modal Confirmar Borrar Noticia -->
+  <div id="deleteNewsConfirmModal" class="modal-custom" onclick="closeModal(event, 'deleteNewsConfirmModal')">
+    <div class="modal-content-custom" onclick="event.stopPropagation()">
+      <h3>Confirmar Eliminación</h3>
+      <p>¿Estás seguro de que deseas eliminar esta noticia?</p>
+      <button id="confirmDeleteNewsBtn" class="btn btn-danger">Sí, eliminar</button>
+      <button type="button" class="btn btn-secondary ms-2" onclick="closeModal(null, 'deleteNewsConfirmModal')">Cancelar</button>
+    </div>
+  </div>
+
+  <!-- Modal Añadir Juego -->
+  <div id="addGameModal" class="modal-custom" onclick="closeModal(event, 'addGameModal')">
+    <div class="modal-content-custom" onclick="event.stopPropagation()">
+      <h3>Añadir Juego</h3>
+      <form id="addGameForm">
+        <div class="mb-3">
+          <label for="gameName" class="form-label">Nombre del Juego</label>
+          <input type="text" id="gameName" class="form-control" required />
+        </div>
+        <div class="mb-3">
+          <label for="gameCategory" class="form-label">Categoría</label>
+          <input type="text" id="gameCategory" class="form-control" required />
+        </div>
+        <div class="mb-3">
+          <label for="gameReleaseDate" class="form-label">Fecha de Lanzamiento</label>
+          <input type="date" id="gameReleaseDate" class="form-control" required />
+        </div>
+        <button type="submit" class="btn btn-primary">Guardar</button>
+        <button type="button" class="btn btn-secondary ms-2" onclick="closeModal(null, 'addGameModal')">Cancelar</button>
+      </form>
+    </div>
+  </div>
+
+  <script src="/JS/script.js"></script>
+</body>
+</html>

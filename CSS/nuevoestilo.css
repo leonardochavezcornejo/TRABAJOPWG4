@@ -1,0 +1,136 @@
+:root {
+  --dark-blue: #1e1e2f;
+  --light-box: #f0f4f8;
+  --link-blue: #3f51b5;
+}
+
+body, html {
+  margin: 0;
+  height: 100%;
+  font-family: Arial, sans-serif;
+}
+
+.dashboard-bg {
+  background-color: var(--dark-blue);
+  height: 100vh;
+  display: flex;
+}
+
+.sidebar {
+  width: 220px;
+  background-color: #6c757d; /* gris oscuro */
+  min-height: 100vh;
+  color: white;
+  padding: 15px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.admin-photo {
+  width: 100px;
+  height: 100px;
+  background-color: #bbb;
+  border-radius: 50%;
+  margin-bottom: 1rem;
+}
+
+.nav-link {
+  color: #ccc;
+  padding: 10px;
+  border-radius: 5px;
+  margin-bottom: 5px;
+  display: block;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.nav-link.active,
+.nav-link:hover {
+  background-color: #444;
+  color: white;
+}
+
+.content {
+  flex-grow: 1;
+  padding: 40px;
+  background-color: var(--light-box);
+  color: #1a1a1a;
+  overflow-y: auto;
+}
+
+/* Ocultar secciones */
+.d-none {
+  display: none !important;
+}
+
+/* Modal general */
+.modal-custom {
+  display: none;
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  background: rgba(0, 0, 0, 0.6);
+  z-index: 1000;
+  overflow-y: auto;
+  align-items: center;
+  justify-content: center;
+}
+
+.modal-content-custom {
+  background: #fff;
+  margin: 50px auto;
+  padding: 20px;
+  border-radius: 10px;
+  width: 90%;
+  max-width: 600px;
+  box-shadow: 0 0 15px rgba(0, 0, 0, 0.3);
+}
+
+/* Encabezado sección Noticias */
+.header-news {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+/* Juegos: contenedor título + botones */
+#juegos .d-flex.align-items-center {
+  margin-bottom: 1rem;
+}
+
+/* Sin margen en título para alinear */
+#juegos h2 {
+  margin: 0;
+}
+
+/* Espaciado entre botones */
+#juegos .d-flex.gap-2 > * {
+  margin-left: 0.5rem;
+}
+
+#juegos .d-flex.gap-2 > *:first-child {
+  margin-left: 0;
+}
+
+/* Tabla responsive */
+.table-responsive {
+  overflow-x: auto;
+}
+
+/* Alinear verticalmente celdas en tabla de juegos */
+#gamesTableBody td,
+#gamesTableBody th {
+  vertical-align: middle;
+}
+
+/* Estadísticas: opcional, espacio entre gráficas */
+#estadisticas .row > div {
+  padding: 1rem;
+}
+/* Tarjeta de contador de usuarios */
+#usuarios .card {
+  border-radius: 12px;
+  background-color: #ffffff;
+}
