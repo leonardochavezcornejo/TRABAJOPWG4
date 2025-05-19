@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Detalles del Juego</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <link rel="stylesheet" href="/CSS/estilo14.css">
+</head>
+<body>
+  <div class="container my-5">
+    <div class="row">
+      <div class="col-md-6">
+        <h2 id="gameTitle" class="text-center mb-3">Left 4 dead 2</h2>
+        <div class="d-flex justify-content-center mb-3">
+          <img id="mainImage" src="/img/game3.jpeg" class="img-fluid rounded" style="height: 300px; object-fit: cover;" alt="Imagen principal del juego" />
+        </div>
+        <div id="thumbnails" class="d-flex justify-content-center mb-3">
+          <img src="/img/game3.jpeg" class="selected" alt="Miniatura 1" onclick="changeMainImage(this)" />
+          <img src="/img/game3_1.jpg" alt="Miniatura 2" onclick="changeMainImage(this)" />
+          <img src="/img/game3_2.jpg" alt="Miniatura 3" onclick="changeMainImage(this)" />
+        </div>
+        <div class="text-center my-3">
+          <div class="d-flex justify-content-center align-items-center mb-2">
+            <span class="me-2">Valoración:</span>
+            <div id="gameRating" class="text-warning fs-4">★★★★☆</div>
+            <span id="ratingValue" class="ms-2">(4.0)</span>
+          </div>
+          <button class="btn btn-primary w-100" onclick="mostrarMensajeCarga()">Jugar ahora</button>
+        </div>
+        <div id="mensajeCarga" class="text-center mt-3 fw-bold text-primary" style="display: none;">
+        Juego cargando...
+        </div>
+      </div>
+
+      <div class="col-md-6">
+        <h4>Descripción</h4>
+        <p id="gameDescription" class="mb-4">
+          Juego cooperativo de disparos en primera persona donde tú y tus amigos deberán sobrevivir a hordas de infectados. Con modos de juego variados.
+        </p>
+
+        <h4>Reseñas de usuarios</h4>
+        <div id="gameReviews" class="mb-4">
+          <p><strong>Juan:</strong> Después de tantos años sigue siendo el mejor juego cooperativo. Las partidas con amigos son épicas.</p>
+          <p><strong>Ana:</strong> Divertido pero necesita una actualización gráfica. La comunidad sigue activa después de todos estos años.</p>
+        </div>
+
+        <h5>Agregar tu reseña</h5>
+        <div class="mb-3">
+          <input type="text" id="userName" class="form-control mb-2" placeholder="Tu nombre" />
+          <textarea id="userComment" class="form-control mb-2" placeholder="Tu reseña" rows="3"></textarea>
+          <div class="star-rating mb-2">
+            <span class="star" onclick="rateGame(1)">☆</span>
+            <span class="star" onclick="rateGame(2)">☆</span>
+            <span class="star" onclick="rateGame(3)">☆</span>
+            <span class="star" onclick="rateGame(4)">☆</span>
+            <span class="star" onclick="rateGame(5)">☆</span>
+          </div>
+          <button class="btn btn-primary w-100" onclick="submitReview()">Enviar reseña</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <script src="/JS/JugaryReseña.js" defer></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js" defer></script>
+</body>
+</html>

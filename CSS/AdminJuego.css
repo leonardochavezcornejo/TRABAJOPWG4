@@ -1,0 +1,13 @@
+body {
+  background-color: #f8f9fa;
+}
+
+.admin-panel {
+  max-width: 900px;
+  margin: 40px auto;
+}
+
+.table thead {
+  background-color: #343a40;
+  color: white;
+}

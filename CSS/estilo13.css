@@ -1,0 +1,35 @@
+  body {
+  background-image: url(/img/fondo.png); 
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-family: sans-serif;
+  }
+
+  .modal {
+      background: white;
+      padding: 20px;
+      border-radius: 6px;
+      text-align: center;
+      width: 300px;
+  }
+
+  .success-icon {
+      font-size: 40px;
+      color: green;
+  }
+
+  button {
+      margin: 10px 5px 0;
+      padding: 6px 12px;
+      cursor: pointer;
+  }
+  .mensaje-final {
+      margin-top: 15px;
+      font-weight: bold;
+      color: #333;
+    }

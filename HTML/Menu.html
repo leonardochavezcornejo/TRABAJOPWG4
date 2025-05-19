@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Tienda de Videojuegos</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="/CSS/juego.css" />
+</head>
+<body>
+  <!-- Navbar -->
+  <nav class="navbar navbar-expand-lg navbar-dark bg-dark px-3">
+    <a class="navbar-brand text-white me-4" href="#" onclick="filterCategory('All')">GameStore</a>
+    <div class="navbar-nav">
+     <nav class="navbar navbar-expand-lg navbar-dark bg-dark px-3">
+  <a class="nav-link" href="#" onclick="filterCategory('Mejor valorados')">Mejor Valorados</a>
+  <a class="nav-link" href="#" onclick="filterCategory('Más vendidos')">Más vendidos</a>
+  <a class="nav-link" href="#" onclick="filterCategory('Gratuitos')">Gratuitos</a>
+  <a class="nav-link" href="#" onclick="filterCategory('Multijugador')">Multijugador</a>
+  <a class="nav-link" href="#" onclick="filterCategory('Acceso anticipado')">Acceso anticipado</a>
+</nav>
+
+
+
+      <div class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">Categorías</a>
+        <ul class="dropdown-menu">
+          <li><a class="dropdown-item" href="#" onclick="filterCategory('All')">Todos</a></li>
+          <li><a class="dropdown-item" href="#" onclick="filterCategory('Más vendidos')">Más vendidos</a></li>
+          <li><a class="dropdown-item" href="#" onclick="filterCategory('Mejor valorados')">Mejor valorados</a></li>
+          <li><a class="dropdown-item" href="#" onclick="filterCategory('Gratuitos')">Gratuitos</a></li>
+          <li><a class="dropdown-item" href="#" onclick="filterCategory('Multijugador')">Multijugador</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="ms-auto d-flex">
+      <button id="cartOpenBtn" class="btn btn-outline-light me-2">Carrito</button>
+      <button class="btn btn-outline-light me-2" onclick="toggleSearch()">Buscar</button>
+      <button class="btn btn-outline-light" onclick="togglePriceFilter()">Filtrar por precio</button>
+      <button class="btn btn-outline-light ms-1" onclick="location.href='/HTML/InicioSesion.html'">Iniciar Sesión</button>
+      <button class="btn btn-outline-light ms-2" onclick="location.href='/HTML/CrearCuenta.html'">Crear Cuenta</button>
+    </div>
+  </nav>
+  
+  <div id="cartPanel" class="position-fixed bg-white shadow-lg p-3 rounded" style="display: none; top: 70px; right: 20px; width: 350px; z-index: 9999;">
+
+    <div class="card-body">
+      <h5 class="card-title">Carrito de Compras</h5>
+      <div id="cartPanelContent" class="mb-3" style="color: #888;">
+        Tu carrito está vacío.
+      </div>
+      <button class="btn btn-success me-2" id="confirmarbtn">Confirmar pedido</button>
+      <button class="btn btn-secondary" id="closeCartPanelBtn">Cerrar</button>
+    </div>
+
+
+  </div>
+
+  <!-- Search Panel -->
+  <div id="searchPanel" class="search-panel position-absolute">
+    <h6 class="px-3 pt-3">Buscar juegos</h6>
+    <input type="text" id="searchInput" class="form-control mx-3" placeholder="Escribe para buscar..." onkeyup="searchGames()" />
+  </div>
+
+  <!-- Price Filter Panel -->
+  <div id="priceFilterPanel" class="search-panel position-absolute" style="top: 130px; display: none;">
+    <h6 class="px-3 pt-3">Filtrar por precio</h6>
+    <div class="px-3">
+      <div class="d-flex justify-content-between mb-2">
+        <span id="minPrice">$0</span>
+        <span id="maxPrice">$100</span>
+      </div>
+      <input type="range" class="form-range" min="0" max="100" step="5" id="priceRange" oninput="filterByPrice()">
+      <div class="d-flex justify-content-between">
+        <small>Mín</small>
+        <small>Máx</small>
+      </div>
+    </div>
+  </div>
+
+  <!-- Carousel -->
+  <div id="carouselExampleIndicators" class="carousel slide" data-bs-ride="carousel">
+    <div class="carousel-inner">
+      <div class="carousel-item active">
+        <img src="/img/Captura de pantalla 2025-05-14 131743.jpg" class="d-block w-100" alt="Slide 1">
+      </div>
+      <div class="carousel-item">
+        <img src="/img/Captura de pantalla 2025-05-14 131759.jpg" class="d-block w-100" alt="Slide 2">
+      </div>
+      <div class="carousel-item">
+        <img src="/img/Captura de pantalla 2025-05-14 131814.jpg" class="d-block w-100" alt="Slide 3">
+      </div>
+    </div>
+    <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="prev">
+      <span class="carousel-control-prev-icon"></span>
+      <span class="visually-hidden">Anterior</span>
+    </button>
+    <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="next">
+      <span class="carousel-control-next-icon"></span>
+      <span class="visually-hidden">Siguiente</span>
+    </button>
+  </div>
+
+  <!-- Game Grid -->
+  <div class="container mt-4">
+    <h2>Juegos destacados</h2>
+    <div id="gameGrid" class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-5 g-4 mt-2"></div>
+  </div>
+
+  <!-- Game Modal -->
+  <div id="gameModal" onclick="hideGameDetails(event)">
+    <div class="modal-content-custom" onclick="event.stopPropagation()">
+      <div class="row">
+        <!-- Columna izquierda con imágenes y detalles -->
+        <div class="col-md-6">
+          <h2 id="gameTitle" class="text-center mb-3"></h2>
+          <div class="d-flex justify-content-center mb-3">
+            <img id="mainImage" src="" class="img-fluid rounded" style="width: 100%; height: 300px; object-fit: cover;">
+          </div>
+          <div id="thumbnails" class="d-flex justify-content-center mb-3 flex-wrap"></div>
+          <div class="text-center my-3">
+            <div class="d-flex justify-content-center align-items-center mb-2">
+              <span class="me-2">Valoración:</span>
+              <div id="gameRating" class="text-warning"></div>
+              <span id="ratingValue" class="ms-2"></span>
+            </div>
+            <button class="btn btn-success w-100" onclick="addToCartFromModal()">Agregar al carrito - <span id="gamePrice"></span></button>
+          </div>
+        </div>
+        
+        <!-- Columna derecha con descripción y comentarios -->
+        <div class="col-md-6">
+          <h4>Descripción</h4>
+          <p id="gameDescription" class="mb-4"></p>
+          
+          <h4>Reseñas de usuarios</h4>
+          <div id="gameReviews" class="mb-4" style="max-height: 200px; overflow-y: auto;"></div>
+          
+          <h5>Agregar tu reseña</h5>
+          <div class="mb-3">
+            <input type="text" id="userName" class="form-control mb-2" placeholder="Tu nombre">
+            <textarea id="userComment" class="form-control mb-2" placeholder="Tu reseña" rows="3"></textarea>
+            <div class="star-rating mb-2">
+              <span class="star" onclick="rateGame(1)">☆</span>
+              <span class="star" onclick="rateGame(2)">☆</span>
+              <span class="star" onclick="rateGame(3)">☆</span>
+              <span class="star" onclick="rateGame(4)">☆</span>
+              <span class="star" onclick="rateGame(5)">☆</span>
+            </div>
+            <button class="btn btn-primary w-100" onclick="submitReview()">Enviar reseña</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="/JS/juego.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

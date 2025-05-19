@@ -1,0 +1,68 @@
+body {
+  font-family: Arial, sans-serif;
+  background-color: #f4f4f4;
+}
+
+.navbar-nav .nav-link {
+  color: white;
+  margin-right: 15px;
+}
+
+.search-panel {
+  background-color: #ccc;
+  padding: 10px;
+  width: 250px;
+  top: 65px;
+  right: 10px;
+  display: none;
+  z-index: 1051;
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(0,0,0,0.3);
+}
+
+.game-card {
+  background-color: #888;
+  color: white;
+  padding: 20px;
+  border-radius: 8px;
+  text-align: center;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.game-card:hover {
+  background-color: #666;
+}
+
+.thumb {
+  width: 80px;
+  height: 60px;
+  cursor: pointer;
+  border: 2px solid transparent;
+  border-radius: 5px;
+}
+
+.thumb:hover {
+  border-color: #000;
+}
+
+#gameModal {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 1050;
+  align-items: center;
+  justify-content: center;
+}
+
+.modal-content-custom {
+  background-color: white;
+  padding: 20px;
+  border-radius: 10px;
+  width: 90%;
+  max-width: 600px;
+}

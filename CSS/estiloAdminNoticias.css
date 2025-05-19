@@ -1,0 +1,99 @@
+/* Ocultar secciones dinámicamente */
+.admin-section {
+  display: none;
+}
+.admin-section:not(.d-none) {
+  display: block;
+}
+
+/* Contenido general */
+.dashboard-bg {
+  min-height: 100vh;
+  background-color: #f0f4f8;
+}
+.sidebar {
+  width: 220px;
+  background-color: #343a40;
+  padding: 1rem 0;
+  min-height: 100vh;
+}
+.sidebar .nav-link {
+  color: #ccc;
+  text-align: center;
+  padding: 0.75rem;
+  display: block;
+  text-decoration: none;
+  transition: background-color 0.3s;
+}
+.sidebar .nav-link.active,
+.sidebar .nav-link:hover {
+  background-color: #495057;
+  color: #fff;
+}
+.admin-photo {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  background-color: #6c757d;
+}
+.content {
+  padding: 2rem;
+  width: 100%;
+}
+
+/* Header Noticias y Juegos */
+.header-news,
+#juegos .d-flex.align-items-center {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+#juegos h2 {
+  margin: 0;
+}
+#juegos .d-flex.gap-2 > * {
+  margin-left: 0.5rem;
+}
+#juegos .d-flex.gap-2 > *:first-child {
+  margin-left: 0;
+}
+
+/* Tabla responsive */
+.table-responsive {
+  overflow-x: auto;
+}
+#gamesTableBody td, #gamesTableBody th {
+  vertical-align: middle;
+}
+
+/* Modales personalizados */
+.modal-custom {
+  display: none;
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  background: rgba(0,0,0,0.6);
+  z-index: 1000;
+  overflow-y: auto;
+  align-items: center;
+  justify-content: center;
+}
+.modal-custom.show {
+  display: flex;
+}
+.modal-content-custom {
+  background: #fff;
+  margin: 50px auto;
+  padding: 20px;
+  border-radius: 10px;
+  width: 90%;
+  max-width: 600px;
+  box-shadow: 0 0 15px rgba(0, 0, 0, 0.3);
+}
+
+/* Usuarios: tarjeta de contador */
+#usuarios .card {
+  border-radius: 12px;
+  background-color: #ffffff;
+}
