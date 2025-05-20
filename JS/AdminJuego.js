@@ -64,19 +64,31 @@ const games = [
 function renderTable() {
   const tbody = document.getElementById('gameTableBody');
   tbody.innerHTML = '';
+  
+
   games.forEach((game, index) => {
-    tbody.innerHTML += `
-      <tr>
-        <td>${game.title}</td>
-        <td>${game.category}</td>
-        <td>$${game.price.toFixed(2)}</td>
-        <td>
-          <button class="btn btn-sm btn-primary me-2" onclick="openForm(${index})">Editar</button>
-          <button class="btn btn-sm btn-danger" onclick="deleteGame(${index})">Eliminar</button>
-        </td>
-      </tr>
-    `;
-  });
+    const basePrice = game.originalPrice !== undefined ? game.originalPrice : game.price;
+const hasDiscount = game.discount && game.discount > 0;
+const discountedPrice = hasDiscount
+  ? (basePrice * (1 - game.discount / 100)).toFixed(2)
+  : basePrice.toFixed(2);
+
+const priceHtml = hasDiscount
+  ? `<span style="text-decoration: line-through; color: #888;">$${basePrice.toFixed(2)}</span><br><strong>$${discountedPrice}</strong> <small class="text-muted">(-${game.discount}%)</small>`
+  : `$${discountedPrice}`;
+
+tbody.innerHTML += `
+  <tr>
+    <td>${game.title}</td>
+    <td>${game.category}</td>
+    <td>${priceHtml}</td>
+    <td>
+      <button class="btn btn-sm btn-primary me-1" onclick="openForm(${index})">Editar</button>
+      <button class="btn btn-sm btn-danger" onclick="deleteGame(${index})">Eliminar</button>
+    </td>
+  </tr>
+`;
+})
 }
 
 function openForm(index = null) {
@@ -100,24 +112,33 @@ function openForm(index = null) {
 }
 
 function saveGame(event) {
-  event.preventDefault();
-  const index = document.getElementById('gameIndex').value;
-  const game = {
-    title: document.getElementById('title').value.trim(),
-    category: document.getElementById('category').value.trim(),
-    price: parseFloat(document.getElementById('price').value),
-    description: document.getElementById('description').value.trim()
-  };
+    event.preventDefault();
 
-  if (index === '') {
-    games.push(game);
-  } else {
-    games[index] = game;
+    const index = document.getElementById('gameIndex').value;
+    const price = parseFloat(document.getElementById('price').value);
+    let discount = parseFloat(document.getElementById('discount').value) || 0;
+
+    if (discount < 0) discount = 0;
+    if (discount > 100) discount = 100;
+
+    const game = {
+      title: document.getElementById('title').value.trim(),
+      category: document.getElementById('category').value.trim(),
+      originalPrice: price,
+      discount: discount,
+      price: price * (1 - discount / 100),
+      description: document.getElementById('description').value.trim()
+    };
+
+    if (index === '') {
+      games.push(game);
+    } else {
+      games[index] = game;
+    }
+
+    bootstrap.Modal.getInstance(document.getElementById('gameModal')).hide();
+    renderTable();
   }
-
-  bootstrap.Modal.getInstance(document.getElementById('gameModal')).hide();
-  renderTable();
-}
 
 function deleteGame(index) {
   if (confirm('¿Estás seguro de eliminar este juego?')) {
