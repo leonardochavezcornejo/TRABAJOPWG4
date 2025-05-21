@@ -15,7 +15,7 @@ const LoginForm: React.FC = () => {
       <header className="d-flex align-items-center p-3">
         <div className="logo">
           <img
-            src="/IMG/logo.png"
+            src="/img/logo.png"
             alt="Logo GameStore"
             style={{ cursor: 'pointer', maxWidth: '80px' }}
             onClick={() => navigate('/menu')}
@@ -38,20 +38,20 @@ const LoginForm: React.FC = () => {
               <label htmlFor="username" className="form-label">Correo electrónico:</label>
               <input type="text" className="form-control" id="username" required />
             </div>
+
             <div className="mb-3 text-start">
-              <div className="d-flex justify-content-between">
-                <label htmlFor="password" className="form-label">Contraseña:</label>
-                <div className="links-admin-forgot">
-                  <Link to="/recuperar" className="forgot-password me-3">¿Olvidaste tu contraseña?</Link>
-                  <Link to="/admin" className="forgot-password">¿Eres administrador?</Link>
-                </div>
-              </div>
+              <label htmlFor="password" className="form-label">Contraseña:</label>
               <input type="password" className="form-control" id="password" required />
             </div>
 
-            <button type="submit" className="btn btn-light w-100 btn-custom">
+            <button type="submit" className="btn btn-light w-100 btn-custom mb-2">
               Iniciar Sesión
             </button>
+
+            <div className="d-flex justify-content-between">
+              <Link to="/recuperar" className="forgot-password">¿Olvidaste tu contraseña?</Link>
+              <Link to="/admin" className="forgot-password">¿Eres administrador?</Link>
+            </div>
           </form>
 
           <p className="mt-3 create-account">
