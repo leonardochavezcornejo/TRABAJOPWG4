@@ -8,6 +8,7 @@ import NoticeTable from './NoticeTable';
 import DeleteNotice from './DeleteNotice';
 import AddNotice from './AddNotice';
 import FilterGamesModal from './FilterGamesModal';
+import GameModal, { type GameData } from './GameModal';
 
 type FilterData = {
   fecha: string;
@@ -27,6 +28,8 @@ const AdminPanel: React.FC = () => {
   const [noticeToDelete, setNoticeToDelete] = useState<{ id: string }>({ id: '' });
   const [addModalVisible, setAddModalVisible] = useState(false);
   const [filterModalVisible, setFilterModalVisible] = useState(false);
+  const [gameModalVisible, setGameModalVisible] = useState(false);
+  const [gameToEdit, setGameToEdit] = useState<GameData | null>(null);
   const handleApplyFilters = (filters: FilterData) => {
     console.log("Filtros aplicados:", filters);
   };
@@ -135,7 +138,10 @@ const AdminPanel: React.FC = () => {
             <div className="container admin-panel">
               <h2 className="mb-4 text-center">Panel de Administración de Juegos</h2>
               <div className="d-flex justify-content-end mb-3 gap-2">
-                <button className="btn btn-success" onClick={() => alert("Abrir formulario de agregar juego")}>+ Agregar Juego</button>
+                <button className="btn btn-success" onClick={() => {
+                  setGameToEdit(null);
+                  setGameModalVisible(true);
+                }}>+ Agregar Juego</button>
                 <button type="button" className="btn btn-primary" onClick={() => setFilterModalVisible(true)}>
                   Filtrar Juegos
                 </button>
@@ -210,6 +216,11 @@ const AdminPanel: React.FC = () => {
         visible={filterModalVisible}
         onClose={() => setFilterModalVisible(false)}
         onFilter={handleApplyFilters}
+      />
+      <GameModal
+        visible={gameModalVisible}
+        onClose={() => setGameModalVisible(false)}
+        initialData={gameToEdit}
       />
     </div> 
   );
