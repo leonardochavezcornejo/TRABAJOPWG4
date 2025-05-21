@@ -82,7 +82,14 @@ const AdminPanel: React.FC = () => {
     <div className="d-flex dashboard-bg" style={{ minHeight: "100vh" }}>
       {/* Sidebar */}
       <div className="sidebar d-flex flex-column align-items-center">
-        <div className="admin-photo mb-3"></div>
+        <div className="admin-photo mb-3">
+        <img
+            src="/img/Cutti.jpg"
+            alt="Foto de Sergio Cutti"
+            className="rounded-circle"
+            style={{ width: "100px", height: "100px", objectFit: "cover" }}
+          />
+        </div>
         <h5 className="text-white">Sergio Cutti</h5>
         <nav className="mt-4 w-100 px-3 d-flex flex-column" style={{ gap: "0.5rem" }}>
           <button
