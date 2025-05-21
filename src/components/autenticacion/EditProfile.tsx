@@ -15,8 +15,7 @@ const EditarPerfil = () => {
 
   const handleSubmit = (e:React.FormEvent) => {
     e.preventDefault();
-    // Aquí puedes manejar el envío del formulario
-    alert('Cambios guardados');
+    navigate('/');
   };
 
   return (
@@ -25,7 +24,12 @@ const EditarPerfil = () => {
       <div className="left-panel d-flex flex-column justify-content-between p-4">
         <div className="d-flex align-items-center">
           <div className="logo">
-           
+            <img
+              src="/img/logo.png"
+              alt="Logo GameStore"
+              style={{ cursor: 'pointer', maxWidth: '80px' }}
+              onClick={() => navigate('/')}
+            />
           </div>
           <div className="brand ms-2">RetroGames</div>
         </div>
@@ -41,7 +45,7 @@ const EditarPerfil = () => {
           <button
             className="btn-close"
             aria-label="Close"
-            onClick={() => navigate('/HTML/Menu.html')}
+            onClick={() => navigate('/')}
           ></button>
         </div>
         <div className="form-container mx-auto">
@@ -61,14 +65,13 @@ const EditarPerfil = () => {
             </div>
             <button
               type="submit"
-              className="btn btn-custom w-100 d-flex justify-content-between align-items-center"
+              className="btn btn-light w-100 btn-custom mb-2"
             >
               <span>Guardar Cambios</span>
-              <span>&check;</span>
             </button>
           </form>
-          <p className="mt-3 text-center">
-            <a onClick={() => navigate('/HTML/Menu.html')} style={{ cursor: 'pointer' }}>
+          <p className="btn btn-light w-100 btn-custom mb-2">
+            <a onClick={() => navigate('/')} style={{ cursor: 'pointer' }}>
               Volver al menú principal
             </a>
           </p>
