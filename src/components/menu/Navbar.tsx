@@ -31,6 +31,9 @@ const Navbar: React.FC<NavbarProps> = ({
         <button className="btn btn-outline-light me-2" onClick={onToggleCart}>Carrito</button>
         <button className="btn btn-outline-light me-2" onClick={onToggleSearch}>Buscar</button>
         <button className="btn btn-outline-light me-2" onClick={onTogglePrice}>Filtrar por precio</button>
+        <button className="btn btn-outline-light ms-2" onClick={() => navigate('/edit-profile')}>
+          Perfil
+        </button>
         <button className="btn btn-outline-light me-2" onClick={() => navigate('/Login')}>
           Iniciar Sesión
         </button>

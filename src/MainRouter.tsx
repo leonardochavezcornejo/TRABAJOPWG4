@@ -5,6 +5,8 @@ import LoginForm from './components/autenticacion/login';
 import CreateAccount from './components/autenticacion/CreateAccount';
 import ResetPassword from './components/autenticacion/ResetPassword';
 import VerifyIdentity from './components/autenticacion/VerifyIdentity';
+import EditProfile from './components/autenticacion/EditProfile';
+
 import AdminPanel from './components/admin/AdminPanel';
 
 const MainRouter = () => {
@@ -14,6 +16,7 @@ const MainRouter = () => {
         <Route path="/" element={<App />} />
         <Route path="/login" element={<LoginForm />} />
         <Route path="/crear-cuenta" element={<CreateAccount />} /> 
+        <Route path="/edit-profile" element={<EditProfile />} /> 
         <Route path="/recuperar" element={<ResetPassword />} />
         <Route path="/verificar" element={<VerifyIdentity />} />
         <Route path="/admin-panel" element={<AdminPanel />} />
