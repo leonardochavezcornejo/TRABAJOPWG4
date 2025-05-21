@@ -9,6 +9,7 @@ import DeleteNotice from './DeleteNotice';
 import AddNotice from './AddNotice';
 import FilterGamesModal from './FilterGamesModal';
 import GameModal, { type GameData } from './GameModal';
+import MonthlyEarningsChart from './MonthlyEarningsChart';
 
 type FilterData = {
   fecha: string;
@@ -172,26 +173,28 @@ const AdminPanel: React.FC = () => {
 
         {activeSection === "estadisticas" && (
           <section className="admin-section">
-            <h2>Estadísticas</h2>
-            <div className="mb-4" style={{ maxWidth: "250px" }}>
-              <div className="card shadow-sm text-center">
-                <div className="card-body">
-                  <h5 className="card-title">Total de Usuarios</h5>
-                  <p id="userCount" className="display-5 fw-bold text-primary">{userCount}</p>
-                </div>
+          <h2>Estadísticas</h2>
+          <div className="mb-4" style={{ maxWidth: "250px" }}>
+            <div className="card shadow-sm text-center">
+              <div className="card-body">
+                <h5 className="card-title">Total de Usuarios</h5>
+                <p id="userCount" className="display-5 fw-bold text-primary">{userCount}</p>
               </div>
             </div>
-            <div className="row">
-              <div className="col-md-6 mb-4">
-                <h5>Juegos por Categoría</h5>
-                <canvas id="gamesByCategoryChart" height={200}></canvas>
-              </div>
-              <div className="col-md-6 mb-4">
-                <h5>Noticias por Mes</h5>
-                <canvas id="newsByMonthChart" height={200}></canvas>
-              </div>
+          </div>
+        
+          <div className="row">
+            <div className="col-md-6 mb-4">
+              <h5>Ganancias por Mes</h5>
+              <MonthlyEarningsChart />
             </div>
-          </section>
+            <div className="col-md-6 mb-4">
+              <h5>Noticias por Mes</h5>
+              <canvas id="newsByMonthChart" height={200}></canvas>
+            </div>
+          </div>
+        </section>
+        
         )}
       </div>
 
