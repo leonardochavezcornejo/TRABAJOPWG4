@@ -40,7 +40,7 @@ const CreateAccount: React.FC = () => {
           <h3 className="text-center mb-4">Regístrate en RetroGames</h3>
           <form onSubmit={handleSubmit}>
             <div className="mb-3">
-              <label className="form-label">Nombre de usuario:</label>
+              <label className="form-label">Nombre Completo:</label>
               <input type="text" className="form-control" required />
             </div>
             <div className="mb-3">
