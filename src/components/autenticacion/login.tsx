@@ -50,7 +50,7 @@ const LoginForm: React.FC = () => {
 
             <div className="d-flex justify-content-between">
               <Link to="/recuperar" className="forgot-password">¿Olvidaste tu contraseña?</Link>
-              <Link to="/admin" className="forgot-password">¿Eres administrador?</Link>
+              <Link to="/admin-panel" className="forgot-password">¿Eres administrador?</Link>
             </div>
           </form>
 
