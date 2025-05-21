@@ -18,7 +18,7 @@ const LoginForm: React.FC = () => {
             src="/img/logo.png"
             alt="Logo GameStore"
             style={{ cursor: 'pointer', maxWidth: '80px' }}
-            onClick={() => navigate('/menu')}
+            onClick={() => navigate('/')}
           />
         </div>
         <div className="brand ms-2">
