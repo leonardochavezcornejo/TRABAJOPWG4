@@ -4,6 +4,7 @@ import App from './App';
 import LoginForm from './components/autenticacion/login';
 import CreateAccount from './components/autenticacion/CreateAccount';
 import ResetPassword from './components/autenticacion/ResetPassword';
+import VerifyIdentity from './components/autenticacion/VerifyIdentity';
 
 const MainRouter = () => {
   return (
@@ -13,6 +14,7 @@ const MainRouter = () => {
         <Route path="/login" element={<LoginForm />} />
         <Route path="/crear-cuenta" element={<CreateAccount />} /> 
         <Route path="/recuperar" element={<ResetPassword />} />
+        <Route path="/verificar" element={<VerifyIdentity />} />
       </Routes>
     </Router>
   );

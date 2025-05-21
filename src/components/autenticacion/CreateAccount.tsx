@@ -7,7 +7,7 @@ const CreateAccount: React.FC = () => {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    navigate('/login');
+    navigate('/verificar');
   };
 
   return (
@@ -20,7 +20,7 @@ const CreateAccount: React.FC = () => {
               src="/img/logo.png"
               alt="Logo GameStore"
               style={{ cursor: 'pointer' }}
-              onClick={() => navigate('/menu')}
+              onClick={() => navigate('/')}
             />
           </div>
           <div className="brand ms-2">RetroGames</div>
@@ -34,7 +34,7 @@ const CreateAccount: React.FC = () => {
       {/* Panel derecho */}
       <div className="right-panel p-4 d-flex flex-column justify-content-center">
         <div className="text-end">
-          <button className="btn-close" aria-label="Close" onClick={() => navigate('/menu')}></button>
+          <button className="btn-close" aria-label="Close" onClick={() => navigate('/')}></button>
         </div>
         <div className="form-container mx-auto">
           <h3 className="text-center mb-4">Regístrate en RetroGames</h3>
