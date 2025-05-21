@@ -1,0 +1,52 @@
+import React from 'react';
+import { useNavigate } from 'react-router-dom';
+import '../../assets/juego.css';
+
+interface NavbarProps {
+  onFilterCategory: (cat: string) => void;
+  onToggleCart: () => void;
+  onToggleSearch: () => void;
+  onTogglePrice: () => void;
+}
+const Navbar: React.FC<NavbarProps> = ({
+  onFilterCategory,
+  onToggleCart,
+  onToggleSearch,
+  onTogglePrice
+}) => {
+  const navigate = useNavigate();
+  return (
+    <nav className="navbar navbar-expand-lg navbar-dark bg-dark px-3">
+      <a className="navbar-brand text-white me-4" href="#" onClick={() => onFilterCategory('All')}>GameStore</a>
+      <div className="navbar-nav">
+        <a className="nav-link" href="#" onClick={() => onFilterCategory('Mejor valorados')}>Mejor Valorados</a>
+        <a className="nav-link" href="#" onClick={() => onFilterCategory('Más vendidos')}>Más vendidos</a>
+        <a className="nav-link" href="#" onClick={() => onFilterCategory('Gratuitos')}>Gratuitos</a>
+        <a className="nav-link" href="#" onClick={() => onFilterCategory('Multijugador')}>Multijugador</a>
+        <a className="nav-link" href="#" onClick={() => onFilterCategory('Acceso anticipado')}>Acceso anticipado</a>
+      </div>
+
+      <div className="nav-item dropdown ms-3">
+        <a className="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">Categorías</a>
+        <ul className="dropdown-menu">
+          <li><a className="dropdown-item" href="#" onClick={() => onFilterCategory('All')}>Todos</a></li>
+          <li><a className="dropdown-item" href="#" onClick={() => onFilterCategory('Más vendidos')}>Más vendidos</a></li>
+          <li><a className="dropdown-item" href="#" onClick={() => onFilterCategory('Mejor valorados')}>Mejor valorados</a></li>
+          <li><a className="dropdown-item" href="#" onClick={() => onFilterCategory('Gratuitos')}>Gratuitos</a></li>
+          <li><a className="dropdown-item" href="#" onClick={() => onFilterCategory('Multijugador')}>Multijugador</a></li>
+        </ul>
+      </div>
+
+      <div className="ms-auto d-flex">
+        <button className="btn btn-outline-light me-2" onClick={onToggleCart}>Carrito</button>
+        <button className="btn btn-outline-light me-2" onClick={onToggleSearch}>Buscar</button>
+        <button className="btn btn-outline-light me-2" onClick={onTogglePrice}>Filtrar por precio</button>
+        <button className="btn btn-outline-light me-2" onClick={() => navigate('/Login')}>
+          Iniciar Sesión
+        </button>
+        <button className="btn btn-outline-light ms-2" onClick={() => window.location.href='/HTML/CrearCuenta.html'}>Crear Cuenta</button>
+      </div>
+    </nav>
+  );
+};
+export default Navbar;
