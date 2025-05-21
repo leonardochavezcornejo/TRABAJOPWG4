@@ -44,7 +44,9 @@ const Navbar: React.FC<NavbarProps> = ({
         <button className="btn btn-outline-light me-2" onClick={() => navigate('/Login')}>
           Iniciar Sesión
         </button>
-        <button className="btn btn-outline-light ms-2" onClick={() => window.location.href='/HTML/CrearCuenta.html'}>Crear Cuenta</button>
+        <button className="btn btn-outline-light ms-2" onClick={() => navigate('/crear-cuenta')}>
+          Crear Cuenta
+        </button>
       </div>
     </nav>
   );

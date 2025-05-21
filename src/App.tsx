@@ -6,6 +6,7 @@ import PriceFilterPanel from './components/menu/PriceFilterPanel';
 import Carousel from './components/menu/Carousel';
 import GameGrid from './components/menu/GameGrid';
 import GameModal from './components/menu/Gamemodal';
+import BuyModal from './components/menu/BuyModal';
 import type { Game } from './components/types';
 import { games } from './components/data/games';
 
@@ -20,6 +21,7 @@ function App() {
   const [priceLimit, setPriceLimit] = useState(100);
   const [selectedGame, setSelectedGame] = useState<Game | null>(null);
   const [filterCategory, setFilterCategory] = useState('All');
+  const [buyVisible, setBuyVisible] = useState(false);
 
   const filteredGames = games.filter(game =>
     (filterCategory === 'All' || game.category === filterCategory) &&
@@ -61,7 +63,9 @@ function App() {
         onClose={() => setCartVisible(false)}
         items={cartItems}
         onRemove={handleRemoveFromCart}
+        onBuy={() => setBuyVisible(true)}
       />
+      <BuyModal visible={buyVisible} onClose={() => setBuyVisible(false)} />
       <SearchPanel visible={searchVisible} onSearch={setSearchQuery} />
       <PriceFilterPanel visible={priceFilterVisible} onChange={setPriceLimit} min={0} max={100} />
 

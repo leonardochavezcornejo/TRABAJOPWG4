@@ -7,9 +7,10 @@ interface CartPanelProps {
   onClose: () => void;
   items: Game[];
   onRemove: (id: number) => void;
+  onBuy: () => void; 
 }
 
-const CartPanel: React.FC<CartPanelProps> = ({ visible, onClose, items, onRemove }) => {
+const CartPanel: React.FC<CartPanelProps> = ({ visible, onClose, items, onRemove, onBuy }) => {
   if (!visible) return null;
 
   const total = items.reduce((sum, item) => sum + item.price, 0);
@@ -47,7 +48,9 @@ const CartPanel: React.FC<CartPanelProps> = ({ visible, onClose, items, onRemove
             </div>
           </>
         )}
-        <button className="btn btn-success me-2">Confirmar pedido</button>
+        <button className="btn btn-success me-2" onClick={onBuy}>
+          Confirmar pedido
+        </button>
         <button className="btn btn-secondary" onClick={onClose}>
           Cerrar
         </button>
