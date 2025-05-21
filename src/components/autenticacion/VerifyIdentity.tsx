@@ -7,7 +7,7 @@ const VerifyIdentity: React.FC = () => {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    navigate('/');
+    navigate('/login');
   };
 
   return (

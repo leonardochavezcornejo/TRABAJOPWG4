@@ -75,7 +75,7 @@ const CreateAccount: React.FC = () => {
                 Por razones de cumplimiento, estamos obligados a recopilar información sobre tu país para ofrecerte precios y cuentas adecuados.
               </div>
             </div>
-            <button type="submit" className="btn btn-custom w-100 d-flex justify-content-between align-items-center">
+            <button type="submit" className="btn btn-light w-100 btn-custom mb-2">
               <span>Continuar</span>
               <span>&rarr;</span>
             </button>
