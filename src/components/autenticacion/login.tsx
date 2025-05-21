@@ -7,7 +7,7 @@ const LoginForm: React.FC = () => {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    navigate('/menu');
+    navigate('/');
   };
 
   return (
