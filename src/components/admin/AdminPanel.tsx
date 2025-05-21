@@ -10,6 +10,7 @@ import AddNotice from './AddNotice';
 import FilterGamesModal from './FilterGamesModal';
 import GameModal, { type GameData } from './GameModal';
 
+
 type FilterData = {
   fecha: string;
   categoria: string;
@@ -148,7 +149,116 @@ const AdminPanel: React.FC = () => {
               </div>
               <table className="table table-bordered table-hover shadow-sm">
                 <thead><tr><th>Título</th><th>Categoría</th><th>Precio</th><th>Acciones</th></tr></thead>
-                <tbody id="gameTableBody"></tbody>
+                <tbody id="gameTableBody">
+                  <tr>
+                    <td>GTA VI</td>
+                    <td>Más vendidos</td>
+                    <td>$59.99</td>
+                    <td>
+                      <button className="btn btn-sm btn-warning me-2">Editar</button>
+                      <button className="btn btn-sm btn-danger">Eliminar</button>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>Mortal Kombat 11</td>
+                    <td>Mejor valorados</td>
+                    <td>$49.99</td>
+                    <td>
+                      <button className="btn btn-sm btn-warning me-2">Editar</button>
+                      <button className="btn btn-sm btn-danger">Eliminar</button>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>Left 4 Dead 2</td>
+                    <td>Multijugador</td>
+                    <td>$19.99</td>
+                    <td>
+                      <button className="btn btn-sm btn-warning me-2">Editar</button>
+                      <button className="btn btn-sm btn-danger">Eliminar</button>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>The Witcher 3: Wild Hunt</td>
+                    <td>Mejor valorados</td>
+                    <td>$39.99</td>
+                    <td>
+                      <button className="btn btn-sm btn-warning me-2">Editar</button>
+                      <button className="btn btn-sm btn-danger">Eliminar</button>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>Cyberpunk 2077</td>
+                    <td>Acceso anticipado</td>
+                    <td>$49.99</td>
+                    <td>
+                      <button className="btn btn-sm btn-warning me-2">Editar</button>
+                      <button className="btn btn-sm btn-danger">Eliminar</button>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>Among Us</td>
+                    <td>Gratuitos</td>
+                    <td>$0.00</td>
+                    <td>
+                      <button className="btn btn-sm btn-warning me-2">Editar</button>
+                      <button className="btn btn-sm btn-danger">Eliminar</button>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>Call of Duty: Warzone</td>
+                    <td>Multijugador</td>
+                    <td>$0.00</td>
+                    <td>
+                      <button className="btn btn-sm btn-warning me-2">Editar</button>
+                      <button className="btn btn-sm btn-danger">Eliminar</button>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>Baldur's Gate 3</td>
+                    <td>Mejor valorados</td>
+                    <td>$59.99</td>
+                    <td>
+                      <button className="btn btn-sm btn-warning me-2">Editar</button>
+                      <button className="btn btn-sm btn-danger">Eliminar</button>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>Hades</td>
+                    <td>Más vendidos</td>
+                    <td>$24.99</td>
+                    <td>
+                      <button className="btn btn-sm btn-warning me-2">Editar</button>
+                      <button className="btn btn-sm btn-danger">Eliminar</button>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>Stardew Valley</td>
+                    <td>Gratuitos</td>
+                    <td>$14.99</td>
+                    <td>
+                      <button className="btn btn-sm btn-warning me-2">Editar</button>
+                      <button className="btn btn-sm btn-danger">Eliminar</button>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>R.E.P.O</td>
+                    <td>Más vendidos</td>
+                    <td>$14.99</td>
+                    <td>
+                      <button className="btn btn-sm btn-warning me-2">Editar</button>
+                      <button className="btn btn-sm btn-danger">Eliminar</button>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>Dead by Daylight</td>
+                    <td>Mejor valorados</td>
+                    <td>$39.99</td>
+                    <td>
+                      <button className="btn btn-sm btn-warning me-2">Editar</button>
+                      <button className="btn btn-sm btn-danger">Eliminar</button>
+                    </td>
+                  </tr>
+                </tbody>
               </table>
             </div>
           </section>
