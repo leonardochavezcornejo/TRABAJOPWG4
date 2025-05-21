@@ -7,6 +7,14 @@ import type { Noticia } from '../data/noticias';
 import NoticeTable from './NoticeTable';
 import DeleteNotice from './DeleteNotice';
 import AddNotice from './AddNotice';
+import FilterGamesModal from './FilterGamesModal';
+
+type FilterData = {
+  fecha: string;
+  categoria: string;
+  precioMin: string;
+  precioMax: string;
+};
 
 const AdminPanel: React.FC = () => {
   const [activeSection, setActiveSection] = useState<"usuarios" | "juegos" | "noticias" | "estadisticas">("usuarios");
@@ -18,6 +26,10 @@ const AdminPanel: React.FC = () => {
   const [deleteModalVisible, setDeleteModalVisible] = useState(false);
   const [noticeToDelete, setNoticeToDelete] = useState<{ id: string }>({ id: '' });
   const [addModalVisible, setAddModalVisible] = useState(false);
+  const [filterModalVisible, setFilterModalVisible] = useState(false);
+  const handleApplyFilters = (filters: FilterData) => {
+    console.log("Filtros aplicados:", filters);
+  };
   const handleDeleteRequest = (id: string) => {
     setNoticeToDelete({ id });
     setDeleteModalVisible(true);
@@ -124,7 +136,9 @@ const AdminPanel: React.FC = () => {
               <h2 className="mb-4 text-center">Panel de Administración de Juegos</h2>
               <div className="d-flex justify-content-end mb-3 gap-2">
                 <button className="btn btn-success" onClick={() => alert("Abrir formulario de agregar juego")}>+ Agregar Juego</button>
-                <button type="button" className="btn btn-primary" onClick={() => alert("Abrir modal de filtros")}>Filtrar Juegos</button>
+                <button type="button" className="btn btn-primary" onClick={() => setFilterModalVisible(true)}>
+                  Filtrar Juegos
+                </button>
               </div>
               <table className="table table-bordered table-hover shadow-sm">
                 <thead><tr><th>Título</th><th>Categoría</th><th>Precio</th><th>Acciones</th></tr></thead>
@@ -191,6 +205,11 @@ const AdminPanel: React.FC = () => {
         visible={addModalVisible}
         onClose={() => setAddModalVisible(false)}
         onSubmit={handleAddNotice}
+      />
+      <FilterGamesModal
+        visible={filterModalVisible}
+        onClose={() => setFilterModalVisible(false)}
+        onFilter={handleApplyFilters}
       />
     </div> 
   );
