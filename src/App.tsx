@@ -5,7 +5,7 @@ import SearchPanel from './components/menu/SearchPanel';
 import PriceFilterPanel from './components/menu/PriceFilterPanel';
 import Carousel from './components/menu/Carousel';
 import GameGrid from './components/menu/GameGrid';
-import GameModal from './components/menu/Gamemodal';
+import GameModal from './components/menu/GameModal';
 import BuyModal from './components/menu/BuyModal';
 import type { Game } from './components/types';
 import { games } from './components/data/games';

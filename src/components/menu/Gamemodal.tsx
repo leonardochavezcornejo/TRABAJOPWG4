@@ -39,9 +39,9 @@ const GameModal: React.FC<GameModalProps> = ({ game, onClose, onAddToCart }) => 
     : '0';
 
   return (
-    <div className="game-modal" onClick={onClose}>
-      <div className="modal-content-custom" onClick={(e) => e.stopPropagation()}>
-        <div className="row">
+    <div className="game-modal-2" onClick={onClose}>
+      <div className="modal-content-game" onClick={(e) => e.stopPropagation()}>
+        <div className="row gx-4">
           {/* Columna izquierda */}
           <div className="col-md-6">
             <h2 className="text-center mb-3">{game.title}</h2>
