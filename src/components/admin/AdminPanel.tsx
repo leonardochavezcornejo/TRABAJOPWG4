@@ -12,6 +12,10 @@ import GameModal, { type GameData } from './GameModal';
 import MonthlyEarningsChart from './MonthlyEarningsChart';
 
 
+
+
+
+
 type FilterData = {
   fecha: string;
   categoria: string;
@@ -20,6 +24,10 @@ type FilterData = {
 };
 
 const AdminPanel: React.FC = () => {
+  const [isModalVisible, setIsModalVisible] = useState(false);
+  const [selectedGame, setSelectedGame] = useState<GameData | null>(null);  
+
+
   const [activeSection, setActiveSection] = useState<"usuarios" | "juegos" | "noticias" | "estadisticas">("usuarios");
   const navigate = useNavigate();
   const [userCount, setUserCount] = useState(3);
@@ -163,7 +171,21 @@ const AdminPanel: React.FC = () => {
                     <td>Más vendidos</td>
                     <td>$59.99</td>
                     <td>
-                      <button className="btn btn-sm btn-warning me-2">Editar</button>
+                      <button
+                          className="btn btn-sm btn-warning me-2"
+                          onClick={() => {
+                          setGameToEdit({
+                          title: "GTA VI",
+                          category: "Mas Vendidos",
+                          price: 59.99 ,
+                          discount: 0,
+                          description: ""
+                        });
+                            setGameModalVisible(true);
+                          }}
+                        >
+                          Editar
+                      </button>
                       <button className="btn btn-sm btn-danger">Eliminar</button>
                     </td>
                   </tr>
@@ -172,7 +194,23 @@ const AdminPanel: React.FC = () => {
                     <td>Mejor valorados</td>
                     <td>$49.99</td>
                     <td>
-                      <button className="btn btn-sm btn-warning me-2">Editar</button>
+                      
+                      <button
+                          className="btn btn-sm btn-warning me-2"
+                          onClick={() => {
+                          setGameToEdit({
+                          title: "Mortal Kombat 11",
+                          category: "Mejor valorados",
+                          price: 49.99 ,
+                          discount: 0,
+                          description: ""
+                        });
+                            setGameModalVisible(true);
+                          }}
+                        >
+                          Editar
+                      </button>
+
                       <button className="btn btn-sm btn-danger">Eliminar</button>
                     </td>
                   </tr>
@@ -181,7 +219,21 @@ const AdminPanel: React.FC = () => {
                     <td>Multijugador</td>
                     <td>$19.99</td>
                     <td>
-                      <button className="btn btn-sm btn-warning me-2">Editar</button>
+                      <button
+                          className="btn btn-sm btn-warning me-2"
+                          onClick={() => {
+                          setGameToEdit({
+                          title: "Left 4 Dead 2",
+                          category: "Multijugador",
+                          price: 19.99 ,
+                          discount: 0,
+                          description: ""
+                        });
+                            setGameModalVisible(true);
+                          }}
+                        >
+                          Editar
+                      </button>
                       <button className="btn btn-sm btn-danger">Eliminar</button>
                     </td>
                   </tr>
@@ -190,7 +242,21 @@ const AdminPanel: React.FC = () => {
                     <td>Mejor valorados</td>
                     <td>$39.99</td>
                     <td>
-                      <button className="btn btn-sm btn-warning me-2">Editar</button>
+                      <button
+                          className="btn btn-sm btn-warning me-2"
+                          onClick={() => {
+                          setGameToEdit({
+                          title: "The Witcher 3: Wild Hunt",
+                          category: "Mejor valorados",
+                          price: 39.99 ,
+                          discount: 0,
+                          description: ""
+                        });
+                            setGameModalVisible(true);
+                          }}
+                        >
+                          Editar
+                      </button>
                       <button className="btn btn-sm btn-danger">Eliminar</button>
                     </td>
                   </tr>
@@ -199,7 +265,21 @@ const AdminPanel: React.FC = () => {
                     <td>Acceso anticipado</td>
                     <td>$49.99</td>
                     <td>
-                      <button className="btn btn-sm btn-warning me-2">Editar</button>
+                      <button
+                          className="btn btn-sm btn-warning me-2"
+                          onClick={() => {
+                          setGameToEdit({
+                          title: "Cyberpunk 2077",
+                          category: "Acceso anticipado",
+                          price: 49.99 ,
+                          discount: 0,
+                          description: ""
+                        });
+                            setGameModalVisible(true);
+                          }}
+                        >
+                          Editar
+                      </button>
                       <button className="btn btn-sm btn-danger">Eliminar</button>
                     </td>
                   </tr>
@@ -208,7 +288,21 @@ const AdminPanel: React.FC = () => {
                     <td>Gratuitos</td>
                     <td>$0.00</td>
                     <td>
-                      <button className="btn btn-sm btn-warning me-2">Editar</button>
+                      <button
+                          className="btn btn-sm btn-warning me-2"
+                          onClick={() => {
+                          setGameToEdit({
+                          title: "Among Us",
+                          category: "Gratuitos",
+                          price: 0.00 ,
+                          discount: 0,
+                          description: ""
+                        });
+                            setGameModalVisible(true);
+                          }}
+                        >
+                          Editar
+                      </button>
                       <button className="btn btn-sm btn-danger">Eliminar</button>
                     </td>
                   </tr>
@@ -217,7 +311,21 @@ const AdminPanel: React.FC = () => {
                     <td>Multijugador</td>
                     <td>$0.00</td>
                     <td>
-                      <button className="btn btn-sm btn-warning me-2">Editar</button>
+                      <button
+                          className="btn btn-sm btn-warning me-2"
+                          onClick={() => {
+                          setGameToEdit({
+                          title: "Call of duty: Warzone",
+                          category: "Multijugador",
+                          price: 0.00 ,
+                          discount: 0,
+                          description: ""
+                        });
+                            setGameModalVisible(true);
+                          }}
+                        >
+                          Editar
+                      </button>
                       <button className="btn btn-sm btn-danger">Eliminar</button>
                     </td>
                   </tr>
@@ -226,7 +334,21 @@ const AdminPanel: React.FC = () => {
                     <td>Mejor valorados</td>
                     <td>$59.99</td>
                     <td>
-                      <button className="btn btn-sm btn-warning me-2">Editar</button>
+                      <button
+                          className="btn btn-sm btn-warning me-2"
+                          onClick={() => {
+                          setGameToEdit({
+                          title: "Baldur's Gate 3",
+                          category: "Mejor Valorados",
+                          price: 59.99 ,
+                          discount: 0,
+                          description: ""
+                        });
+                            setGameModalVisible(true);
+                          }}
+                        >
+                          Editar
+                      </button>
                       <button className="btn btn-sm btn-danger">Eliminar</button>
                     </td>
                   </tr>
@@ -235,7 +357,21 @@ const AdminPanel: React.FC = () => {
                     <td>Más vendidos</td>
                     <td>$24.99</td>
                     <td>
-                      <button className="btn btn-sm btn-warning me-2">Editar</button>
+                      <button
+                          className="btn btn-sm btn-warning me-2"
+                          onClick={() => {
+                          setGameToEdit({
+                          title: "Hades",
+                          category: "Más vendidos",
+                          price: 24.99 ,
+                          discount: 0,
+                          description: ""
+                        });
+                            setGameModalVisible(true);
+                          }}
+                        >
+                          Editar
+                      </button>
                       <button className="btn btn-sm btn-danger">Eliminar</button>
                     </td>
                   </tr>
@@ -244,7 +380,21 @@ const AdminPanel: React.FC = () => {
                     <td>Gratuitos</td>
                     <td>$14.99</td>
                     <td>
-                      <button className="btn btn-sm btn-warning me-2">Editar</button>
+                      <button
+                          className="btn btn-sm btn-warning me-2"
+                          onClick={() => {
+                          setGameToEdit({
+                          title: "Stardew Valley",
+                          category: "Gratuitos",
+                          price: 14.99 ,
+                          discount: 0,
+                          description: ""
+                        });
+                            setGameModalVisible(true);
+                          }}
+                        >
+                          Editar
+                      </button>
                       <button className="btn btn-sm btn-danger">Eliminar</button>
                     </td>
                   </tr>
@@ -253,7 +403,21 @@ const AdminPanel: React.FC = () => {
                     <td>Más vendidos</td>
                     <td>$14.99</td>
                     <td>
-                      <button className="btn btn-sm btn-warning me-2">Editar</button>
+                      <button
+                          className="btn btn-sm btn-warning me-2"
+                          onClick={() => {
+                          setGameToEdit({
+                          title: "R.E.P.O",
+                          category: "Más vendidos",
+                          price: 14.99 ,
+                          discount: 0,
+                          description: ""
+                        });
+                            setGameModalVisible(true);
+                          }}
+                        >
+                          Editar
+                      </button>
                       <button className="btn btn-sm btn-danger">Eliminar</button>
                     </td>
                   </tr>
@@ -262,7 +426,21 @@ const AdminPanel: React.FC = () => {
                     <td>Mejor valorados</td>
                     <td>$39.99</td>
                     <td>
-                      <button className="btn btn-sm btn-warning me-2">Editar</button>
+                      <button
+                          className="btn btn-sm btn-warning me-2"
+                          onClick={() => {
+                          setGameToEdit({
+                          title: "Dead by Daylight",
+                          category: "Mejor valorados",
+                          price: 39.99 ,
+                          discount: 0,
+                          description: ""
+                        });
+                            setGameModalVisible(true);
+                          }}
+                        >
+                          Editar
+                      </button>
                       <button className="btn btn-sm btn-danger">Eliminar</button>
                     </td>
                   </tr>

@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import '../../assets/estiloAdminNoticias.css';
+import 'bootstrap/dist/css/bootstrap.min.css';
+
 
 interface GameData {
   id?: string;
@@ -57,13 +59,23 @@ const GameModal: React.FC<GameModalProps> = ({ visible, onClose, initialData }) 
   if (!visible) return null;
 
   return (
-    <div className="modal-custom" onClick={onClose}>
-      <div className="modal-content-custom modal-large" onClick={e => e.stopPropagation()}>
+    <div className="modal d-block" onClick={onClose} style={{ backgroundColor: 'rgba(0,0,0,0.5)' }}>
+      <div className="modal-dialog modal-lg" onClick={(e) => e.stopPropagation()}>
+        <div className="modal-content">
         <form onSubmit={handleSubmit}>
+          {/* Encabezado negro */}
           <div className="modal-header bg-dark text-white">
             <h5 className="modal-title">{initialData ? 'Editar Juego' : 'Agregar Juego'}</h5>
-            <button type="button" className="btn-close" onClick={onClose}></button>
-          </div>
+            <button
+              type="button"
+              className="btn-close"
+              style={{ filter: 'invert(1)' }}
+              onClick={onClose}
+              aria-label="Cerrar"
+            ></button>
+             </div>
+
+
 
           <div className="modal-body">
             <div className="row mb-3">
@@ -133,10 +145,11 @@ const GameModal: React.FC<GameModalProps> = ({ visible, onClose, initialData }) 
           </div>
 
           <div className="modal-footer">
-            <button type="submit" className="btn btn-primary">Guardar</button>
+            <button type="submit" className="btn btn-primary mx-2">Guardar</button>
             <button type="button" className="btn btn-secondary" onClick={onClose}>Cancelar</button>
           </div>
         </form>
+        </div>
       </div>
     </div>
   );
