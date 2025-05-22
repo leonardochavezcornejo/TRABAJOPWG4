@@ -12,20 +12,20 @@ interface GameData {
   description: string;
 }
 
-interface GameModalProps {
+interface AdminGameModalProps {
   visible: boolean;
   onClose: () => void;
   initialData?: GameData | null;
 }
 
-const GameModal: React.FC<GameModalProps> = ({ visible, onClose, initialData }) => {
+const AdminGameModal: React.FC<AdminGameModalProps> = ({ visible, onClose, initialData }) => {
   const [title, setTitle] = useState('');
   const [category, setCategory] = useState('');
   const [price, setPrice] = useState(0);
   const [discount, setDiscount] = useState(0);
   const [description, setDescription] = useState('');
 
-  // Cuando se abre el modal con datos iniciales, se cargan en el formulario
+ 
   useEffect(() => {
     if (initialData) {
       setTitle(initialData.title);
@@ -155,5 +155,5 @@ const GameModal: React.FC<GameModalProps> = ({ visible, onClose, initialData }) 
   );
 };
 
-export default GameModal;
+export default AdminGameModal;
 export type { GameData };

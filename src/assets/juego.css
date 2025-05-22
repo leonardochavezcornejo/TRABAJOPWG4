@@ -53,7 +53,6 @@ body {
   right: 0;
   bottom: 0;
   background-color: rgba(0, 0, 0, 0.7);
-  display: none;
   align-items: center;
   justify-content: center;
   z-index: 2000;
@@ -71,7 +70,6 @@ body {
   box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
 }
 
-/* Estilos para la sección de comentarios */
 .review-item {
   border-bottom: 1px solid #eee;
   padding: 12px 0;
@@ -97,7 +95,7 @@ body {
   line-height: 1.4;
 }
 
-/* Estrellas de calificación */
+
 .star-rating {
   font-size: 24px;
   cursor: pointer;
@@ -120,7 +118,7 @@ body {
   color: #ddd;
 }
 
-/* Formulario de comentarios */
+
 #userName, #userComment {
   border-radius: 6px;
   border: 1px solid #ced4da;
@@ -132,7 +130,7 @@ body {
   min-height: 80px;
 }
 
-/* Precios y botones */
+
 .card-text.text-success {
   font-weight: bold;
   font-size: 1.1rem;
@@ -167,7 +165,6 @@ body {
   transform: translateY(-2px);
 }
 
-/* Scrollbar personalizada */
 #gameReviews::-webkit-scrollbar {
   width: 6px;
 }
@@ -186,7 +183,6 @@ body {
   background: #555;
 }
 
-/* Responsive */
 @media (max-width: 768px) {
   .modal-content-custom {
     width: 95%;

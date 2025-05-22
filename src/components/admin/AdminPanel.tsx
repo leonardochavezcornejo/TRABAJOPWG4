@@ -8,10 +8,8 @@ import NoticeTable from './NoticeTable';
 import DeleteNotice from './DeleteNotice';
 import AddNotice from './AddNotice';
 import FilterGamesModal from './FilterGamesModal';
-import GameModal, { type GameData } from './GameModal';
+import AdminGameModal, { type GameData } from './AdminGameModal';
 import MonthlyEarningsChart from './MonthlyEarningsChart';
-
-
 
 
 
@@ -515,7 +513,7 @@ const AdminPanel: React.FC = () => {
         onClose={() => setFilterModalVisible(false)}
         onFilter={handleApplyFilters}
       />
-      <GameModal
+      <AdminGameModal
         visible={gameModalVisible}
         onClose={() => setGameModalVisible(false)}
         initialData={gameToEdit}
