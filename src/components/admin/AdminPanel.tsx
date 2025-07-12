@@ -9,6 +9,7 @@ import DeleteNotice from './DeleteNotice';
 import AddNotice from './AddNotice';
 import FilterGamesModal from './FilterGamesModal';
 import AdminGameModal, { type GameData } from './AdminGameModal';
+import { games as initialGames } from '../data/games';
 import MonthlyEarningsChart from './MonthlyEarningsChart';
 
 
@@ -38,6 +39,11 @@ const AdminPanel: React.FC = () => {
   const [filterModalVisible, setFilterModalVisible] = useState(false);
   const [gameModalVisible, setGameModalVisible] = useState(false);
   const [gameToEdit, setGameToEdit] = useState<GameData | null>(null);
+  const [games, setGames] = useState(initialGames);
+  // Eliminar juego por id
+  const handleDeleteGame = (id: number) => {
+    setGames(prev => prev.filter(g => g.id !== id));
+  };
   const handleApplyFilters = (filters: FilterData) => {
     console.log("Filtros aplicados:", filters);
   };
@@ -164,284 +170,30 @@ const AdminPanel: React.FC = () => {
               <table className="table table-bordered table-hover shadow-sm">
                 <thead><tr><th>Título</th><th>Categoría</th><th>Precio</th><th>Acciones</th></tr></thead>
                 <tbody id="gameTableBody">
-                  <tr>
-                    <td>GTA VI</td>
-                    <td>Más vendidos</td>
-                    <td>$59.99</td>
-                    <td>
-                      <button
+                  {games.map(game => (
+                    <tr key={game.id}>
+                      <td>{game.title}</td>
+                      <td>{game.category}</td>
+                      <td>${game.price.toFixed(2)}</td>
+                      <td>
+                        <button
                           className="btn btn-sm btn-warning me-2"
                           onClick={() => {
-                          setGameToEdit({
-                          title: "GTA VI",
-                          category: "Mas Vendidos",
-                          price: 59.99 ,
-                          discount: 0,
-                          description: ""
-                        });
+                            setGameToEdit(game);
                             setGameModalVisible(true);
                           }}
                         >
                           Editar
-                      </button>
-                      <button className="btn btn-sm btn-danger">Eliminar</button>
-                    </td>
-                  </tr>
-                  <tr>
-                    <td>Mortal Kombat 11</td>
-                    <td>Mejor valorados</td>
-                    <td>$49.99</td>
-                    <td>
-                      
-                      <button
-                          className="btn btn-sm btn-warning me-2"
-                          onClick={() => {
-                          setGameToEdit({
-                          title: "Mortal Kombat 11",
-                          category: "Mejor valorados",
-                          price: 49.99 ,
-                          discount: 0,
-                          description: ""
-                        });
-                            setGameModalVisible(true);
-                          }}
+                        </button>
+                        <button
+                          className="btn btn-sm btn-danger"
+                          onClick={() => handleDeleteGame(game.id)}
                         >
-                          Editar
-                      </button>
-
-                      <button className="btn btn-sm btn-danger">Eliminar</button>
-                    </td>
-                  </tr>
-                  <tr>
-                    <td>Left 4 Dead 2</td>
-                    <td>Multijugador</td>
-                    <td>$19.99</td>
-                    <td>
-                      <button
-                          className="btn btn-sm btn-warning me-2"
-                          onClick={() => {
-                          setGameToEdit({
-                          title: "Left 4 Dead 2",
-                          category: "Multijugador",
-                          price: 19.99 ,
-                          discount: 0,
-                          description: ""
-                        });
-                            setGameModalVisible(true);
-                          }}
-                        >
-                          Editar
-                      </button>
-                      <button className="btn btn-sm btn-danger">Eliminar</button>
-                    </td>
-                  </tr>
-                  <tr>
-                    <td>The Witcher 3: Wild Hunt</td>
-                    <td>Mejor valorados</td>
-                    <td>$39.99</td>
-                    <td>
-                      <button
-                          className="btn btn-sm btn-warning me-2"
-                          onClick={() => {
-                          setGameToEdit({
-                          title: "The Witcher 3: Wild Hunt",
-                          category: "Mejor valorados",
-                          price: 39.99 ,
-                          discount: 0,
-                          description: ""
-                        });
-                            setGameModalVisible(true);
-                          }}
-                        >
-                          Editar
-                      </button>
-                      <button className="btn btn-sm btn-danger">Eliminar</button>
-                    </td>
-                  </tr>
-                  <tr>
-                    <td>Cyberpunk 2077</td>
-                    <td>Acceso anticipado</td>
-                    <td>$49.99</td>
-                    <td>
-                      <button
-                          className="btn btn-sm btn-warning me-2"
-                          onClick={() => {
-                          setGameToEdit({
-                          title: "Cyberpunk 2077",
-                          category: "Acceso anticipado",
-                          price: 49.99 ,
-                          discount: 0,
-                          description: ""
-                        });
-                            setGameModalVisible(true);
-                          }}
-                        >
-                          Editar
-                      </button>
-                      <button className="btn btn-sm btn-danger">Eliminar</button>
-                    </td>
-                  </tr>
-                  <tr>
-                    <td>Among Us</td>
-                    <td>Gratuitos</td>
-                    <td>$0.00</td>
-                    <td>
-                      <button
-                          className="btn btn-sm btn-warning me-2"
-                          onClick={() => {
-                          setGameToEdit({
-                          title: "Among Us",
-                          category: "Gratuitos",
-                          price: 0.00 ,
-                          discount: 0,
-                          description: ""
-                        });
-                            setGameModalVisible(true);
-                          }}
-                        >
-                          Editar
-                      </button>
-                      <button className="btn btn-sm btn-danger">Eliminar</button>
-                    </td>
-                  </tr>
-                  <tr>
-                    <td>Call of Duty: Warzone</td>
-                    <td>Multijugador</td>
-                    <td>$0.00</td>
-                    <td>
-                      <button
-                          className="btn btn-sm btn-warning me-2"
-                          onClick={() => {
-                          setGameToEdit({
-                          title: "Call of duty: Warzone",
-                          category: "Multijugador",
-                          price: 0.00 ,
-                          discount: 0,
-                          description: ""
-                        });
-                            setGameModalVisible(true);
-                          }}
-                        >
-                          Editar
-                      </button>
-                      <button className="btn btn-sm btn-danger">Eliminar</button>
-                    </td>
-                  </tr>
-                  <tr>
-                    <td>Baldur's Gate 3</td>
-                    <td>Mejor valorados</td>
-                    <td>$59.99</td>
-                    <td>
-                      <button
-                          className="btn btn-sm btn-warning me-2"
-                          onClick={() => {
-                          setGameToEdit({
-                          title: "Baldur's Gate 3",
-                          category: "Mejor Valorados",
-                          price: 59.99 ,
-                          discount: 0,
-                          description: ""
-                        });
-                            setGameModalVisible(true);
-                          }}
-                        >
-                          Editar
-                      </button>
-                      <button className="btn btn-sm btn-danger">Eliminar</button>
-                    </td>
-                  </tr>
-                  <tr>
-                    <td>Hades</td>
-                    <td>Más vendidos</td>
-                    <td>$24.99</td>
-                    <td>
-                      <button
-                          className="btn btn-sm btn-warning me-2"
-                          onClick={() => {
-                          setGameToEdit({
-                          title: "Hades",
-                          category: "Más vendidos",
-                          price: 24.99 ,
-                          discount: 0,
-                          description: ""
-                        });
-                            setGameModalVisible(true);
-                          }}
-                        >
-                          Editar
-                      </button>
-                      <button className="btn btn-sm btn-danger">Eliminar</button>
-                    </td>
-                  </tr>
-                  <tr>
-                    <td>Stardew Valley</td>
-                    <td>Gratuitos</td>
-                    <td>$14.99</td>
-                    <td>
-                      <button
-                          className="btn btn-sm btn-warning me-2"
-                          onClick={() => {
-                          setGameToEdit({
-                          title: "Stardew Valley",
-                          category: "Gratuitos",
-                          price: 14.99 ,
-                          discount: 0,
-                          description: ""
-                        });
-                            setGameModalVisible(true);
-                          }}
-                        >
-                          Editar
-                      </button>
-                      <button className="btn btn-sm btn-danger">Eliminar</button>
-                    </td>
-                  </tr>
-                  <tr>
-                    <td>R.E.P.O</td>
-                    <td>Más vendidos</td>
-                    <td>$14.99</td>
-                    <td>
-                      <button
-                          className="btn btn-sm btn-warning me-2"
-                          onClick={() => {
-                          setGameToEdit({
-                          title: "R.E.P.O",
-                          category: "Más vendidos",
-                          price: 14.99 ,
-                          discount: 0,
-                          description: ""
-                        });
-                            setGameModalVisible(true);
-                          }}
-                        >
-                          Editar
-                      </button>
-                      <button className="btn btn-sm btn-danger">Eliminar</button>
-                    </td>
-                  </tr>
-                  <tr>
-                    <td>Dead by Daylight</td>
-                    <td>Mejor valorados</td>
-                    <td>$39.99</td>
-                    <td>
-                      <button
-                          className="btn btn-sm btn-warning me-2"
-                          onClick={() => {
-                          setGameToEdit({
-                          title: "Dead by Daylight",
-                          category: "Mejor valorados",
-                          price: 39.99 ,
-                          discount: 0,
-                          description: ""
-                        });
-                            setGameModalVisible(true);
-                          }}
-                        >
-                          Editar
-                      </button>
-                      <button className="btn btn-sm btn-danger">Eliminar</button>
-                    </td>
-                  </tr>
+                          Eliminar
+                        </button>
+                      </td>
+                    </tr>
+                  ))}
                 </tbody>
               </table>
             </div>
