@@ -19,11 +19,26 @@ const FilterGamesModal: React.FC<FilterGamesModalProps> = ({ visible, onClose, o
   const [precioMin, setPrecioMin] = useState('');
   const [precioMax, setPrecioMax] = useState('');
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    onFilter({ categoria, precioMin, precioMax });
-    onClose();
+
+    // Llamar a la API para obtener los juegos filtrados
+    try {
+      const response = await fetch(`http://localhost:3000/api/admin/games/filter?categoria=${categoria}&precioMin=${precioMin}&precioMax=${precioMax}`);
+      const data = await response.json();
+
+      if (response.ok) {
+        onFilter({ categoria, precioMin, precioMax }); // Pasa los filtros a los componentes superiores
+        onClose(); // Cierra el modal
+      } else {
+        alert(data.message || 'Error al filtrar los juegos');
+      }
+    } catch (error) {
+      console.error('Error al aplicar el filtro:', error);
+      alert('Error al aplicar el filtro');
+    }
   };
+
 
   if (!visible) return null;
 
@@ -37,8 +52,6 @@ const FilterGamesModal: React.FC<FilterGamesModalProps> = ({ visible, onClose, o
           </div>
 
           <div className="modal-body">
-
-
             {/* Categoría */}
             <div className="mb-3">
               <label htmlFor="categoria" className="form-label">Categoría</label>

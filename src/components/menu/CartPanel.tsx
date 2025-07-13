@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import type { Game } from '../types';
 import '../../assets/juego.css';
 
@@ -7,13 +7,57 @@ interface CartPanelProps {
   onClose: () => void;
   items: Game[];
   onRemove: (id: number) => void;
-  onBuy: () => void; 
+  onBuy: () => void;
 }
 
 const CartPanel: React.FC<CartPanelProps> = ({ visible, onClose, items, onRemove, onBuy }) => {
-  if (!visible) return null;
+  const [total, setTotal] = useState(0);
 
-  const total = items.reduce((sum, item) => sum + item.price, 0);
+  useEffect(() => {
+    // Recalcular el total cuando se agregan o eliminan productos
+    const newTotal = items.reduce((sum, item) => sum + item.price, 0);
+    setTotal(newTotal);
+  }, [items]);
+
+  const handleRemove = async (id: number) => {
+    // Realizar una solicitud DELETE al backend para eliminar el producto
+    try {
+      await fetch(`http://localhost:3000/api/cart/remove/${id}`, {
+        method: 'DELETE',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+      onRemove(id); // Llamar la función para actualizar el estado en el componente padre
+    } catch (error) {
+      console.error('Error al eliminar el producto:', error);
+    }
+  };
+
+  const handleBuy = async () => {
+    // Confirmar el pedido y vaciar el carrito
+    try {
+      const response = await fetch('http://localhost:3000/api/cart/checkout', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ items }),
+      });
+
+      const data = await response.json();
+      if (response.ok) {
+        alert('Pedido confirmado con éxito');
+        onBuy(); // Llamar la función para actualizar el estado en el componente padre
+      } else {
+        alert(data.message || 'Error al confirmar el pedido');
+      }
+    } catch (error) {
+      console.error('Error al confirmar el pedido:', error);
+    }
+  };
+
+  if (!visible) return null;
 
   return (
     <div className="cart-panel">
@@ -35,7 +79,7 @@ const CartPanel: React.FC<CartPanelProps> = ({ visible, onClose, items, onRemove
                   </div>
                   <button
                     className="btn btn-sm btn-danger"
-                    onClick={() => onRemove(item.id)}
+                    onClick={() => handleRemove(item.id)}
                   >
                     Eliminar
                   </button>
@@ -48,7 +92,7 @@ const CartPanel: React.FC<CartPanelProps> = ({ visible, onClose, items, onRemove
             </div>
           </>
         )}
-        <button className="btn btn-success me-2" onClick={onBuy}>
+        <button className="btn btn-success me-2" onClick={handleBuy}>
           Confirmar pedido
         </button>
         <button className="btn btn-secondary" onClick={onClose}>
