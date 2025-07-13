@@ -50,20 +50,22 @@ const GameModal: React.FC<GameModalProps> = ({ game, onClose, onAddToCart }) => 
           {/* Columna izquierda */}
           <div className="col-md-6">
             <h2 className="text-center mb-3">{game.title}</h2>
+            {/* Mostrar el video o iframe de YouTube dependiendo de la URL */}
             {game.images[selectedImage].endsWith('.mp4') ? (
               <video
                 src={game.images[selectedImage]}
                 controls
                 className="img-fluid rounded mb-3"
                 style={{ width: '100%', height: 300, objectFit: 'cover' }}
-                poster={game.images.find(img => img.endsWith('.jpg') || img.endsWith('.jpeg') || img.endsWith('.png'))}
+                poster={game.images.find(img => img.endsWith('.jpg') || img.endsWith('.jpeg') || img.endsWith('.png'))} // Vista previa de imagen
               />
             ) : game.images[selectedImage].includes('youtube.com') ? (
+              // Mostrar iframe de YouTube si el enlace es de youtube.com
               <div className="mb-3" style={{ width: '100%', height: 300 }}>
                 <iframe
                   width="100%"
                   height="100%"
-                  src={game.images[selectedImage]}
+                  src={game.images[selectedImage].includes('embed') ? game.images[selectedImage] : game.images[selectedImage].replace('watch?v=', 'embed/')} // Convertir a formato embed si es necesario
                   title="YouTube video player"
                   frameBorder="0"
                   allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
@@ -80,61 +82,60 @@ const GameModal: React.FC<GameModalProps> = ({ game, onClose, onAddToCart }) => 
               />
             )}
             <div className="d-flex justify-content-center mb-3 flex-wrap">
-              {game.images.map((img, index) => {
-                if (img.endsWith('.mp4')) {
-                  return (
-                    <video
-                      key={index}
-                      src={img}
-                      className={`thumb ${index === selectedImage ? 'active' : ''}`}
-                      style={{ width: 60, height: 40, objectFit: 'cover', margin: 2, border: index === selectedImage ? '2px solid #007bff' : '1px solid #ccc', cursor: 'pointer' }}
-                      onClick={() => setSelectedImage(index)}
-                      muted
-                      preload="metadata"
-                    />
-                  );
-                } else if (img.includes('youtube.com')) {
-                  // Extraer el id del video para la miniatura
-                  const match = img.match(/embed\/([\w-]+)/);
-                  const videoId = match ? match[1] : '';
-                  const thumbUrl = videoId ? `https://img.youtube.com/vi/${videoId}/0.jpg` : '';
-                  return (
-                    <img
-                      key={index}
-                      src={thumbUrl}
-                      className={`thumb ${index === selectedImage ? 'active' : ''}`}
-                      style={{ width: 60, height: 40, objectFit: 'cover', margin: 2, border: index === selectedImage ? '2px solid #007bff' : '1px solid #ccc', cursor: 'pointer' }}
-                      onClick={() => setSelectedImage(index)}
-                      alt={`thumbnail-youtube-${index}`}
-                    />
-                  );
-                } else {
-                  return (
-                    <img
-                      key={index}
-                      src={img}
-                      className={`thumb ${index === selectedImage ? 'active' : ''}`}
-                      style={{ width: 60, height: 40, objectFit: 'cover', margin: 2, border: index === selectedImage ? '2px solid #007bff' : '1px solid #ccc', cursor: 'pointer' }}
-                      onClick={() => setSelectedImage(index)}
-                      alt={`thumbnail-${index}`}
-                    />
-                  );
-                }
-              })}
-            </div>
-            <div className="text-center my-3">
-              <div className="d-flex justify-content-center align-items-center mb-2">
-                <span className="me-2">Valoración:</span>
-                <div className="text-warning me-1">
-                  {'★'.repeat(Math.round(Number(averageRating)))}
-                </div>
-                <span>({averageRating} de {reviews.length} valoraciones)</span>
+                {/* Recorrer las miniaturas */}
+                {game.images.map((img, index) => {
+                  if (img.endsWith('.mp4')) {
+                    return (
+                      <video
+                        key={index}
+                        src={img}
+                        className={`thumb ${index === selectedImage ? 'active' : ''}`}
+                        style={{
+                          width: 60, height: 40, objectFit: 'cover', margin: 2,
+                          border: index === selectedImage ? '2px solid #007bff' : '1px solid #ccc', cursor: 'pointer'
+                        }}
+                        onClick={() => setSelectedImage(index)}
+                        muted
+                        preload="metadata"
+                      />
+                    );
+                  } else if (img.includes('youtube.com')) {
+                    // Extraer el id del video de YouTube, manejando tanto el formato 'embed' como 'watch?v='
+                    const match = img.match(/(?:youtube\.com\/(?:[^\/\n\s]+\/\S+\/|(?:v|e(?:mbed)?)\/|\S*?[?&]v=)|youtu\.be\/)([a-zA-Z0-9_-]{11})/);
+                    const videoId = match ? match[1] : '';  // Obtener el video ID
+                    const thumbUrl = videoId ? `https://img.youtube.com/vi/${videoId}/0.jpg` : ''; // Generar miniatura de YouTube
+
+                    return (
+                      <img
+                        key={index}
+                        src={thumbUrl}  // Usamos la URL de la miniatura
+                        className={`thumb ${index === selectedImage ? 'active' : ''}`}
+                        style={{
+                          width: 60, height: 40, objectFit: 'cover', margin: 2,
+                          border: index === selectedImage ? '2px solid #007bff' : '1px solid #ccc', cursor: 'pointer'
+                        }}
+                        onClick={() => setSelectedImage(index)}
+                        alt={`thumbnail-youtube-${index}`} // Asegúrate de que el alt sea correcto
+                      />
+                    );
+                  } else {
+                    return (
+                      <img
+                        key={index}
+                        src={img}
+                        className={`thumb ${index === selectedImage ? 'active' : ''}`}
+                        style={{
+                          width: 60, height: 40, objectFit: 'cover', margin: 2,
+                          border: index === selectedImage ? '2px solid #007bff' : '1px solid #ccc', cursor: 'pointer'
+                        }}
+                        onClick={() => setSelectedImage(index)}
+                        alt={`thumbnail-${index}`}
+                      />
+                    );
+                  }
+                })}
               </div>
-              <button className="btn btn-success w-100" onClick={() => onAddToCart(game)}>
-                Agregar al carrito - ${game.price}
-              </button>
             </div>
-          </div>
 
           {/* Columna derecha */}
           <div className="col-md-6">
