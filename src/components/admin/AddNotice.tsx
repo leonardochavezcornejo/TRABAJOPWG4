@@ -17,7 +17,7 @@ const AddNotice: React.FC<AddNoticeProps> = ({ visible, onClose, onSubmit }) => 
     if (title.trim() && content.trim()) {
       try {
         // Llamada a la API para agregar la noticia
-        const response = await fetch('http://localhost:3000/api/admin/news', {
+        const response = await fetch('http://localhost:5000/api/admin/news', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',

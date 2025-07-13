@@ -34,7 +34,7 @@ const EditNotice: React.FC<EditNoticeProps> = ({
 
     // Enviar la solicitud PUT al backend
     try {
-      const response = await fetch(`http://localhost:3000/api/admin/news/${initialData.id}`, {
+      const response = await fetch(`http://localhost:5000/api/admin/news/${initialData.id}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',

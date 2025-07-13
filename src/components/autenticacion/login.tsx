@@ -19,7 +19,7 @@ const LoginForm: React.FC = () => {
 
     try {
       // Enviar solicitud POST al backend para login con Fetch
-      const response = await fetch('http://localhost:3000/api/login', {
+      const response = await fetch('http://localhost:5000/api/login', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -30,7 +30,6 @@ const LoginForm: React.FC = () => {
       // Verificar si la respuesta fue exitosa
       if (response.ok) {
         const data = await response.json();
-        alert(data.message);  // Mostrar mensaje de éxito
         setUser(data.user);   // Almacenar los datos del usuario en el estado
         navigate('/');  // Redirigir a la página principal
       } else {

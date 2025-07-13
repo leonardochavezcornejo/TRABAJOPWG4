@@ -22,7 +22,7 @@ const CartPanel: React.FC<CartPanelProps> = ({ visible, onClose, items, onRemove
   const handleRemove = async (id: number) => {
     // Realizar una solicitud DELETE al backend para eliminar el producto
     try {
-      await fetch(`http://localhost:3000/api/cart/remove/${id}`, {
+      await fetch(`http://localhost:5000/api/cart/remove/${id}`, {
         method: 'DELETE',
         headers: {
           'Content-Type': 'application/json',
@@ -37,7 +37,7 @@ const CartPanel: React.FC<CartPanelProps> = ({ visible, onClose, items, onRemove
   const handleBuy = async () => {
     // Confirmar el pedido y vaciar el carrito
     try {
-      const response = await fetch('http://localhost:3000/api/cart/checkout', {
+      const response = await fetch('http://localhost:5000/api/cart/checkout', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

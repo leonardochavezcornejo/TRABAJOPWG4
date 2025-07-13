@@ -17,7 +17,7 @@ const ConfirmationModal: React.FC<ConfirmationModalProps> = ({ visible, onClose,
   const handleConfirm = async () => {
     setLoading(true);
     try {
-      const response = await fetch(`http://localhost:3000/api/cart/${userId}/checkout`, {
+      const response = await fetch(`http://localhost:5000/api/cart/${userId}/checkout`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

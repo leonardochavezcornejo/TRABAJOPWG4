@@ -9,7 +9,7 @@ const MonthlyEarningsChart: React.FC = () => {
     // Llamada a la API para obtener las ganancias mensuales
     const fetchEarningsData = async () => {
       try {
-        const response = await fetch('http://localhost:3000/api/stats/monthly-earnings');
+        const response = await fetch('http://localhost:5000/api/stats/monthly-earnings');
         if (response.ok) {
           const data = await response.json();
           setEarningsData(data);

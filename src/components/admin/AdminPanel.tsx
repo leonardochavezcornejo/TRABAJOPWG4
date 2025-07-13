@@ -44,7 +44,7 @@ const AdminPanel: React.FC = () => {
   // Eliminar juego por id
   const handleDeleteGame = async (id: number) => {
     try {
-      await fetch(`http://localhost:3000/api/admin/games/${id}`, {
+      await fetch(`http://localhost:5000/api/admin/games/${id}`, {
         method: 'DELETE',
       });
       // Filtrar el juego eliminado de la lista de juegos
@@ -60,7 +60,7 @@ const AdminPanel: React.FC = () => {
     try {
       if (game.id) {
         // Si el juego tiene id, lo editamos (PUT)
-        await fetch(`http://localhost:3000/api/admin/games/${game.id}`, {
+        await fetch(`http://localhost:5000/api/admin/games/${game.id}`, {
           method: 'PUT',
           headers: {
             'Content-Type': 'application/json',
@@ -69,7 +69,7 @@ const AdminPanel: React.FC = () => {
         });
       } else {
         // Si no tiene id, lo creamos (POST)
-        await fetch('http://localhost:3000/api/admin/games', {
+        await fetch('http://localhost:5000/api/admin/games', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -86,7 +86,7 @@ const AdminPanel: React.FC = () => {
 
   const handleApplyFilters = async (filters: FilterData) => {
     try {
-      const response = await fetch(`http://localhost:3000/api/admin/games/filter?category=${filters.categoria}&priceRange=${filters.precioMin}-${filters.precioMax}`);
+      const response = await fetch(`http://localhost:5000/api/admin/games/filter?category=${filters.categoria}&priceRange=${filters.precioMin}-${filters.precioMax}`);
       const data = await response.json();
       if (response.ok) {
         setGames(data); // Actualiza los juegos filtrados
@@ -105,7 +105,7 @@ const AdminPanel: React.FC = () => {
 
   const handleConfirmDelete = async () => {
     try {
-      await fetch(`http://localhost:3000/api/admin/news/${noticeToDelete.id}`, {
+      await fetch(`http://localhost:5000/api/admin/news/${noticeToDelete.id}`, {
         method: 'DELETE',
       });
       setNoticias(prev => prev.filter(n => n.id !== noticeToDelete.id));
@@ -118,7 +118,7 @@ const AdminPanel: React.FC = () => {
   // Eliminada función no usada handleDelete
   const handleAddNotice = async (title: string, content: string) => {
     try {
-      const response = await fetch('http://localhost:3000/api/admin/news', {
+      const response = await fetch('http://localhost:5000/api/admin/news', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -148,7 +148,7 @@ const AdminPanel: React.FC = () => {
 
   const handleEditSubmit = async (id: string, title: string, content: string) => {
     try {
-      const response = await fetch(`http://localhost:3000/api/admin/news/${id}`, {
+      const response = await fetch(`http://localhost:5000/api/admin/news/${id}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',

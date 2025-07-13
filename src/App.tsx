@@ -39,7 +39,7 @@ function App() {
 
   // Obtiene los juegos del backend al montar el componente
   useEffect(() => {
-    fetch('http://localhost:3000/api/games')
+    fetch('http://localhost:5000/api/games')
       .then(res => res.json())
       .then(data => setGames(data))
       .catch(err => console.error('Error fetching games:', err));

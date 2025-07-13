@@ -13,7 +13,7 @@ const DeleteNotice: React.FC<DeleteNoticeProps> = ({ visible, onClose, onConfirm
   const handleDelete = async () => {
     try {
       // Realizamos la solicitud DELETE al backend para eliminar la noticia
-      const response = await fetch('http://localhost:3000/api/admin/news/{id}', {  // Reemplaza `{id}` por el ID de la noticia
+      const response = await fetch('http://localhost:5000/api/admin/news/{id}', {  // Reemplaza `{id}` por el ID de la noticia
         method: 'DELETE',
       });
 

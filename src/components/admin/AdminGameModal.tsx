@@ -61,14 +61,14 @@ const AdminGameModal: React.FC<AdminGameModalProps> = ({ visible, onClose, initi
       let response;
       if (initialData?.id) {
         // Editar el juego (PUT)
-        response = await fetch(`http://localhost:3000/api/admin/games/${initialData.id}`, {
+        response = await fetch(`http://localhost:5000/api/admin/games/${initialData.id}`, {
           method: 'PUT',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(game)
         });
       } else {
         // Agregar el juego (POST)
-        response = await fetch('http://localhost:3000/api/admin/games', {
+        response = await fetch('http://localhost:5000/api/admin/games', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(game)

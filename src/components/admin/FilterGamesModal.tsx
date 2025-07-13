@@ -24,7 +24,7 @@ const FilterGamesModal: React.FC<FilterGamesModalProps> = ({ visible, onClose, o
 
     // Llamar a la API para obtener los juegos filtrados
     try {
-      const response = await fetch(`http://localhost:3000/api/admin/games/filter?categoria=${categoria}&precioMin=${precioMin}&precioMax=${precioMax}`);
+      const response = await fetch(`http://localhost:5000/api/admin/games/filter?categoria=${categoria}&precioMin=${precioMin}&precioMax=${precioMax}`);
       const data = await response.json();
 
       if (response.ok) {

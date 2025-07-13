@@ -17,7 +17,7 @@ const EditarPerfil = () => {
   useEffect(() => {
     const fetchUserData = async () => {
       try {
-        const response = await fetch(`http://localhost:3000/api/profile?userId=${userId}`);
+        const response = await fetch(`http://localhost:5000/api/profile?userId=${userId}`);
         const data = await response.json();
 
         if (response.ok) {
@@ -46,7 +46,7 @@ const EditarPerfil = () => {
 
     try {
       // Enviar solicitud PUT al backend para actualizar el perfil del usuario
-      const response = await fetch(`http://localhost:3000/api/update-profile`, {
+      const response = await fetch(`http://localhost:5000/api/update-profile`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',

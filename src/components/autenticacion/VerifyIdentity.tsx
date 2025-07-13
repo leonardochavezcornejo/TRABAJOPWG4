@@ -17,7 +17,7 @@ const VerifyIdentity: React.FC = () => {
 
     try {
       // Enviar solicitud POST al backend para verificar el código
-      const response = await fetch('http://localhost:3000/api/verify-code', {
+      const response = await fetch('http://localhost:5000/api/verify-code', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
