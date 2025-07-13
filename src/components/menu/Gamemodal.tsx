@@ -10,6 +10,11 @@ interface GameModalProps {
 
 const GameModal: React.FC<GameModalProps> = ({ game, onClose, onAddToCart }) => {
   const [selectedImage, setSelectedImage] = useState(0);
+
+  // Reiniciar la imagen seleccionada cuando cambia el juego
+  React.useEffect(() => {
+    setSelectedImage(0);
+  }, [game]);
   const [userName, setUserName] = useState('');
   const [userComment, setUserComment] = useState('');
   const [userRating, setUserRating] = useState(0);
@@ -45,22 +50,77 @@ const GameModal: React.FC<GameModalProps> = ({ game, onClose, onAddToCart }) => 
           {/* Columna izquierda */}
           <div className="col-md-6">
             <h2 className="text-center mb-3">{game.title}</h2>
-            <img
-              src={game.images[selectedImage]}
-              alt={game.title}
-              className="img-fluid rounded mb-3"
-              style={{ width: '100%', height: 300, objectFit: 'cover' }}
-            />
-            <div className="d-flex justify-content-center mb-3 flex-wrap">
-              {game.images.map((img, index) => (
-                <img
-                  key={index}
-                  src={img}
-                  className={`thumb ${index === selectedImage ? 'active' : ''}`}
-                  onClick={() => setSelectedImage(index)}
-                  alt={`thumbnail-${index}`}
+            {game.images[selectedImage].endsWith('.mp4') ? (
+              <video
+                src={game.images[selectedImage]}
+                controls
+                className="img-fluid rounded mb-3"
+                style={{ width: '100%', height: 300, objectFit: 'cover' }}
+                poster={game.images.find(img => img.endsWith('.jpg') || img.endsWith('.jpeg') || img.endsWith('.png'))}
+              />
+            ) : game.images[selectedImage].includes('youtube.com') ? (
+              <div className="mb-3" style={{ width: '100%', height: 300 }}>
+                <iframe
+                  width="100%"
+                  height="100%"
+                  src={game.images[selectedImage]}
+                  title="YouTube video player"
+                  frameBorder="0"
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                  allowFullScreen
+                  style={{ borderRadius: '8px', width: '100%', height: '100%', objectFit: 'cover' }}
                 />
-              ))}
+              </div>
+            ) : (
+              <img
+                src={game.images[selectedImage]}
+                alt={game.title}
+                className="img-fluid rounded mb-3"
+                style={{ width: '100%', height: 300, objectFit: 'cover' }}
+              />
+            )}
+            <div className="d-flex justify-content-center mb-3 flex-wrap">
+              {game.images.map((img, index) => {
+                if (img.endsWith('.mp4')) {
+                  return (
+                    <video
+                      key={index}
+                      src={img}
+                      className={`thumb ${index === selectedImage ? 'active' : ''}`}
+                      style={{ width: 60, height: 40, objectFit: 'cover', margin: 2, border: index === selectedImage ? '2px solid #007bff' : '1px solid #ccc', cursor: 'pointer' }}
+                      onClick={() => setSelectedImage(index)}
+                      muted
+                      preload="metadata"
+                    />
+                  );
+                } else if (img.includes('youtube.com')) {
+                  // Extraer el id del video para la miniatura
+                  const match = img.match(/embed\/([\w-]+)/);
+                  const videoId = match ? match[1] : '';
+                  const thumbUrl = videoId ? `https://img.youtube.com/vi/${videoId}/0.jpg` : '';
+                  return (
+                    <img
+                      key={index}
+                      src={thumbUrl}
+                      className={`thumb ${index === selectedImage ? 'active' : ''}`}
+                      style={{ width: 60, height: 40, objectFit: 'cover', margin: 2, border: index === selectedImage ? '2px solid #007bff' : '1px solid #ccc', cursor: 'pointer' }}
+                      onClick={() => setSelectedImage(index)}
+                      alt={`thumbnail-youtube-${index}`}
+                    />
+                  );
+                } else {
+                  return (
+                    <img
+                      key={index}
+                      src={img}
+                      className={`thumb ${index === selectedImage ? 'active' : ''}`}
+                      style={{ width: 60, height: 40, objectFit: 'cover', margin: 2, border: index === selectedImage ? '2px solid #007bff' : '1px solid #ccc', cursor: 'pointer' }}
+                      onClick={() => setSelectedImage(index)}
+                      alt={`thumbnail-${index}`}
+                    />
+                  );
+                }
+              })}
             </div>
             <div className="text-center my-3">
               <div className="d-flex justify-content-center align-items-center mb-2">

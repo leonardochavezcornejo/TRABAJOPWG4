@@ -22,13 +22,12 @@ type FilterData = {
 };
 
 const AdminPanel: React.FC = () => {
-  const [isModalVisible, setIsModalVisible] = useState(false);
-  const [selectedGame, setSelectedGame] = useState<GameData | null>(null);  
+  // Eliminados estados no usados
 
 
   const [activeSection, setActiveSection] = useState<"usuarios" | "juegos" | "noticias" | "estadisticas">("usuarios");
   const navigate = useNavigate();
-  const [userCount, setUserCount] = useState(3);
+  const userCount = 3;
   const [editModalVisible, setEditModalVisible] = useState(false);
   const [noticeToEdit, setNoticeToEdit] = useState({ id: '', title: '', content: '' });
   const [noticias, setNoticias] = useState<Noticia[]>(noticiasIniciales);
@@ -50,7 +49,7 @@ const AdminPanel: React.FC = () => {
       // Si existe, editar; si no, agregar
       const exists = prev.some(g => g.id === game.id);
       if (exists) {
-        return prev.map(g => g.id === game.id ? { ...g, ...game } : g);
+        return prev.map(g => g.id === game.id ? { ...g, ...game, id: Number(game.id) } : g);
       } else {
         // Asignar un id numérico único
         const newId = prev.length > 0 ? Math.max(...prev.map(g => g.id)) + 1 : 1;
@@ -70,9 +69,7 @@ const AdminPanel: React.FC = () => {
     setNoticias(prev => prev.filter(n => n.id !== noticeToDelete.id));
     setDeleteModalVisible(false);
   };
-  const handleDelete = (id: string) => {
-    setNoticias(prev => prev.filter(n => n.id !== id));
-  };
+  // Eliminada función no usada handleDelete
   const handleAddNotice = (title: string, content: string) => {
     const nuevaNoticia: Noticia = {
       id: crypto.randomUUID(),
@@ -208,14 +205,14 @@ const AdminPanel: React.FC = () => {
                           className="btn btn-sm btn-warning me-2"
                           onClick={() => {
                             // Pasar discount aunque no esté en Game
-                            setGameToEdit({
-                              id: game.id,
-                              title: game.title,
-                              category: game.category,
-                              price: game.price,
-                              discount: (game as any).discount ?? 0,
-                              description: game.description
-                            });
+                        setGameToEdit({
+                          id: game.id,
+                          title: game.title,
+                          category: game.category,
+                          price: game.price,
+                          discount: (game as any).discount ?? 0,
+                          description: game.description
+                        });
                             setGameModalVisible(true);
                           }}
                         >

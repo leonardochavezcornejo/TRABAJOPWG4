@@ -8,7 +8,7 @@ export const games: Game[] = [
     category: "Más vendidos",
     price: 59.99,
     description: "La última entrega de la famosa saga de Rockstar Games te sumerge en una ciudad abierta llena de posibilidades. Con gráficos revolucionarios y una historia llena de giros inesperados, GTA VI establece un nuevo estándar para los juegos de mundo abierto.",
-    images: ["/img/game1.jpg", "/img/game1_1.jpg", "/img/game1_2.jpeg"],
+    images: ["/img/game1.jpg", "/img/game1_1.jpg", "/img/game1_2.jpeg", "https://www.youtube.com/embed/QdBZY2fkU-0"],
     rating: 5,
     reviews: gameReviews[1] || []
   },
