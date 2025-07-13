@@ -78,7 +78,7 @@ const AdminPanel: React.FC = () => {
       fecha: new Date().toLocaleDateString(),
       estado: 'Activa'
     };
-    setNoticias(prev => [nuevaNoticia, ...prev]);
+    setNoticias(prev => [nuevaNoticia, ...prev]); // agrega encima, no borra ninguna
     setAddModalVisible(false);
   };
   const handleOpenEdit = (id: string) => {
@@ -241,11 +241,13 @@ const AdminPanel: React.FC = () => {
                 Añadir Noticia
               </button>
             </div>
-            <NoticeTable
-              noticias={noticias}
-              onEditar={handleOpenEdit}
-              onBorrar={handleDeleteRequest}
-            />
+            <div style={{ maxHeight: '500px', overflowY: 'auto' }}>
+              <NoticeTable
+                noticias={noticias}
+                onEditar={handleOpenEdit}
+                onBorrar={handleDeleteRequest}
+              />
+            </div>
           </section>
         )}
 
