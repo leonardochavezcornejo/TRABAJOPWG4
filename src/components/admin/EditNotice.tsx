@@ -26,12 +26,38 @@ const EditNotice: React.FC<EditNoticeProps> = ({
     setContent(initialData.content);
   }, [initialData]);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+
+    // Llamada a la función onSubmit con los valores actuales
     onSubmit(initialData.id, title, content);
+
+    // Enviar la solicitud PUT al backend
+    try {
+      const response = await fetch(`http://localhost:3000/api/admin/news/${initialData.id}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ title, content }), // Enviamos los nuevos datos
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        alert(data.message); // Mostrar mensaje de éxito
+        onClose(); // Cerrar el modal
+      } else {
+        const errorData = await response.json();
+        alert(errorData.message || 'Error al editar la noticia'); // Mostrar mensaje de error
+      }
+    } catch (error) {
+      console.error('Error al hacer la solicitud:', error);
+      alert('Error al editar la noticia');
+    }
   };
 
   if (!visible) return null;
+
 
   return (
     <div className="modal-custom" onClick={onClose}>

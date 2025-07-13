@@ -10,6 +10,27 @@ interface DeleteNoticeProps {
 const DeleteNotice: React.FC<DeleteNoticeProps> = ({ visible, onClose, onConfirm }) => {
   if (!visible) return null;
 
+  const handleDelete = async () => {
+    try {
+      // Realizamos la solicitud DELETE al backend para eliminar la noticia
+      const response = await fetch('http://localhost:3000/api/admin/news/{id}', {  // Reemplaza `{id}` por el ID de la noticia
+        method: 'DELETE',
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        alert(data.message); // Mensaje de éxito
+        onConfirm(); // Llamamos a onConfirm para actualizar la lista de noticias o cualquier acción adicional
+      } else {
+        const errorData = await response.json();
+        alert(errorData.message || 'Error al eliminar noticia');
+      }
+    } catch (error) {
+      console.error('Error al hacer la solicitud:', error);
+      alert('Error al eliminar noticia');
+    }
+  };
+
   return (
     <div
       id="deleteNewsConfirmModal"
@@ -25,7 +46,7 @@ const DeleteNotice: React.FC<DeleteNoticeProps> = ({ visible, onClose, onConfirm
         <button
           id="confirmDeleteNewsBtn"
           className="btn btn-danger"
-          onClick={onConfirm}
+          onClick={handleDelete}  // Llamamos a handleDelete en lugar de onConfirm
         >
           Sí, eliminar
         </button>

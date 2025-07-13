@@ -10,13 +10,36 @@ interface AddNoticeProps {
 const AddNotice: React.FC<AddNoticeProps> = ({ visible, onClose, onSubmit }) => {
   const [title, setTitle] = useState('');
   const [content, setContent] = useState('');
+  const [errorMessage, setErrorMessage] = useState('');
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (title.trim() && content.trim()) {
-      onSubmit(title, content);
-      setTitle('');
-      setContent('');
+      try {
+        // Llamada a la API para agregar la noticia
+        const response = await fetch('http://localhost:3000/api/admin/news', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ title, content }), // Pasamos los datos del formulario
+        });
+
+        if (response.ok) {
+          const data = await response.json();
+          alert(data.message); // Mostrar mensaje de éxito
+          onSubmit(title, content); // Llamamos a la función onSubmit que puedes manejar en el componente principal
+          setTitle('');
+          setContent('');
+          onClose();
+        } else {
+          const errorData = await response.json();
+          setErrorMessage(errorData.message || 'Error al agregar noticia');
+        }
+      } catch (error) {
+        console.error('Error al hacer la solicitud:', error);
+        setErrorMessage('Error al realizar la solicitud');
+      }
     }
   };
 
@@ -26,6 +49,7 @@ const AddNotice: React.FC<AddNoticeProps> = ({ visible, onClose, onSubmit }) => 
     <div className="modal-custom" onClick={onClose}>
       <div className="modal-content-custom" onClick={(e) => e.stopPropagation()}>
         <h3>Añadir Noticia</h3>
+        {errorMessage && <div className="alert alert-danger">{errorMessage}</div>} {/* Mostrar error si existe */}
         <form onSubmit={handleSubmit}>
           <div className="mb-3">
             <label htmlFor="newNewsTitle" className="form-label">Título</label>
