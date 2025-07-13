@@ -1,14 +1,51 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import '../../assets/estilos4.css';
 
 const CreateAccount: React.FC = () => {
   const navigate = useNavigate();
 
-  const handleSubmit = (e: React.FormEvent) => {
+  // Estados para cada campo del formulario
+  const [fullName, setFullName] = useState('');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [username, setUsername] = useState('');
+  const [country, setCountry] = useState('');
+  const [errorMessage, setErrorMessage] = useState('');
+
+
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    navigate('/verificar');
+
+    // Limpiar mensajes de error previos
+    setErrorMessage('');
+
+    try {
+      // Enviar solicitud POST al backend para registrar el usuario
+      const response = await fetch('http://localhost:3000/api/register', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ fullName, email, password, username, country }),  // Pasamos los datos como JSON
+      });
+
+      // Verificar si la respuesta fue exitosa
+      if (response.ok) {
+        const data = await response.json();
+        alert(data.message);  // Mostrar mensaje de éxito
+        navigate('/verificar');  // Redirigir a una página de verificación o login
+      } else {
+        const errorData = await response.json();
+        setErrorMessage(errorData.message || 'Error al registrar cuenta');  // Mostrar mensaje de error
+      }
+    } catch (error) {
+      // Si ocurre un error durante la solicitud
+      console.error('Error al hacer la solicitud:', error);
+      setErrorMessage('Error al realizar la solicitud');
+    }
   };
+
 
   return (
     <div className="d-flex vh-100">
@@ -38,35 +75,62 @@ const CreateAccount: React.FC = () => {
         </div>
         <div className="form-container mx-auto">
           <h3 className="text-center mb-4">Regístrate en RetroGames</h3>
+
+          {/* Mostrar error si existe */}
+          {errorMessage && <div className="alert alert-danger">{errorMessage}</div>}
+
           <form onSubmit={handleSubmit}>
             <div className="mb-3">
               <label className="form-label">Nombre Completo:</label>
-              <input type="text" className="form-control" required />
+              <input
+                type="text"
+                className="form-control"
+                value={fullName}
+                onChange={(e) => setFullName(e.target.value)}
+                required
+              />
             </div>
             <div className="mb-3">
               <label className="form-label">Correo electrónico:</label>
-              <input type="email" className="form-control" required />
+              <input
+                type="email"
+                className="form-control"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                required
+              />
             </div>
             <div className="mb-3">
               <label className="form-label">Contraseña:</label>
-              <input type="password" className="form-control" required />
-              <div className="form-text">
-                La contraseña debe tener al menos 15 caractéres.
-              </div>
+              <input
+                type="password"
+                className="form-control"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                required
+              />
+              <div className="form-text">La contraseña debe tener al menos 15 caracteres.</div>
             </div>
             <div className="mb-3">
               <label className="form-label">Username:</label>
-              <input type="text" className="form-control" required />
-              <div className="form-text">
-                Puedes usar letras, números o signos ($,%,#,@,!,...).
-              </div>
+              <input
+                type="text"
+                className="form-control"
+                value={username}
+                onChange={(e) => setUsername(e.target.value)}
+                required
+              />
+              <div className="form-text">Puedes usar letras, números o signos ($,%,#,@,!,...).</div>
             </div>
             <div className="mb-3">
               <label className="form-label">Tu país:</label>
-              <select className="form-select" required>
-                <option value="" disabled selected>
-                  Escoge...
-                </option>
+              <select
+                className="form-select"
+                value={country}
+                onChange={(e) => setCountry(e.target.value)}
+                required
+              >
+                <option value="" disabled selected>Escoge...</option>
                 <option>Perú</option>
                 <option>Argentina</option>
                 <option>Chile</option>
@@ -80,6 +144,7 @@ const CreateAccount: React.FC = () => {
               <span>&rarr;</span>
             </button>
           </form>
+
           <p className="mt-3 text-center create-account">
             ¿Tienes una cuenta?{' '}
             <span style={{ cursor: 'pointer', color: '#0d6efd' }} onClick={() => navigate('/login')}>
@@ -91,5 +156,6 @@ const CreateAccount: React.FC = () => {
     </div>
   );
 };
+
 
 export default CreateAccount;

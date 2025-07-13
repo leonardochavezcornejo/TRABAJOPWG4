@@ -1,21 +1,71 @@
-import React from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
 import '../../assets/estilos4.css';
 
-
-
 import 'bootstrap/dist/css/bootstrap.min.css';
-
-
-
-
 
 const EditarPerfil = () => {
   const navigate = useNavigate();
 
-  const handleSubmit = (e:React.FormEvent) => {
+  const { userId } = useParams();  // Obtener el ID del usuario de los parámetros de la URL
+  const [userData, setUserData] = useState<any>(null);  // Guardar los datos del usuario
+  const [fullName, setFullName] = useState('');
+  const [email, setEmail] = useState('');
+  const [errorMessage, setErrorMessage] = useState('');
+
+  // Obtener los datos del usuario
+  useEffect(() => {
+    const fetchUserData = async () => {
+      try {
+        const response = await fetch(`http://localhost:3000/api/profile?userId=${userId}`);
+        const data = await response.json();
+
+        if (response.ok) {
+          setUserData(data);
+          setFullName(data.username);  // Asignamos los valores al estado
+          setEmail(data.email);
+        } else {
+          setErrorMessage(data.message || 'Error al obtener los datos del usuario');
+        }
+      } catch (error) {
+        console.error('Error fetching user data:', error);
+        setErrorMessage('Error al obtener los datos del usuario');
+      }
+    };
+
+    if (userId) {
+      fetchUserData();  // Cargar datos del usuario al cargar el componente
+    }
+  }, [userId]);
+
+
+
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    navigate('/');
+    setErrorMessage('');
+
+    try {
+      // Enviar solicitud PUT al backend para actualizar el perfil del usuario
+      const response = await fetch(`http://localhost:3000/api/update-profile`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ userId, fullName, email }),  // Enviamos los datos actualizados
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        alert(data.message);  // Mostrar mensaje de éxito
+        navigate('/');  // Redirigir al usuario al menú principal
+      } else {
+        const errorData = await response.json();
+        setErrorMessage(errorData.message || 'Error al guardar los cambios');  // Mostrar mensaje de error
+      }
+    } catch (error) {
+      console.error('Error al hacer la solicitud:', error);
+      setErrorMessage('Error al realizar la solicitud');
+    }
   };
 
   return (
@@ -50,18 +100,30 @@ const EditarPerfil = () => {
         </div>
         <div className="form-container mx-auto">
           <h3 className="text-center mb-4">Editar Perfil</h3>
+
+          {/* Mostrar error si existe */}
+          {errorMessage && <div className="alert alert-danger">{errorMessage}</div>}
+
           <form onSubmit={handleSubmit}>
             <div className="mb-3">
               <label className="form-label">Nombre:</label>
-              <input type="text" className="form-control" required />
-            </div>
-            <div className="mb-3">
-              <label className="form-label">Apellido:</label>
-              <input type="text" className="form-control" required />
+              <input
+                type="text"
+                className="form-control"
+                value={fullName}
+                onChange={(e) => setFullName(e.target.value)}
+                required
+              />
             </div>
             <div className="mb-3">
               <label className="form-label">Correo electrónico:</label>
-              <input type="email" className="form-control" required />
+              <input
+                type="email"
+                className="form-control"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                required
+              />
             </div>
             <button
               type="submit"

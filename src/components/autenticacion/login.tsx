@@ -1,14 +1,49 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import '../../assets/estilos4.css';
 
 const LoginForm: React.FC = () => {
   const navigate = useNavigate();
 
-  const handleSubmit = (e: React.FormEvent) => {
+  
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [errorMessage, setErrorMessage] = useState('');
+  const [user, setUser] = useState<any>(null);
+
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    navigate('/');
+
+    // Limpiar mensajes de error previos
+    setErrorMessage('');
+
+    try {
+      // Enviar solicitud POST al backend para login con Fetch
+      const response = await fetch('http://localhost:3000/api/login', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ email, password }),  // Pasamos las credenciales como JSON
+      });
+
+      // Verificar si la respuesta fue exitosa
+      if (response.ok) {
+        const data = await response.json();
+        alert(data.message);  // Mostrar mensaje de éxito
+        setUser(data.user);   // Almacenar los datos del usuario en el estado
+        navigate('/');  // Redirigir a la página principal
+      } else {
+        const errorData = await response.json();
+        setErrorMessage(errorData.message || 'Error al iniciar sesión');  // Mostrar mensaje de error
+      }
+    } catch (error) {
+      // Si ocurre un error durante la solicitud
+      console.error('Error al hacer la solicitud:', error);
+      setErrorMessage('Error al realizar la solicitud');
+    }
   };
+
 
   return (
     <div className="bg-light min-vh-100">
@@ -33,15 +68,32 @@ const LoginForm: React.FC = () => {
             <br />
             RetroGames
           </h2>
+
+          {errorMessage && <div className="alert alert-danger">{errorMessage}</div>}  {/* Mostrar error si existe */}
+
           <form onSubmit={handleSubmit}>
             <div className="mb-3 text-start">
-              <label htmlFor="username" className="form-label">Correo electrónico:</label>
-              <input type="text" className="form-control" id="username" required />
+              <label htmlFor="email" className="form-label">Correo electrónico:</label>
+              <input
+                type="email"  // Cambiado de 'text' a 'email'
+                className="form-control"
+                id="email"  // Cambiado de 'username' a 'email'
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                required
+              />
             </div>
 
             <div className="mb-3 text-start">
               <label htmlFor="password" className="form-label">Contraseña:</label>
-              <input type="password" className="form-control" id="password" required />
+              <input
+                type="password"
+                className="form-control"
+                id="password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                required
+              />
             </div>
 
             <button type="submit" className="btn btn-light w-100 btn-custom mb-2">
