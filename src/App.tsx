@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Navbar from './components/menu/Navbar';
 import CartPanel from './components/menu/CartPanel';
 import SearchPanel from './components/menu/SearchPanel';
@@ -8,7 +8,6 @@ import GameGrid from './components/menu/GameGrid';
 import GameModal from './components/menu/GameModal';
 import BuyModal from './components/menu/BuyModal';
 import type { Game } from './components/types';
-import { games } from './components/data/games';
 
 
 
@@ -22,6 +21,7 @@ function App() {
   const [selectedGame, setSelectedGame] = useState<Game | null>(null);
   const [filterCategory, setFilterCategory] = useState('All');
   const [buyVisible, setBuyVisible] = useState(false);
+  const [games, setGames] = useState<Game[]>([]);
 
   const filteredGames = games.filter(game =>
     (filterCategory === 'All' || game.category === filterCategory) &&
@@ -36,6 +36,15 @@ function App() {
   const handleRemoveFromCart = (id: number) => {
     setCartItems(prev => prev.filter(game => game.id !== id));
   };
+
+  // Obtiene los juegos del backend al montar el componente
+  useEffect(() => {
+    fetch('http://localhost:3000/api/games')
+      .then(res => res.json())
+      .then(data => setGames(data))
+      .catch(err => console.error('Error fetching games:', err));
+  }, []);
+
 
   return (
     <>

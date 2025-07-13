@@ -1,44 +1,22 @@
 import React, { useState } from 'react';
 import ConfirmationModal from './ConfirmationModal';
 
+
 interface BuyModalProps {
   visible: boolean;
   onClose: () => void;
+  userId: string;  // El ID del usuario para pasarlo al modal de confirmación
 }
 
-const BuyModal: React.FC<BuyModalProps> = ({ visible, onClose }) => {
+const BuyModal: React.FC<BuyModalProps> = ({ visible, onClose, userId }) => {
   const [showConfirmation, setShowConfirmation] = useState(false);
-  const [formData, setFormData] = useState({
-    fullName: '',
-    email: '',
-    cardNumber: '',
-    cvc: '',
-    expiryDate: ''
-  });
-
-  // Maneja los cambios en el formulario
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target;
-    setFormData((prev) => ({ ...prev, [name]: value }));
-  };
-
-  // Validación simple del formulario
-  const isFormValid = () => {
-    return Object.values(formData).every((value) => value.trim() !== '');
-  };
-
-  // Enviar el formulario
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (isFormValid()) {
-      setShowConfirmation(true);
-    } else {
-      alert('Por favor, completa todos los campos.');
-    }
-  };
 
   if (!visible) return null;
 
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    setShowConfirmation(true);
+  };
 
   return (
     <>
@@ -59,69 +37,30 @@ const BuyModal: React.FC<BuyModalProps> = ({ visible, onClose }) => {
                 </div>
                 <div className="mb-3">
                   <label className="form-label">Nombre Completo</label>
-                  <input
-                    type="text"
-                    name="fullName"
-                    className="form-control"
-                    value={formData.fullName}
-                    onChange={handleInputChange}
-                    required
-                  />
+                  <input type="text" className="form-control" />
                 </div>
                 <div className="mb-3">
                   <label className="form-label">Dirección email</label>
-                  <input
-                    type="email"
-                    name="email"
-                    className="form-control"
-                    value={formData.email}
-                    onChange={handleInputChange}
-                    required
-                  />
+                  <input type="email" className="form-control" />
                 </div>
                 <div className="mb-3">
                   <label className="form-label">Número de tarjeta</label>
-                  <input
-                    type="text"
-                    name="cardNumber"
-                    className="form-control"
-                    value={formData.cardNumber}
-                    onChange={handleInputChange}
-                    required
-                  />
+                  <input type="text" className="form-control" />
                 </div>
                 <div className="row">
                   <div className="col-md-6 mb-3">
                     <label className="form-label">CVC</label>
-                    <input
-                      type="text"
-                      name="cvc"
-                      className="form-control"
-                      value={formData.cvc}
-                      onChange={handleInputChange}
-                      required
-                    />
+                    <input type="text" className="form-control" />
                   </div>
                   <div className="col-md-6 mb-3">
                     <label className="form-label">Fecha de caducidad</label>
-                    <input
-                      type="month"
-                      name="expiryDate"
-                      className="form-control"
-                      value={formData.expiryDate}
-                      onChange={handleInputChange}
-                      required
-                    />
+                    <input type="month" className="form-control" />
                   </div>
                 </div>
               </div>
               <div className="modal-footer">
-                <button type="submit" className="btn btn-success" disabled={!isFormValid()}>
-                  Pagar ✔
-                </button>
-                <button type="button" className="btn btn-secondary" onClick={onClose}>
-                  Cancelar
-                </button>
+                <button type="submit" className="btn btn-success">Pagar ✔</button>
+                <button type="button" className="btn btn-secondary" onClick={onClose}>Cancelar</button>
               </div>
             </form>
           </div>
@@ -134,6 +73,7 @@ const BuyModal: React.FC<BuyModalProps> = ({ visible, onClose }) => {
           setShowConfirmation(false);
           onClose(); // cerrar ambos modales
         }}
+        userId={userId}
       />
     </>
   );
