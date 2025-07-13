@@ -65,7 +65,7 @@ function App() {
         onRemove={handleRemoveFromCart}
         onBuy={() => setBuyVisible(true)}
       />
-      <BuyModal visible={buyVisible} onClose={() => setBuyVisible(false)} />
+      <BuyModal visible={buyVisible} onClose={() => setBuyVisible(false)} userId="user123" />
       <SearchPanel visible={searchVisible} onSearch={setSearchQuery} />
       <PriceFilterPanel visible={priceFilterVisible} onChange={setPriceLimit} min={0} max={100} />
 

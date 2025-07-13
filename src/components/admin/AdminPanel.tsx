@@ -38,49 +38,106 @@ const AdminPanel: React.FC = () => {
   const [gameModalVisible, setGameModalVisible] = useState(false);
   const [gameToEdit, setGameToEdit] = useState<GameData | null>(null);
   const [games, setGames] = useState(initialGames);
+
+
+
   // Eliminar juego por id
-  const handleDeleteGame = (id: number) => {
-    setGames(prev => prev.filter(g => g.id !== id));
+  const handleDeleteGame = async (id: number) => {
+    try {
+      await fetch(`http://localhost:3000/api/admin/games/${id}`, {
+        method: 'DELETE',
+      });
+      // Filtrar el juego eliminado de la lista de juegos
+      setGames(prev => prev.filter(game => game.id !== id));
+    } catch (error) {
+      console.error('Error al eliminar el juego:', error);
+    }
   };
 
+
   // Guardar (agregar o editar) juego
-  const handleSaveGame = (game: GameData) => {
-    setGames(prev => {
-      // Si existe, editar; si no, agregar
-      const exists = prev.some(g => g.id === game.id);
-      if (exists) {
-        return prev.map(g => g.id === game.id ? { ...g, ...game, id: Number(game.id) } : g);
+  const handleSaveGame = async (game: GameData) => {
+    try {
+      if (game.id) {
+        // Si el juego tiene id, lo editamos (PUT)
+        await fetch(`http://localhost:3000/api/admin/games/${game.id}`, {
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(game),
+        });
       } else {
-        // Asignar un id numérico único
-        const newId = prev.length > 0 ? Math.max(...prev.map(g => g.id)) + 1 : 1;
-        return [...prev, { ...game, id: newId }];
+        // Si no tiene id, lo creamos (POST)
+        await fetch('http://localhost:3000/api/admin/games', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(game),
+        });
       }
-    });
-    setGameModalVisible(false);
+      setGameModalVisible(false);
+      // Actualiza la lista de juegos, si es necesario
+    } catch (error) {
+      console.error('Error al guardar el juego:', error);
+    }
   };
-  const handleApplyFilters = (filters: FilterData) => {
-    console.log("Filtros aplicados:", filters);
+
+  const handleApplyFilters = async (filters: FilterData) => {
+    try {
+      const response = await fetch(`http://localhost:3000/api/admin/games/filter?category=${filters.categoria}&priceRange=${filters.precioMin}-${filters.precioMax}`);
+      const data = await response.json();
+      if (response.ok) {
+        setGames(data); // Actualiza los juegos filtrados
+      } else {
+        alert('Error al aplicar los filtros');
+      }
+    } catch (error) {
+      console.error('Error al aplicar los filtros:', error);
+    }
   };
+  
   const handleDeleteRequest = (id: string) => {
     setNoticeToDelete({ id });
     setDeleteModalVisible(true);
   };
-  const handleConfirmDelete = () => {
-    setNoticias(prev => prev.filter(n => n.id !== noticeToDelete.id));
-    setDeleteModalVisible(false);
+
+  const handleConfirmDelete = async () => {
+    try {
+      await fetch(`http://localhost:3000/api/admin/news/${noticeToDelete.id}`, {
+        method: 'DELETE',
+      });
+      setNoticias(prev => prev.filter(n => n.id !== noticeToDelete.id));
+      setDeleteModalVisible(false);
+    } catch (error) {
+      console.error('Error al eliminar la noticia:', error);
+    }
   };
+
   // Eliminada función no usada handleDelete
-  const handleAddNotice = (title: string, content: string) => {
-    const nuevaNoticia: Noticia = {
-      id: crypto.randomUUID(),
-      title,
-      content,
-      fecha: new Date().toLocaleDateString(),
-      estado: 'Activa'
-    };
-    setNoticias(prev => [nuevaNoticia, ...prev]); // agrega encima, no borra ninguna
+  const handleAddNotice = async (title: string, content: string) => {
+    try {
+      const response = await fetch('http://localhost:3000/api/admin/news', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ title, content }),
+      });
+
+      const data = await response.json();
+      if (response.ok) {
+        setNoticias(prev => [data.news, ...prev]); // Agrega encima
+      } else {
+        alert(data.message || 'Error al agregar la noticia');
+      }
+    } catch (error) {
+      console.error('Error al agregar la noticia:', error);
+    }
     setAddModalVisible(false);
   };
+
   const handleOpenEdit = (id: string) => {
     const noticia = noticias.find(n => n.id === id);
     if (noticia) {
@@ -89,12 +146,27 @@ const AdminPanel: React.FC = () => {
     }
   };
 
-  const handleEditSubmit = (id: string, title: string, content: string) => {
-    setNoticias(prev =>
-      prev.map(n =>
-        n.id === id ? { ...n, title, content } : n
-      )
-    );
+  const handleEditSubmit = async (id: string, title: string, content: string) => {
+    try {
+      const response = await fetch(`http://localhost:3000/api/admin/news/${id}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ title, content }),
+      });
+
+      const data = await response.json();
+      if (response.ok) {
+        setNoticias(prev =>
+          prev.map(n => (n.id === id ? { ...n, title, content } : n))
+        );
+      } else {
+        alert(data.message || 'Error al editar la noticia');
+      }
+    } catch (error) {
+      console.error('Error al editar la noticia:', error);
+    }
     setEditModalVisible(false);
   };
 
