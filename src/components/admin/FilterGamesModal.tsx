@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import '../../assets/estiloAdminNoticias.css';
 
 interface FilterData {
-  fecha: string;
   categoria: string;
   precioMin: string;
   precioMax: string;
@@ -15,14 +14,14 @@ interface FilterGamesModalProps {
 }
 
 const FilterGamesModal: React.FC<FilterGamesModalProps> = ({ visible, onClose, onFilter }) => {
-  const [fecha, setFecha] = useState('');
+  // Eliminar fecha
   const [categoria, setCategoria] = useState('');
   const [precioMin, setPrecioMin] = useState('');
   const [precioMax, setPrecioMax] = useState('');
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    onFilter({ fecha, categoria, precioMin, precioMax });
+    onFilter({ categoria, precioMin, precioMax });
     onClose();
   };
 
@@ -38,11 +37,7 @@ const FilterGamesModal: React.FC<FilterGamesModalProps> = ({ visible, onClose, o
           </div>
 
           <div className="modal-body">
-            {/* Fecha */}
-            <div className="mb-3">
-              <label htmlFor="fecha" className="form-label">Fecha</label>
-              <input type="date" className="form-control" id="fecha" value={fecha} onChange={e => setFecha(e.target.value)} />
-            </div>
+
 
             {/* Categoría */}
             <div className="mb-3">

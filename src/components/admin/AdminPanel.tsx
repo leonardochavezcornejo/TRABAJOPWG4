@@ -16,7 +16,6 @@ import MonthlyEarningsChart from './MonthlyEarningsChart';
 
 
 type FilterData = {
-  fecha: string;
   categoria: string;
   precioMin: string;
   precioMax: string;
@@ -43,6 +42,22 @@ const AdminPanel: React.FC = () => {
   // Eliminar juego por id
   const handleDeleteGame = (id: number) => {
     setGames(prev => prev.filter(g => g.id !== id));
+  };
+
+  // Guardar (agregar o editar) juego
+  const handleSaveGame = (game: GameData) => {
+    setGames(prev => {
+      // Si existe, editar; si no, agregar
+      const exists = prev.some(g => g.id === game.id);
+      if (exists) {
+        return prev.map(g => g.id === game.id ? { ...g, ...game } : g);
+      } else {
+        // Asignar un id numérico único
+        const newId = prev.length > 0 ? Math.max(...prev.map(g => g.id)) + 1 : 1;
+        return [...prev, { ...game, id: newId }];
+      }
+    });
+    setGameModalVisible(false);
   };
   const handleApplyFilters = (filters: FilterData) => {
     console.log("Filtros aplicados:", filters);
@@ -174,12 +189,33 @@ const AdminPanel: React.FC = () => {
                     <tr key={game.id}>
                       <td>{game.title}</td>
                       <td>{game.category}</td>
-                      <td>${game.price.toFixed(2)}</td>
+                      <td>
+                        {(game as any).discount && (game as any).discount > 0 ? (
+                          <>
+                            <span style={{ textDecoration: 'line-through', color: '#888', marginRight: 8 }}>
+                              ${game.price.toFixed(2)}
+                            </span>
+                            <span>
+                              ${ (game.price * (1 - ((game as any).discount ?? 0) / 100)).toFixed(2) }
+                            </span>
+                          </>
+                        ) : (
+                          <>${game.price.toFixed(2)}</>
+                        )}
+                      </td>
                       <td>
                         <button
                           className="btn btn-sm btn-warning me-2"
                           onClick={() => {
-                            setGameToEdit(game);
+                            // Pasar discount aunque no esté en Game
+                            setGameToEdit({
+                              id: game.id,
+                              title: game.title,
+                              category: game.category,
+                              price: game.price,
+                              discount: (game as any).discount ?? 0,
+                              description: game.description
+                            });
                             setGameModalVisible(true);
                           }}
                         >
@@ -269,6 +305,7 @@ const AdminPanel: React.FC = () => {
         visible={gameModalVisible}
         onClose={() => setGameModalVisible(false)}
         initialData={gameToEdit}
+        onSave={handleSaveGame}
       />
     </div> 
   );

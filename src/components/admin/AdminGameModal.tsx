@@ -16,9 +16,10 @@ interface AdminGameModalProps {
   visible: boolean;
   onClose: () => void;
   initialData?: GameData | null;
+  onSave: (game: GameData) => void;
 }
 
-const AdminGameModal: React.FC<AdminGameModalProps> = ({ visible, onClose, initialData }) => {
+const AdminGameModal: React.FC<AdminGameModalProps> = ({ visible, onClose, initialData, onSave }) => {
   const [title, setTitle] = useState('');
   const [category, setCategory] = useState('');
   const [price, setPrice] = useState(0);
@@ -46,14 +47,14 @@ const AdminGameModal: React.FC<AdminGameModalProps> = ({ visible, onClose, initi
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     const game: GameData = {
-      id: initialData?.id || crypto.randomUUID(),
+      id: initialData?.id,
       title,
       category,
       price,
       discount,
       description
     };
-    onClose();
+    onSave(game);
   };
 
   if (!visible) return null;
