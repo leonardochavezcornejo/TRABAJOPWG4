@@ -37,6 +37,28 @@ const AdminGameModal: React.FC<AdminGameModalProps> = ({ visible, onClose, initi
   const [releaseDate, setReleaseDate] = useState('');
   const [onSale, setOnSale] = useState(false);
   const [images, setImages] = useState<string[]>([]);
+
+  const handleImageInput = (e: React.ChangeEvent<HTMLInputElement>) => {
+    // No hacer nada si el input está vacío
+    if (!e.target.value) return;
+
+    // Agregar la URL ingresada al array de imágenes
+    setImages(prevImages => [...prevImages, e.target.value]);
+
+    // Limpiar el input después de agregar la URL
+    e.target.value = '';
+  };
+
+  // Cuando se hace enter, agregar la URL y limpiar el input
+  const handleKeyDown = (e: React.KeyboardEvent) => {
+    if (e.key === 'Enter') {
+      const input = e.target as HTMLInputElement;
+      if (input.value) {
+        setImages(prevImages => [...prevImages, input.value]);
+        input.value = ''; // Limpiar el input después de agregar
+      }
+    }
+  };
  
   useEffect(() => {
     if (initialData) {
@@ -62,6 +84,9 @@ const AdminGameModal: React.FC<AdminGameModalProps> = ({ visible, onClose, initi
       setImages([]);
     }
   }, [initialData, visible]);
+
+  
+
 
   // Función para manejar el envío del formulario
   const handleSubmit = async (e: React.FormEvent) => {
@@ -133,7 +158,7 @@ const AdminGameModal: React.FC<AdminGameModalProps> = ({ visible, onClose, initi
             <div className="modal-body">
               <div className="row mb-3">
                 <div className="col-md-6">
-                  <label htmlFor="title" className="form-label">Titulo</label>
+                  <label htmlFor="title" className="form-label">Título</label>
                   <input
                     type="text"
                     id="title"
@@ -144,7 +169,7 @@ const AdminGameModal: React.FC<AdminGameModalProps> = ({ visible, onClose, initi
                   />
                 </div>
                 <div className="col-md-6">
-                  <label htmlFor="category" className="form-label">Categoria</label>
+                  <label htmlFor="category" className="form-label">Categoría</label>
                   <input
                     type="text"
                     id="category"
@@ -210,7 +235,7 @@ const AdminGameModal: React.FC<AdminGameModalProps> = ({ visible, onClose, initi
               </div>
 
               <div className="mb-3">
-                <label htmlFor="description" className="form-label">Descripcion</label>
+                <label htmlFor="description" className="form-label">Descripción</label>
                 <textarea
                   id="description"
                   className="form-control"
@@ -219,6 +244,31 @@ const AdminGameModal: React.FC<AdminGameModalProps> = ({ visible, onClose, initi
                   onChange={(e) => setDescription(e.target.value)}
                   required
                 ></textarea>
+              </div>
+
+              <div className="mb-3">
+                <label htmlFor="images" className="form-label">URLs de Imágenes</label>
+                <input
+                  type="text"
+                  id="images"
+                  className="form-control"
+                  onBlur={handleImageInput} // On blur (after focus is lost)
+                />
+                <small className="form-text text-muted">Agrega las URLs de las imágenes separadas por enter.</small>
+              </div>
+
+              <div className="mb-3">
+                <h5>Imágenes cargadas</h5>
+                <ul>
+                  {images.map((image, index) => (
+                    <li key={index}>
+                      <img src={image} alt={`game-img-${index}`} className="img-thumbnail" width="100" />
+                      <button type="button" onClick={() => removeImage(index)} className="btn btn-danger btn-sm ml-2">
+                        Eliminar
+                      </button>
+                    </li>
+                  ))}
+                </ul>
               </div>
             </div>
 
