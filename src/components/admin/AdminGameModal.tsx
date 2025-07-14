@@ -17,7 +17,6 @@ interface Game {
   rating?: number; // Calificación del juego
   reviews?: Review[]; // Reseñas del juego
   discount?: number; // Descuento
-  
 }
 
 interface AdminGameModalProps {
@@ -37,6 +36,9 @@ const AdminGameModal: React.FC<AdminGameModalProps> = ({ visible, onClose, initi
   const [releaseDate, setReleaseDate] = useState('');
   const [onSale, setOnSale] = useState(false);
   const [images, setImages] = useState<string[]>([]);
+
+  
+
 
   const handleImageInput = (e: React.ChangeEvent<HTMLInputElement>) => {
     const imageUrl = e.target.value.trim();

@@ -48,6 +48,14 @@ const GameModal: React.FC<GameModalProps> = ({ game, onClose, onAddToCart }) => 
     ? (reviews.reduce((sum, r) => sum + r.stars, 0) / reviews.length).toFixed(1)
     : '0';
 
+
+  // Función para manejar el botón "Añadir al carrito"
+  const handleAddToCart = () => {
+    if (game) {
+      onAddToCart(game); // Llama a la función para agregar al carrito
+    }
+  };
+
   return (
     <div className="game-modal-2" onClick={onClose}>
       <div className="modal-content-game" onClick={(e) => e.stopPropagation()}>
@@ -194,6 +202,11 @@ const GameModal: React.FC<GameModalProps> = ({ game, onClose, onAddToCart }) => 
             </div>
             <button className="btn btn-primary w-100" onClick={handleSubmit}>
               Submit Review
+            </button>
+
+            {/* Botón de Añadir al carrito */}
+            <button className="btn btn-success w-100 mt-4" onClick={handleAddToCart}>
+              Añadir al carrito
             </button>
           </div>
         </div>
