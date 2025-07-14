@@ -100,15 +100,15 @@ const AdminGameModal: React.FC<AdminGameModalProps> = ({ visible, onClose, initi
 
       const data = await response.json();
       if (response.ok) {
-        alert(data.message); // Success message
-        onSave(game); // Update game list
-        onClose(); // Close modal
+        alert(data.message); // Mensaje de éxito
+        onSave(game); // Actualizar lista de juegos
+        onClose(); // Cerrar modal
       } else {
-        alert(data.message || 'Error saving the game');
+        alert(data.message || 'Error al guardar el juego');
       }
     } catch (error) {
-      console.error('Error saving the game:', error);
-      alert('Error saving the game');
+      console.error('Error al guardar el juego:', error);
+      alert('Error al guardar el juego');
     }
   };
 
@@ -120,13 +120,13 @@ const AdminGameModal: React.FC<AdminGameModalProps> = ({ visible, onClose, initi
         <div className="modal-content">
           <form onSubmit={handleSubmit}>
             <div className="modal-header bg-dark text-white">
-              <h5 className="modal-title">{initialData ? 'Edit Game' : 'Add Game'}</h5>
+              <h5 className="modal-title">{initialData ? 'Editar Juego' : 'Agregar Juego'}</h5>
               <button
                 type="button"
                 className="btn-close"
                 style={{ filter: 'invert(1)' }}
                 onClick={onClose}
-                aria-label="Close"
+                aria-label="Cerrar"
               ></button>
             </div>
 
