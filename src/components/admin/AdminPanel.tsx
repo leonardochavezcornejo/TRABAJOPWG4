@@ -8,6 +8,7 @@ import DeleteNotice from './DeleteNotice';
 import AddNotice from './AddNotice';
 import FilterGamesModal from './FilterGamesModal';
 import AdminGameModal, { type Game } from './AdminGameModal';
+import type { User } from '../data/user';
 
 
 
@@ -34,7 +35,10 @@ const AdminPanel: React.FC = () => {
   const [gameToEdit, setGameToEdit] = useState<Game | null>(null);
   const [games, setGames] = useState<Game[]>([]);
   const [noticias, setNoticias] = useState<Noticia[]>([]);
+  const [usuarios, setUsuarios] = useState<User[]>([]);
+  const [userToDelete, setUserToDelete] = useState<{ id: number }>({ id: 0 });
 
+  
 
   useEffect(() => {
     const fetchNoticias = async () => {
@@ -50,6 +54,19 @@ const AdminPanel: React.FC = () => {
     fetchNoticias();
   }, []);
 
+  // Fetch usuarios desde el backend
+  useEffect(() => {
+    const fetchUsers = async () => {
+      try {
+        const response = await fetch('http://localhost:5000/api/users');
+        const data: User[] = await response.json();
+        setUsuarios(data);
+      } catch (error) {
+        console.error('Error al obtener los usuarios:', error);
+      }
+    };
+    fetchUsers();
+  }, []);
 
 
   // Función para obtener los juegos desde el backend
@@ -67,6 +84,8 @@ const AdminPanel: React.FC = () => {
   useEffect(() => {
     fetchGames();
   }, []); 
+
+  
 
 
   // Eliminar juego por id
@@ -231,12 +250,6 @@ const AdminPanel: React.FC = () => {
           >
             Noticias
           </button>
-          <button
-            className={`nav-link btn btn-link text-start ${activeSection === "estadisticas" ? "active" : ""}`}
-            onClick={() => showSection("estadisticas")}
-          >
-            Estadísticas
-          </button>
           <button className="nav-link mt-auto btn btn-link text-start" onClick={() => navigate('/')}>
             Cerrar sesión
           </button>
@@ -251,12 +264,22 @@ const AdminPanel: React.FC = () => {
             <div className="table-responsive">
               <table className="table table-striped table-bordered user-table text-center align-middle">
                 <thead className="table-light">
-                  <tr><th>Id</th><th>Foto</th><th>Nickname</th><th>Nombre</th></tr>
+                  <tr>
+                    <th>Id</th>
+                    <th>Email</th>
+                    <th>Username</th>
+                    <th>País</th>
+                  </tr>
                 </thead>
                 <tbody>
-                  <tr><td>1</td><td><img src="/img/Andresaurio.png" className="user-photo" alt="Andresaurio" /></td><td>Andresaurio</td><td className="fw-bold">Andrés</td></tr>
-                  <tr><td>2</td><td><img src="/img/Domo.jpg" className="user-photo" alt="Domazdack" /></td><td>Domazdack</td><td className="fw-bold">Dominic</td></tr>
-                  <tr><td>3</td><td><img src="/img/JEP.jpg" className="user-photo" alt="Jep365" /></td><td>Jep365</td><td className="fw-bold">Jairo</td></tr>
+                  {usuarios.map((user) => (
+                    <tr key={user.id}>
+                      <td>{user.id}</td>
+                      <td>{user.email}</td>
+                      <td>{user.username}</td>
+                      <td>{user.country}</td>
+                    </tr>
+                  ))}
                 </tbody>
               </table>
             </div>
