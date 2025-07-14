@@ -7,12 +7,13 @@ import Carousel from './components/menu/Carousel';
 import GameGrid from './components/menu/GameGrid';
 import GameModal from './components/menu/GameModal';
 import BuyModal from './components/menu/BuyModal';
+import type { Cart, CartItem } from './components/data/cart';
 import type { Game } from './components/admin/AdminGameModal';
 
 
 
 function App() {
-  const [cartItems, setCartItems] = useState<Game[]>([]);
+  const [cartItems, setCartItems] = useState<CartItem[]>([]); 
   const [cartVisible, setCartVisible] = useState(false);
   const [searchVisible, setSearchVisible] = useState(false);
   const [priceFilterVisible, setPriceFilterVisible] = useState(false);
@@ -29,12 +30,28 @@ function App() {
     game.price <= priceLimit
   );
 
+  const total = cartItems.reduce((sum, item) => sum + item.quantity * item.game.price, 0);
+
   const handleAddToCart = (game: Game) => {
-    setCartItems((prev) => [...prev, game]);
+    setCartItems((prev) => {
+      const existingGame = prev.find(item => item.game.id === game.id);
+
+      if (existingGame) {
+        // Si el juego ya está en el carrito, incrementamos la cantidad
+        return prev.map(item =>
+          item.game.id === game.id
+            ? { ...item, quantity: item.quantity + 1 }
+            : item
+        );
+      } else {
+        // Si el juego no está en el carrito, lo añadimos con cantidad 1
+        return [...prev, { game, quantity: 1 }];
+      }
+    });
   };
 
-  const handleRemoveFromCart = (id: number) => {
-    setCartItems(prev => prev.filter(game => game.id !== id));
+  const handleRemoveFromCart = (gameId: number) => {
+    setCartItems((prev) => prev.filter(item => item.game.id !== gameId));
   };
 
   // Obtiene los juegos del backend al montar el componente
@@ -70,7 +87,7 @@ function App() {
       <CartPanel
         visible={cartVisible}
         onClose={() => setCartVisible(false)}
-        items={cartItems}
+        cart={{ items: cartItems, total: total }} // Pasa el carrito completo
         onRemove={handleRemoveFromCart}
         onBuy={() => setBuyVisible(true)}
       />
