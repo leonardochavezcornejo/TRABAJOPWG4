@@ -5,22 +5,21 @@ interface DeleteNoticeProps {
   visible: boolean;
   onClose: () => void;
   onConfirm: () => void;
+  id: string;
 }
 
-const DeleteNotice: React.FC<DeleteNoticeProps> = ({ visible, onClose, onConfirm }) => {
+const DeleteNotice: React.FC<DeleteNoticeProps> = ({ visible, onClose, onConfirm, id }) => {
   if (!visible) return null;
 
   const handleDelete = async () => {
     try {
-      // Realizamos la solicitud DELETE al backend para eliminar la noticia
-      const response = await fetch('http://localhost:5000/api/admin/news/{id}', {  // Reemplaza `{id}` por el ID de la noticia
+      const response = await fetch(`http://localhost:5000/api/admin/news/${id}`, {
         method: 'DELETE',
       });
-
       if (response.ok) {
         const data = await response.json();
-        alert(data.message); // Mensaje de éxito
-        onConfirm(); // Llamamos a onConfirm para actualizar la lista de noticias o cualquier acción adicional
+        alert(data.message);
+        onConfirm();
       } else {
         const errorData = await response.json();
         alert(errorData.message || 'Error al eliminar noticia');

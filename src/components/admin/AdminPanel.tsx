@@ -387,6 +387,7 @@ const AdminPanel: React.FC = () => {
         visible={deleteModalVisible}
         onClose={() => setDeleteModalVisible(false)}
         onConfirm={handleConfirmDelete}
+        id={noticeToDelete.id}
       />
       <AddNotice
         visible={addModalVisible}
