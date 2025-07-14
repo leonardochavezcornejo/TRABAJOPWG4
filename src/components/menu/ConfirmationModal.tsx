@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 interface ConfirmationModalProps {
@@ -25,8 +25,6 @@ const ConfirmationModal: React.FC<ConfirmationModalProps> = ({ visible, onClose,
         body: JSON.stringify({ items: [] })  // Puedes pasar los productos en el carrito si es necesario
       });
 
-      const data = await response.json();
-      
       if (response.ok) {
         setMessage('Gracias por confirmar tu compra. Las claves han sido enviadas a tu correo.');
         setTimeout(() => {

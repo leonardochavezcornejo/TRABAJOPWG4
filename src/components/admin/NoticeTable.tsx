@@ -8,7 +8,7 @@ interface TablaNoticiasProps {
   onBorrar: (id: string) => void;  // Función para borrar
 }
 
-const TablaNoticias: React.FC<TablaNoticiasProps> = ({ noticias, onEditar, onBorrar }) => {
+const TablaNoticias: React.FC<TablaNoticiasProps> = ({ onEditar, onBorrar }) => {
   const [noticiasData, setNoticiasData] = useState<Noticia[]>([]); // Estado para noticias
 
   // Función para obtener las noticias desde la API

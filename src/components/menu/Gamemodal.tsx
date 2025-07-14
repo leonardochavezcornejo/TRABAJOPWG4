@@ -44,11 +44,6 @@ const GameModal: React.FC<GameModalProps> = ({ game, onClose, onAddToCart }) => 
   };
 
 
-  const averageRating = reviews.length
-    ? (reviews.reduce((sum, r) => sum + r.stars, 0) / reviews.length).toFixed(1)
-    : '0';
-
-
   // Función para manejar el botón "Añadir al carrito"
   const handleAddToCart = () => {
     if (game) {

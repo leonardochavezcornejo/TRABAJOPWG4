@@ -1,13 +1,13 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import Navbar from './components/menu/Navbar';
 import CartPanel from './components/menu/CartPanel';
 import SearchPanel from './components/menu/SearchPanel';
 import PriceFilterPanel from './components/menu/PriceFilterPanel';
 import Carousel from './components/menu/Carousel';
 import GameGrid from './components/menu/GameGrid';
-import GameModal from './components/menu/GameModal';
+import GameModal from './components/menu/GameModal.tsx';
 import BuyModal from './components/menu/BuyModal';
-import type { Cart, CartItem } from './components/data/cart';
+import type { CartItem } from './components/data/cart';
 import type { Game } from './components/admin/AdminGameModal';
 
 
