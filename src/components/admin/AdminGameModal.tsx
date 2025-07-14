@@ -59,16 +59,7 @@ const AdminGameModal: React.FC<AdminGameModalProps> = ({ visible, onClose, initi
     return pattern.test(string);
   };
 
-  // Cuando se hace enter, agregar la URL y limpiar el input
-  const handleKeyDown = (e: React.KeyboardEvent) => {
-    if (e.key === 'Enter') {
-      const input = e.target as HTMLInputElement;
-      if (input.value) {
-        setImages(prevImages => [...prevImages, input.value]);
-        input.value = ''; // Limpiar el input después de agregar
-      }
-    }
-  };
+
 
   // Función para eliminar una imagen
   const removeImage = (index: number) => {

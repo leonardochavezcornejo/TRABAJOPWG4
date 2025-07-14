@@ -8,7 +8,7 @@ const EditarPerfil = () => {
   const navigate = useNavigate();
 
   const { userId } = useParams();  // Obtener el ID del usuario de los parámetros de la URL
-  const [userData, setUserData] = useState<any>(null);  // Guardar los datos del usuario
+  const [setUserData] = useState<any>(null);  // Guardar los datos del usuario
   const [fullName, setFullName] = useState('');
   const [email, setEmail] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
