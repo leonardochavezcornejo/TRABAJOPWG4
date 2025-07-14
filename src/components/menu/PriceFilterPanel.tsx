@@ -36,4 +36,5 @@ const PriceFilterPanel: React.FC<PriceFilterPanelProps> = ({ visible, onChange, 
   );
 };
 
+
 export default PriceFilterPanel;
