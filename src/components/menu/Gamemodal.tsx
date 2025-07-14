@@ -209,5 +209,4 @@ const GameModal: React.FC<GameModalProps> = ({ game, onClose, onAddToCart }) => 
     </div>
   );
 };
-
 export default GameModal;
