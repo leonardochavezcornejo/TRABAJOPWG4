@@ -4,17 +4,18 @@ import '../../assets/estiloAdminNoticias.css';
 interface AddNoticeProps {
   visible: boolean;
   onClose: () => void;
-  onSubmit: (title: string, content: string) => void;
+  onSubmit: (title: string, content: string, image: string) => void; // Actualizar para aceptar 3 argumentos
 }
 
 const AddNotice: React.FC<AddNoticeProps> = ({ visible, onClose, onSubmit }) => {
   const [title, setTitle] = useState('');
   const [content, setContent] = useState('');
+  const [image, setImage] = useState(''); // Campo para la URL de la imagen
   const [errorMessage, setErrorMessage] = useState('');
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (title.trim() && content.trim()) {
+    if (title.trim() && content.trim() && image.trim()) {  // Validar que todos los campos estén completos
       try {
         // Llamada a la API para agregar la noticia
         const response = await fetch('http://localhost:5000/api/admin/news', {
@@ -22,15 +23,16 @@ const AddNotice: React.FC<AddNoticeProps> = ({ visible, onClose, onSubmit }) => 
           headers: {
             'Content-Type': 'application/json',
           },
-          body: JSON.stringify({ title, content }), // Pasamos los datos del formulario
+          body: JSON.stringify({ title, content, image }), // Ahora enviamos el campo `image`
         });
 
         if (response.ok) {
           const data = await response.json();
           alert(data.message); // Mostrar mensaje de éxito
-          onSubmit(title, content); // Llamamos a la función onSubmit que puedes manejar en el componente principal
+          onSubmit(title, content, image); // Ahora pasamos 3 argumentos a `onSubmit`
           setTitle('');
           setContent('');
+          setImage(''); // Limpiar el campo de la imagen
           onClose();
         } else {
           const errorData = await response.json();
@@ -40,6 +42,8 @@ const AddNotice: React.FC<AddNoticeProps> = ({ visible, onClose, onSubmit }) => 
         console.error('Error al hacer la solicitud:', error);
         setErrorMessage('Error al realizar la solicitud');
       }
+    } else {
+      setErrorMessage('Todos los campos son obligatorios'); // Agregado para validar si faltan campos
     }
   };
 
@@ -72,6 +76,17 @@ const AddNotice: React.FC<AddNoticeProps> = ({ visible, onClose, onSubmit }) => 
               onChange={(e) => setContent(e.target.value)}
               required
             ></textarea>
+          </div>
+          <div className="mb-3">
+            <label htmlFor="newNewsImage" className="form-label">Imagen (URL)</label>
+            <input
+              type="text"
+              id="newNewsImage"
+              className="form-control"
+              value={image}
+              onChange={(e) => setImage(e.target.value)}
+              required
+            />
           </div>
           <button type="submit" className="btn btn-success">Agregar Noticia</button>
           <button type="button" className="btn btn-secondary ms-2" onClick={onClose}>Cancelar</button>

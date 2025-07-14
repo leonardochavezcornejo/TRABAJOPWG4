@@ -35,13 +35,18 @@ const AdminPanel: React.FC = () => {
   const [games, setGames] = useState<Game[]>([]);
   const [noticias, setNoticias] = useState<Noticia[]>([]);
 
+
   useEffect(() => {
     const fetchNoticias = async () => {
-      const response = await fetch("/api/admin/news");
-      const data = await response.json();
-      setNoticias(data);
+      try {
+        const response = await fetch("/api/admin/news");
+        const data: Noticia[] = await response.json();
+        console.log(data); // Verifica la respuesta aquí
+        setNoticias(data);
+      } catch (error) {
+        console.error('Error al obtener las noticias:', error);
+      }
     };
-
     fetchNoticias();
   }, []);
 
@@ -115,6 +120,8 @@ const AdminPanel: React.FC = () => {
     }
   };
 
+
+  
   const handleDeleteRequest = (id: string) => {
     setNoticeToDelete({ id });
     setDeleteModalVisible(true);
@@ -133,19 +140,19 @@ const AdminPanel: React.FC = () => {
   };
 
   // Eliminada función no usada handleDelete
-  const handleAddNotice = async (title: string, content: string) => {
+  const handleAddNotice = async (title: string, content: string, image: string) => {
     try {
       const response = await fetch('http://localhost:5000/api/admin/news', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ title, content }),
+        body: JSON.stringify({ title, content, image }), // Asegúrate de enviar la imagen
       });
 
       const data = await response.json();
       if (response.ok) {
-        setNoticias(prev => [data.news, ...prev]); // Agrega encima
+        setNoticias(prev => [data.news, ...prev]); // Agregar la nueva noticia al inicio
       } else {
         alert(data.message || 'Error al agregar la noticia');
       }
@@ -154,6 +161,7 @@ const AdminPanel: React.FC = () => {
     }
     setAddModalVisible(false);
   };
+
 
   const handleOpenEdit = (id: string) => {
     const noticia = noticias.find(n => n.id === id);
@@ -365,32 +373,6 @@ const AdminPanel: React.FC = () => {
               />
             </div>
           </section>
-        )}
-
-        {activeSection === "estadisticas" && (
-          <section className="admin-section">
-          <h2>Estadísticas</h2>
-          <div className="mb-4" style={{ maxWidth: "250px" }}>
-            <div className="card shadow-sm text-center">
-              <div className="card-body">
-                <h5 className="card-title">Total de Usuarios</h5>
-                <p id="userCount" className="display-5 fw-bold text-primary">{userCount}</p>
-              </div>
-            </div>
-          </div>
-        
-          <div className="row">
-            <div className="col-md-6 mb-4">
-              <h5>Ganancias por Mes</h5>
-              <MonthlyEarningsChart />
-            </div>
-            <div className="col-md-6 mb-4">
-              <h5>Noticias por Mes</h5>
-              <canvas id="newsByMonthChart" height={200}></canvas>
-            </div>
-          </div>
-        </section>
-        
         )}
       </div>
 

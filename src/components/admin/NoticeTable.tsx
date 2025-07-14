@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, { useState, useEffect } from 'react';
 import type { Noticia } from '../data/noticias';
 import type { Game } from './AdminGameModal';
 
@@ -8,21 +8,8 @@ interface TablaNoticiasProps {
   onBorrar: (id: string) => void;  // Función para borrar
 }
 
-const TablaNoticias: React.FC<TablaNoticiasProps> = ({ onEditar, onBorrar }) => {
-
-  const [noticias, setNoticias] = useState<Noticia[]>([]); // Estado para noticias
+const TablaNoticias: React.FC<TablaNoticiasProps> = ({ noticias, onEditar, onBorrar }) => {
   const [games, setGames] = useState<Game[]>([]); // Estado para juegos
-
-  // Función para obtener las noticias desde la API
-  const fetchNoticias = async () => {
-    try {
-      const response = await fetch('/api/admin/news');
-      const data: Noticia[] = await response.json();
-      setNoticias(data); // Actualiza el estado de noticias
-    } catch (error) {
-      console.error('Error al obtener las noticias:', error);
-    }
-  };
 
   // Función para obtener los juegos desde la API
   const fetchGames = async () => {
@@ -35,79 +22,36 @@ const TablaNoticias: React.FC<TablaNoticiasProps> = ({ onEditar, onBorrar }) => 
     }
   };
 
-  // Cargar noticias y juegos al montar el componente
+  // Cargar juegos al montar el componente
   useEffect(() => {
-    fetchNoticias();
     fetchGames();
   }, []);
 
-
   return (
     <div className="table-responsive">
-      {/* Mostrar la primera noticia como tarjeta con encabezado e imagen del juego */}
-      {noticias.length > 0 && (() => {
-        const noticia = noticias[0];
-        const juegoRelacionado = games.find(g => noticia.title.toLowerCase().includes(g.title.toLowerCase()));
-        return (
-          <div key={noticia.id} className="card mb-4 shadow-sm">
-            <div className="card-header bg-primary text-white">
-              <h4 className="mb-0">{noticia.title}</h4>
-            </div>
-            {juegoRelacionado && (
-              <img
-                src={juegoRelacionado.images[0]}
-                alt={juegoRelacionado.title}
-                className="card-img-top noticia-img-estrecha"
-                style={{ maxHeight: 520, objectFit: 'cover' }}
-              />
-            )}
-            <div className="card-body">
-              <p className="card-text">{noticia.content}</p>
-              <div className="d-flex justify-content-between align-items-center">
-                <small className="text-muted">{noticia.fecha}</small>
-                <span className="badge bg-success">{noticia.estado}</span>
-                <div>
-                  <button
-                    className="btn btn-sm btn-primary me-2"
-                    onClick={() => onEditar(noticia.id)}
-                  >
-                    Editar
-                  </button>
-                  <button
-                    className="btn btn-sm btn-danger"
-                    onClick={() => onBorrar(noticia.id)}
-                  >
-                    Borrar
-                  </button>
-                </div>
-              </div>
-            </div>
-          </div>
-        );
-      })()}
+      <table className="table table-striped table-bordered">
+        <thead className="table-light">
+          <tr>
+            <th>Título</th>
+            <th>Contenido</th>
+            <th>Fecha</th>
+            <th>Acciones</th>
+          </tr>
+        </thead>
+        <tbody>
+          {noticias.length > 0 && noticias.map((noticia) => {
+            // Buscar el juego relacionado por título
+            const juegoRelacionado = games.find(g => noticia.title.toLowerCase().includes(g.title.toLowerCase()));
 
-      {/* Mostrar el resto de noticias como tarjetas debajo */}
-      {noticias.slice(1).map(noticia => {
-        const juegoRelacionado = games.find(g => noticia.title.toLowerCase().includes(g.title.toLowerCase()));
-        return (
-          <div key={noticia.id} className="card mb-3 shadow-sm">
-            <div className="card-header bg-primary text-white">
-              <h5 className="mb-0">{noticia.title}</h5>
-            </div>
-            {juegoRelacionado && (
-              <img
-                src={juegoRelacionado.images[0]}
-                alt={juegoRelacionado.title}
-                className="card-img-top noticia-img-estrecha"
-                style={{ maxHeight: 400, objectFit: 'cover' }}
-              />
-            )}
-            <div className="card-body">
-              <p className="card-text">{noticia.content}</p>
-              <div className="d-flex justify-content-between align-items-center">
-                <small className="text-muted">{noticia.fecha}</small>
-                <span className="badge bg-success">{noticia.estado}</span>
-                <div>
+            // Formatear la fecha
+            const formattedDate = new Date(noticia.createdAt).toLocaleDateString("es-ES");
+
+            return (
+              <tr key={noticia.id}>
+                <td>{noticia.title}</td>
+                <td>{noticia.content}</td>
+                <td>{formattedDate}</td>
+                <td>
                   <button
                     className="btn btn-sm btn-primary me-2"
                     onClick={() => onEditar(noticia.id)}
@@ -120,12 +64,12 @@ const TablaNoticias: React.FC<TablaNoticiasProps> = ({ onEditar, onBorrar }) => 
                   >
                     Borrar
                   </button>
-                </div>
-              </div>
-            </div>
-          </div>
-        );
-      })}
+                </td>
+              </tr>
+            );
+          })}
+        </tbody>
+      </table>
     </div>
   );
 };
