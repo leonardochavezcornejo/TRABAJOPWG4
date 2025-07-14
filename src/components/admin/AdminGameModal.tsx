@@ -39,14 +39,24 @@ const AdminGameModal: React.FC<AdminGameModalProps> = ({ visible, onClose, initi
   const [images, setImages] = useState<string[]>([]);
 
   const handleImageInput = (e: React.ChangeEvent<HTMLInputElement>) => {
-    // No hacer nada si el input está vacío
-    if (!e.target.value) return;
+    const imageUrl = e.target.value.trim();
+    if (!imageUrl) return;
 
-    // Agregar la URL ingresada al array de imágenes
-    setImages(prevImages => [...prevImages, e.target.value]);
+    // Verificar si la URL es válida
+    if (isValidUrl(imageUrl)) {
+      setImages(prevImages => [...prevImages, imageUrl]);
+    } else {
+      alert("La URL de la imagen no es válida.");
+    }
 
-    // Limpiar el input después de agregar la URL
+    // Limpiar el input
     e.target.value = '';
+  };
+
+  // Función para validar URL
+  const isValidUrl = (string: string) => {
+    const pattern = new RegExp('^(https?:\\/\\/)?([\\w-]+\\.)+[\\w-]+(\\/[^\\s]*)?$', 'i');
+    return pattern.test(string);
   };
 
   // Cuando se hace enter, agregar la URL y limpiar el input
@@ -58,6 +68,11 @@ const AdminGameModal: React.FC<AdminGameModalProps> = ({ visible, onClose, initi
         input.value = ''; // Limpiar el input después de agregar
       }
     }
+  };
+
+  // Función para eliminar una imagen
+  const removeImage = (index: number) => {
+    setImages(images.filter((_, i) => i !== index)); // Eliminar la imagen en el índice especificado
   };
  
   useEffect(() => {
@@ -108,14 +123,14 @@ const AdminGameModal: React.FC<AdminGameModalProps> = ({ visible, onClose, initi
     try {
       let response;
       if (initialData?.id) {
-        // Update game (PUT)
+        // Actualizar el juego (PUT)
         response = await fetch(`http://localhost:5000/api/admin/games/${initialData.id}`, {
           method: 'PUT',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(game)
         });
       } else {
-        // Add new game (POST)
+        // Agregar nuevo juego (POST)
         response = await fetch('http://localhost:5000/api/admin/games', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
