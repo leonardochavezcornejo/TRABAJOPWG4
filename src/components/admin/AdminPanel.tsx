@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import EditNotice from './EditNotice';
 import '../../assets/estiloAdminNoticias.css';
@@ -39,70 +39,92 @@ const AdminPanel: React.FC = () => {
   const [gameToEdit, setGameToEdit] = useState<GameData | null>(null);
   const [games, setGames] = useState(initialGames);
 
+  useEffect(() => {
+    const fetchGames = async () => {
+      try {
+        const response = await fetch('http://localhost:5000/api/games');
+        const data = await response.json();
+        setGames(data);  // Establecer los juegos desde la respuesta del backend
+      } catch (error) {
+        console.error('Error al obtener los juegos:', error);
+      }
+    };
+
+    fetchGames();
+  }, []); 
 
 
-  // Eliminar juego por id
+  // Añadir juego
+
+  const handleAddGame = async (game: GameData) => {
+    try {
+      const response = await fetch('http://localhost:5000/api/admin/games', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(game),
+      });
+
+      if (response.ok) {
+        const newGame = await response.json();
+        setGames((prevGames) => [...prevGames, newGame.game]);  // Actualizar el estado con el nuevo juego
+      } else {
+        console.error('Error al agregar el juego');
+      }
+    } catch (error) {
+      console.error('Error al agregar el juego:', error);
+    }
+  };
+
+  // Eliminar un juego
+
   const handleDeleteGame = async (id: number) => {
     try {
-      await fetch(`http://localhost:5000/api/admin/games/${id}`, {
+      const response = await fetch(`http://localhost:5000/api/admin/games/${id}`, {
         method: 'DELETE',
       });
-      // Filtrar el juego eliminado de la lista de juegos
-      setGames(prev => prev.filter(game => game.id !== id));
+
+      if (response.ok) {
+        setGames((prevGames) => prevGames.filter((game) => game.id !== id));  // Eliminar del estado
+      } else {
+        console.error('Error al eliminar el juego');
+      }
     } catch (error) {
       console.error('Error al eliminar el juego:', error);
     }
   };
 
-
-  // Guardar (agregar o editar) juego
+  // Editar un juego
   const handleSaveGame = async (game: GameData) => {
     try {
       if (game.id) {
-        // Si el juego tiene id, lo editamos (PUT)
-        await fetch(`http://localhost:5000/api/admin/games/${game.id}`, {
+        // Editar juego
+        const response = await fetch(`http://localhost:5000/api/admin/games/${game.id}`, {
           method: 'PUT',
           headers: {
             'Content-Type': 'application/json',
           },
           body: JSON.stringify(game),
         });
+
+        if (response.ok) {
+          const updatedGame = await response.json();
+          setGames((prevGames) =>
+            prevGames.map((g) => (g.id === updatedGame.id ? updatedGame : g))  // Actualizar el juego editado
+          );
+        }
       } else {
-        // Si no tiene id, lo creamos (POST)
-        await fetch('http://localhost:5000/api/admin/games', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify(game),
-        });
+        // Agregar juego
+        await handleAddGame(game);
       }
-      setGameModalVisible(false);
-      // Actualiza la lista de juegos, si es necesario
     } catch (error) {
       console.error('Error al guardar el juego:', error);
     }
   };
 
-  const handleApplyFilters = async (filters: FilterData) => {
-    try {
-      const response = await fetch(`http://localhost:5000/api/admin/games/filter?category=${filters.categoria}&priceRange=${filters.precioMin}-${filters.precioMax}`);
-      const data = await response.json();
-      if (response.ok) {
-        setGames(data); // Actualiza los juegos filtrados
-      } else {
-        alert('Error al aplicar los filtros');
-      }
-    } catch (error) {
-      console.error('Error al aplicar los filtros:', error);
-    }
-  };
-  
-  const handleDeleteRequest = (id: string) => {
-    setNoticeToDelete({ id });
-    setDeleteModalVisible(true);
-  };
 
+  // ------------------------------------ NOTICIAS ------------------------------------
   const handleConfirmDelete = async () => {
     try {
       await fetch(`http://localhost:5000/api/admin/news/${noticeToDelete.id}`, {
@@ -113,6 +135,12 @@ const AdminPanel: React.FC = () => {
     } catch (error) {
       console.error('Error al eliminar la noticia:', error);
     }
+  };
+
+  // Muestra el modal de confirmación para borrar una noticia
+  const handleDeleteRequest = (id: string) => {
+    setNoticeToDelete({ id });
+    setDeleteModalVisible(true);
   };
 
   // Eliminada función no usada handleDelete
@@ -172,6 +200,24 @@ const AdminPanel: React.FC = () => {
 
   const showSection = (section: typeof activeSection) => {
     setActiveSection(section);
+  };
+
+  // Función para aplicar filtros a los juegos
+  const handleApplyFilters = (filters: FilterData) => {
+    // Aquí puedes implementar la lógica de filtrado según tus necesidades
+    // Por ejemplo, podrías filtrar los juegos por categoría y rango de precios
+    setGames(
+      initialGames.filter((game) => {
+        const matchesCategory =
+          !filters.categoria || game.category === filters.categoria;
+        const matchesMin =
+          !filters.precioMin || game.price >= parseFloat(filters.precioMin);
+        const matchesMax =
+          !filters.precioMax || game.price <= parseFloat(filters.precioMax);
+        return matchesCategory && matchesMin && matchesMax;
+      })
+    );
+    setFilterModalVisible(false);
   };
 
   return (
@@ -278,7 +324,7 @@ const AdminPanel: React.FC = () => {
                           onClick={() => {
                             // Pasar discount aunque no esté en Game
                         setGameToEdit({
-                          id: game.id,
+                          id: String(game.id),
                           title: game.title,
                           category: game.category,
                           price: game.price,
