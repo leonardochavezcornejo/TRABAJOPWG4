@@ -36,6 +36,15 @@ const AdminGameModal: React.FC<AdminGameModalProps> = ({ visible, onClose, initi
   const [releaseDate, setReleaseDate] = useState('');
   const [onSale, setOnSale] = useState(false);
   const [images, setImages] = useState<string[]>([]);
+  const [errorMessage, setErrorMessage] = useState('');
+
+  const categories = [
+    "Mejor Valorados",
+    "Más vendidos",
+    "Gratuitos",
+    "Multijugador",
+    "Acceso anticipado",
+  ];
 
 
   const handleImageInput = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -45,8 +54,9 @@ const AdminGameModal: React.FC<AdminGameModalProps> = ({ visible, onClose, initi
     // Verificar si la URL es válida
     if (isValidUrl(imageUrl)) {
       setImages(prevImages => [...prevImages, imageUrl]);
+      setErrorMessage(''); // Limpiar el mensaje de error si la URL es válida
     } else {
-      alert("La URL de la imagen no es válida.");
+      setErrorMessage("La URL de la imagen no es válida."); // Mostrar el mensaje de error
     }
 
     // Limpiar el input
@@ -88,9 +98,9 @@ const AdminGameModal: React.FC<AdminGameModalProps> = ({ visible, onClose, initi
       setReleaseDate('');
       setOnSale(false);
       setImages([]);
+      setErrorMessage(''); // Limpiar mensaje de error al resetear
     }
   }, [initialData, visible]);
-
   
 
 
@@ -176,14 +186,20 @@ const AdminGameModal: React.FC<AdminGameModalProps> = ({ visible, onClose, initi
                 </div>
                 <div className="col-md-6">
                   <label htmlFor="category" className="form-label">Categoría</label>
-                  <input
-                    type="text"
+                  <select
                     id="category"
                     className="form-control"
                     value={category}
                     onChange={(e) => setCategory(e.target.value)}
                     required
-                  />
+                  >
+                    <option value="">Selecciona una categoría</option>
+                    {categories.map((cat, index) => (
+                      <option key={index} value={cat}>
+                        {cat}
+                      </option>
+                    ))}
+                  </select>
                 </div>
               </div>
 
@@ -258,9 +274,11 @@ const AdminGameModal: React.FC<AdminGameModalProps> = ({ visible, onClose, initi
                   type="text"
                   id="images"
                   className="form-control"
-                  onBlur={handleImageInput} // On blur (after focus is lost)
+                  onBlur={handleImageInput}
                 />
                 <small className="form-text text-muted">Agrega las URLs de las imágenes separadas por enter.</small>
+                {/* Mostrar mensaje de error debajo del input si hay algún error */}
+                {errorMessage && <div className="text-danger mt-2">{errorMessage}</div>}
               </div>
 
               <div className="mb-3">
