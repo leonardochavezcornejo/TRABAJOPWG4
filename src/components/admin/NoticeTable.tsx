@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import type { Noticia } from '../data/noticias';
-import type { Game } from './AdminGameModal';
+
 
 interface TablaNoticiasProps {
   noticias: Noticia[];    // Lista de noticias
@@ -9,23 +9,24 @@ interface TablaNoticiasProps {
 }
 
 const TablaNoticias: React.FC<TablaNoticiasProps> = ({ noticias, onEditar, onBorrar }) => {
-  const [games, setGames] = useState<Game[]>([]); // Estado para juegos
+  const [noticiasData, setNoticiasData] = useState<Noticia[]>([]); // Estado para noticias
 
-  // Función para obtener los juegos desde la API
-  const fetchGames = async () => {
+  // Función para obtener las noticias desde la API
+  const fetchNoticias = async () => {
     try {
-      const response = await fetch('/api/games');
-      const data: Game[] = await response.json();
-      setGames(data); // Actualiza el estado de juegos
+      const response = await fetch('http://localhost:5000/api/admin/news');
+      const data: Noticia[] = await response.json();
+      setNoticiasData(data); // Actualiza el estado de noticias
     } catch (error) {
-      console.error('Error al obtener los juegos:', error);
+      console.error('Error al obtener las noticias:', error);
     }
   };
 
-  // Cargar juegos al montar el componente
+  // Cargar noticias al montar el componente
   useEffect(() => {
-    fetchGames();
+    fetchNoticias();
   }, []);
+
 
   return (
     <div className="table-responsive">
@@ -35,15 +36,15 @@ const TablaNoticias: React.FC<TablaNoticiasProps> = ({ noticias, onEditar, onBor
             <th>Título</th>
             <th>Contenido</th>
             <th>Fecha</th>
+            <th>Imagen</th>
             <th>Acciones</th>
           </tr>
         </thead>
         <tbody>
-          {noticias.length > 0 && noticias.map((noticia) => {
-            // Buscar el juego relacionado por título
-            const juegoRelacionado = games.find(g => noticia.title.toLowerCase().includes(g.title.toLowerCase()));
+          {noticiasData.length > 0 && noticiasData.map((noticia) => {
+            // Verifica que la noticia tiene los datos correctos
+            console.log(noticia);  // Verifica los datos
 
-            // Formatear la fecha
             const formattedDate = new Date(noticia.createdAt).toLocaleDateString("es-ES");
 
             return (
@@ -51,6 +52,9 @@ const TablaNoticias: React.FC<TablaNoticiasProps> = ({ noticias, onEditar, onBor
                 <td>{noticia.title}</td>
                 <td>{noticia.content}</td>
                 <td>{formattedDate}</td>
+                <td>
+                  <img src={noticia.image} alt={noticia.title} style={{ width: '50px', height: '50px', objectFit: 'cover' }} />
+                </td>
                 <td>
                   <button
                     className="btn btn-sm btn-primary me-2"
