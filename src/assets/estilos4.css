@@ -1,0 +1,103 @@
+:root {
+    --dark-blue: #1e1e2f;
+    --light-box: #f0f4f8;
+    --link-blue: #3f51b5;
+}
+
+
+body, html {
+    margin: 0;
+    height: 100%;
+}
+
+
+.main-background {
+    background-color: var(--dark-blue);
+    height: 100vh; 
+    padding: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+
+.logo {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    overflow: hidden;
+    background-color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.logo img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+
+.login-box {
+    background-color: var(--light-box);
+    border-radius: 20px;
+    padding: 40px;
+    color: #1a1a1a;
+    width: 100%;
+    max-width: 400px;
+}
+
+
+.form-control {
+    border-radius: 10px;
+    background-color: #ccc;
+    border: none;
+}
+
+.form-select {
+    border-radius: 10px;
+    background-color: #e0e0e0;
+    border: none;
+}
+
+.btn-custom {
+    background-color: var(--link-blue);
+    color: white;
+    border-radius: 10px;
+    font-weight: bold;
+    border: none;
+    padding: 10px;
+}
+
+
+.forgot-password {
+    font-size: 0.875rem;
+    color: var(--link-blue);
+    text-decoration: none;
+}
+
+.create-account a {
+    color: var(--link-blue);
+    font-weight: bold;
+    text-decoration: none;
+}
+
+
+.left-panel {
+    width: 50%;
+    background-color: var(--dark-blue);
+    color: white;
+}
+
+.right-panel {
+    width: 50%;
+    background-color: var(--light-box);
+    color: #1a1a1a;
+    position: relative;
+}
+
+.form-container {
+    width: 100%;
+    max-width: 450px;
+}
