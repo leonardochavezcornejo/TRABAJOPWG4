@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import EditNotice from './EditNotice';
 import '../../assets/estiloAdminNoticias.css';
@@ -9,10 +9,8 @@ import DeleteNotice from './DeleteNotice';
 import AddNotice from './AddNotice';
 import FilterGamesModal from './FilterGamesModal';
 import AdminGameModal, { type GameData } from './AdminGameModal';
-import { games as initialGames } from '../data/games';
 import MonthlyEarningsChart from './MonthlyEarningsChart';
-
-
+import type { Game } from '../types';
 
 
 type FilterData = {
@@ -37,8 +35,24 @@ const AdminPanel: React.FC = () => {
   const [filterModalVisible, setFilterModalVisible] = useState(false);
   const [gameModalVisible, setGameModalVisible] = useState(false);
   const [gameToEdit, setGameToEdit] = useState<GameData | null>(null);
-  const [games, setGames] = useState(initialGames);
+  const [games, setGames] = useState<Game[]>([]);
 
+
+  // Función para obtener los juegos desde el backend
+  const fetchGames = async () => {
+    try {
+      const response = await fetch('http://localhost:5000/api/games');
+      const data: Game[] = await response.json(); // Asegúrate de que la respuesta sea un array de tipo `Game`
+      setGames(data); // Actualiza el estado con los juegos obtenidos
+    } catch (error) {
+      console.error('Error al obtener los juegos:', error);
+    }
+  };
+
+  // Llamada a la función fetchGames cuando el componente se monta
+  useEffect(() => {
+    fetchGames();
+  }, []); 
 
 
   // Eliminar juego por id
@@ -47,8 +61,7 @@ const AdminPanel: React.FC = () => {
       await fetch(`http://localhost:5000/api/admin/games/${id}`, {
         method: 'DELETE',
       });
-      // Filtrar el juego eliminado de la lista de juegos
-      setGames(prev => prev.filter(game => game.id !== id));
+      setGames(prev => prev.filter(game => game.id !== id)); // Actualizar la lista de juegos
     } catch (error) {
       console.error('Error al eliminar el juego:', error);
     }
@@ -59,26 +72,21 @@ const AdminPanel: React.FC = () => {
   const handleSaveGame = async (game: GameData) => {
     try {
       if (game.id) {
-        // Si el juego tiene id, lo editamos (PUT)
+        // Editar juego
         await fetch(`http://localhost:5000/api/admin/games/${game.id}`, {
           method: 'PUT',
-          headers: {
-            'Content-Type': 'application/json',
-          },
+          headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(game),
         });
       } else {
-        // Si no tiene id, lo creamos (POST)
+        // Agregar nuevo juego
         await fetch('http://localhost:5000/api/admin/games', {
           method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
+          headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(game),
         });
       }
       setGameModalVisible(false);
-      // Actualiza la lista de juegos, si es necesario
     } catch (error) {
       console.error('Error al guardar el juego:', error);
     }
@@ -89,7 +97,7 @@ const AdminPanel: React.FC = () => {
       const response = await fetch(`http://localhost:5000/api/admin/games/filter?category=${filters.categoria}&priceRange=${filters.precioMin}-${filters.precioMax}`);
       const data = await response.json();
       if (response.ok) {
-        setGames(data); // Actualiza los juegos filtrados
+        setGames(data); // Actualizar juegos con los filtros aplicados
       } else {
         alert('Error al aplicar los filtros');
       }
@@ -97,7 +105,7 @@ const AdminPanel: React.FC = () => {
       console.error('Error al aplicar los filtros:', error);
     }
   };
-  
+
   const handleDeleteRequest = (id: string) => {
     setNoticeToDelete({ id });
     setDeleteModalVisible(true);
@@ -243,29 +251,45 @@ const AdminPanel: React.FC = () => {
             <div className="container admin-panel">
               <h2 className="mb-4 text-center">Panel de Administración de Juegos</h2>
               <div className="d-flex justify-content-end mb-3 gap-2">
-                <button className="btn btn-success" onClick={() => {
-                  setGameToEdit(null);
-                  setGameModalVisible(true);
-                }}>+ Agregar Juego</button>
-                <button type="button" className="btn btn-primary" onClick={() => setFilterModalVisible(true)}>
+                <button
+                  className="btn btn-success"
+                  onClick={() => {
+                    setGameToEdit(null);
+                    setGameModalVisible(true);
+                  }}
+                >
+                  + Agregar Juego
+                </button>
+                <button
+                  type="button"
+                  className="btn btn-primary"
+                  onClick={() => setFilterModalVisible(true)}
+                >
                   Filtrar Juegos
                 </button>
               </div>
               <table className="table table-bordered table-hover shadow-sm">
-                <thead><tr><th>Título</th><th>Categoría</th><th>Precio</th><th>Acciones</th></tr></thead>
+                <thead>
+                  <tr>
+                    <th>Título</th>
+                    <th>Categoría</th>
+                    <th>Precio</th>
+                    <th>Acciones</th>
+                  </tr>
+                </thead>
                 <tbody id="gameTableBody">
-                  {games.map(game => (
-                    <tr key={game.id}>
+                  {games.map((game) => (
+                    <tr key={game.id.toString()}>
                       <td>{game.title}</td>
                       <td>{game.category}</td>
                       <td>
-                        {(game as any).discount && (game as any).discount > 0 ? (
+                        {game.discount && game.discount > 0 ? (
                           <>
                             <span style={{ textDecoration: 'line-through', color: '#888', marginRight: 8 }}>
                               ${game.price.toFixed(2)}
                             </span>
                             <span>
-                              ${ (game.price * (1 - ((game as any).discount ?? 0) / 100)).toFixed(2) }
+                              ${(game.price * (1 - game.discount / 100)).toFixed(2)}
                             </span>
                           </>
                         ) : (
@@ -276,15 +300,17 @@ const AdminPanel: React.FC = () => {
                         <button
                           className="btn btn-sm btn-warning me-2"
                           onClick={() => {
-                            // Pasar discount aunque no esté en Game
-                        setGameToEdit({
-                          id: game.id,
-                          title: game.title,
-                          category: game.category,
-                          price: game.price,
-                          discount: (game as any).discount ?? 0,
-                          description: game.description
-                        });
+                            setGameToEdit({
+                              id: game.id,
+                              title: game.title,
+                              category: game.category,
+                              price: game.price,
+                              discount: game.discount ?? 0,
+                              description: game.description,
+                              platform: game.platform,
+                              releaseDate: game.releaseDate,
+                              images: game.images,
+                            });
                             setGameModalVisible(true);
                           }}
                         >
@@ -292,7 +318,14 @@ const AdminPanel: React.FC = () => {
                         </button>
                         <button
                           className="btn btn-sm btn-danger"
-                          onClick={() => handleDeleteGame(game.id)}
+                          onClick={() => {
+                            const confirmed = window.confirm(
+                              "¿Estás seguro de que deseas eliminar este juego?"
+                            );
+                            if (confirmed) {
+                              handleDeleteGame(game.id);
+                            }
+                          }}
                         >
                           Eliminar
                         </button>
@@ -304,6 +337,7 @@ const AdminPanel: React.FC = () => {
             </div>
           </section>
         )}
+
 
         {activeSection === "noticias" && (
           <section className="admin-section">
