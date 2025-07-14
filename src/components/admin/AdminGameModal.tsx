@@ -133,7 +133,7 @@ const AdminGameModal: React.FC<AdminGameModalProps> = ({ visible, onClose, initi
             <div className="modal-body">
               <div className="row mb-3">
                 <div className="col-md-6">
-                  <label htmlFor="title" className="form-label">Title</label>
+                  <label htmlFor="title" className="form-label">Titulo</label>
                   <input
                     type="text"
                     id="title"
@@ -144,7 +144,7 @@ const AdminGameModal: React.FC<AdminGameModalProps> = ({ visible, onClose, initi
                   />
                 </div>
                 <div className="col-md-6">
-                  <label htmlFor="category" className="form-label">Category</label>
+                  <label htmlFor="category" className="form-label">Categoria</label>
                   <input
                     type="text"
                     id="category"
@@ -158,7 +158,7 @@ const AdminGameModal: React.FC<AdminGameModalProps> = ({ visible, onClose, initi
 
               <div className="row mb-3">
                 <div className="col-md-6">
-                  <label htmlFor="price" className="form-label">Price ($)</label>
+                  <label htmlFor="price" className="form-label">Precio ($)</label>
                   <input
                     type="number"
                     id="price"
@@ -171,7 +171,7 @@ const AdminGameModal: React.FC<AdminGameModalProps> = ({ visible, onClose, initi
                   />
                 </div>
                 <div className="col-md-6">
-                  <label htmlFor="discount" className="form-label">Discount (%)</label>
+                  <label htmlFor="discount" className="form-label">Descuento (%)</label>
                   <input
                     type="number"
                     id="discount"
@@ -186,7 +186,7 @@ const AdminGameModal: React.FC<AdminGameModalProps> = ({ visible, onClose, initi
 
               <div className="row mb-3">
                 <div className="col-md-6">
-                  <label htmlFor="platform" className="form-label">Platform</label>
+                  <label htmlFor="platform" className="form-label">Plataforma</label>
                   <input
                     type="text"
                     id="platform"
@@ -197,7 +197,7 @@ const AdminGameModal: React.FC<AdminGameModalProps> = ({ visible, onClose, initi
                   />
                 </div>
                 <div className="col-md-6">
-                  <label htmlFor="releaseDate" className="form-label">Release Date</label>
+                  <label htmlFor="releaseDate" className="form-label">Fecha de Lanzamiento</label>
                   <input
                     type="date"
                     id="releaseDate"
@@ -210,7 +210,7 @@ const AdminGameModal: React.FC<AdminGameModalProps> = ({ visible, onClose, initi
               </div>
 
               <div className="mb-3">
-                <label htmlFor="description" className="form-label">Description</label>
+                <label htmlFor="description" className="form-label">Descripcion</label>
                 <textarea
                   id="description"
                   className="form-control"
@@ -223,8 +223,8 @@ const AdminGameModal: React.FC<AdminGameModalProps> = ({ visible, onClose, initi
             </div>
 
             <div className="modal-footer">
-              <button type="submit" className="btn btn-primary mx-2">Save</button>
-              <button type="button" className="btn btn-secondary" onClick={onClose}>Cancel</button>
+              <button type="submit" className="btn btn-primary mx-2">Guardar</button>
+              <button type="button" className="btn btn-secondary" onClick={onClose}>Cancelar</button>
             </div>
           </form>
         </div>
