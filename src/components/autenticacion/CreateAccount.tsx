@@ -32,7 +32,6 @@ const CreateAccount: React.FC = () => {
 
       // Verificar si la respuesta fue exitosa
       if (response.ok) {
-        const data = await response.json();
         navigate('/verificar');  // Redirigir a una página de verificación o login
       } else {
         const errorData = await response.json();

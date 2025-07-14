@@ -8,7 +8,7 @@ import DeleteNotice from './DeleteNotice';
 import AddNotice from './AddNotice';
 import FilterGamesModal from './FilterGamesModal';
 import AdminGameModal, { type Game } from './AdminGameModal';
-import MonthlyEarningsChart from './MonthlyEarningsChart';
+
 
 
 type FilterData = {
@@ -23,7 +23,7 @@ const AdminPanel: React.FC = () => {
 
   const [activeSection, setActiveSection] = useState<"usuarios" | "juegos" | "noticias" | "estadisticas">("usuarios");
   const navigate = useNavigate();
-  const userCount = 3;
+  
   const [editModalVisible, setEditModalVisible] = useState(false);
   const [noticeToEdit, setNoticeToEdit] = useState({ id: '', title: '', content: '' });
   const [deleteModalVisible, setDeleteModalVisible] = useState(false);
