@@ -36,7 +36,6 @@ const AdminPanel: React.FC = () => {
   const [games, setGames] = useState<Game[]>([]);
   const [noticias, setNoticias] = useState<Noticia[]>([]);
   const [usuarios, setUsuarios] = useState<User[]>([]);
-  const [userToDelete, setUserToDelete] = useState<{ id: number }>({ id: 0 });
 
   
 

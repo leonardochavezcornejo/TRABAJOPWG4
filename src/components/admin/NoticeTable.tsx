@@ -58,13 +58,13 @@ const TablaNoticias: React.FC<TablaNoticiasProps> = ({ onEditar, onBorrar }) => 
                 <td>
                   <button
                     className="btn btn-sm btn-primary me-2"
-                    onClick={() => onEditar(Number(noticia.id))}  // Convierte id a number si es necesario
+                    onClick={() => onEditar(Number(noticia.id))} 
                   >
                     Editar
                   </button>
                   <button
                     className="btn btn-sm btn-danger"
-                    onClick={() => onBorrar(Number(noticia.id))}  // Convierte id a number si es necesario
+                    onClick={() => onBorrar(Number(noticia.id))} 
                   >
                     Borrar
                   </button>
