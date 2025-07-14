@@ -7,7 +7,7 @@ import Carousel from './components/menu/Carousel';
 import GameGrid from './components/menu/GameGrid';
 import GameModal from './components/menu/GameModal';
 import BuyModal from './components/menu/BuyModal';
-import type { Game } from './components/types';
+import type { Game } from './components/admin/AdminGameModal';
 
 
 

@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import type { Game } from '../types';
+import type { Game } from '../admin/AdminGameModal';
+import type { Review } from '../data/reviews';
 import '../../assets/juego.css';
 
 interface GameModalProps {
@@ -15,6 +16,8 @@ const GameModal: React.FC<GameModalProps> = ({ game, onClose, onAddToCart }) => 
   React.useEffect(() => {
     setSelectedImage(0);
   }, [game]);
+
+
   const [userName, setUserName] = useState('');
   const [userComment, setUserComment] = useState('');
   const [userRating, setUserRating] = useState(0);
@@ -26,18 +29,20 @@ const GameModal: React.FC<GameModalProps> = ({ game, onClose, onAddToCart }) => 
     if (!userName || !userComment || userRating === 0) return;
 
     const date = new Date().toISOString().split('T')[0];
-    const newReview = {
+    const newReview: Review = {
       name: userName,
       comment: userComment,
       stars: userRating,
       date
     };
+
     const updatedReviews = [...reviews, newReview];
     setReviews(updatedReviews);
     setUserName('');
     setUserComment('');
     setUserRating(0);
   };
+
 
   const averageRating = reviews.length
     ? (reviews.reduce((sum, r) => sum + r.stars, 0) / reviews.length).toFixed(1)
@@ -82,67 +87,67 @@ const GameModal: React.FC<GameModalProps> = ({ game, onClose, onAddToCart }) => 
               />
             )}
             <div className="d-flex justify-content-center mb-3 flex-wrap">
-                {/* Recorrer las miniaturas */}
-                {game.images.map((img, index) => {
-                  if (img.endsWith('.mp4')) {
-                    return (
-                      <video
-                        key={index}
-                        src={img}
-                        className={`thumb ${index === selectedImage ? 'active' : ''}`}
-                        style={{
-                          width: 60, height: 40, objectFit: 'cover', margin: 2,
-                          border: index === selectedImage ? '2px solid #007bff' : '1px solid #ccc', cursor: 'pointer'
-                        }}
-                        onClick={() => setSelectedImage(index)}
-                        muted
-                        preload="metadata"
-                      />
-                    );
-                  } else if (img.includes('youtube.com')) {
-                    // Extraer el id del video de YouTube, manejando tanto el formato 'embed' como 'watch?v='
-                    const match = img.match(/(?:youtube\.com\/(?:[^\/\n\s]+\/\S+\/|(?:v|e(?:mbed)?)\/|\S*?[?&]v=)|youtu\.be\/)([a-zA-Z0-9_-]{11})/);
-                    const videoId = match ? match[1] : '';  // Obtener el video ID
-                    const thumbUrl = videoId ? `https://img.youtube.com/vi/${videoId}/0.jpg` : ''; // Generar miniatura de YouTube
+              {/* Recorrer las miniaturas */}
+              {game.images.map((img, index) => {
+                if (img.endsWith('.mp4')) {
+                  return (
+                    <video
+                      key={index}
+                      src={img}
+                      className={`thumb ${index === selectedImage ? 'active' : ''}`}
+                      style={{
+                        width: 60, height: 40, objectFit: 'cover', margin: 2,
+                        border: index === selectedImage ? '2px solid #007bff' : '1px solid #ccc', cursor: 'pointer'
+                      }}
+                      onClick={() => setSelectedImage(index)}
+                      muted
+                      preload="metadata"
+                    />
+                  );
+                } else if (img.includes('youtube.com')) {
+                  // Extraer el id del video de YouTube, manejando tanto el formato 'embed' como 'watch?v='
+                  const match = img.match(/(?:youtube\.com\/(?:[^\/\n\s]+\/\S+\/|(?:v|e(?:mbed)?)\/|\S*?[?&]v=)|youtu\.be\/)([a-zA-Z0-9_-]{11})/);
+                  const videoId = match ? match[1] : '';  // Obtener el video ID
+                  const thumbUrl = videoId ? `https://img.youtube.com/vi/${videoId}/0.jpg` : ''; // Generar miniatura de YouTube
 
-                    return (
-                      <img
-                        key={index}
-                        src={thumbUrl}  // Usamos la URL de la miniatura
-                        className={`thumb ${index === selectedImage ? 'active' : ''}`}
-                        style={{
-                          width: 60, height: 40, objectFit: 'cover', margin: 2,
-                          border: index === selectedImage ? '2px solid #007bff' : '1px solid #ccc', cursor: 'pointer'
-                        }}
-                        onClick={() => setSelectedImage(index)}
-                        alt={`thumbnail-youtube-${index}`} // Asegúrate de que el alt sea correcto
-                      />
-                    );
-                  } else {
-                    return (
-                      <img
-                        key={index}
-                        src={img}
-                        className={`thumb ${index === selectedImage ? 'active' : ''}`}
-                        style={{
-                          width: 60, height: 40, objectFit: 'cover', margin: 2,
-                          border: index === selectedImage ? '2px solid #007bff' : '1px solid #ccc', cursor: 'pointer'
-                        }}
-                        onClick={() => setSelectedImage(index)}
-                        alt={`thumbnail-${index}`}
-                      />
-                    );
-                  }
-                })}
-              </div>
+                  return (
+                    <img
+                      key={index}
+                      src={thumbUrl}  // Usamos la URL de la miniatura
+                      className={`thumb ${index === selectedImage ? 'active' : ''}`}
+                      style={{
+                        width: 60, height: 40, objectFit: 'cover', margin: 2,
+                        border: index === selectedImage ? '2px solid #007bff' : '1px solid #ccc', cursor: 'pointer'
+                      }}
+                      onClick={() => setSelectedImage(index)}
+                      alt={`thumbnail-youtube-${index}`} // Asegúrate de que el alt sea correcto
+                    />
+                  );
+                } else {
+                  return (
+                    <img
+                      key={index}
+                      src={img}
+                      className={`thumb ${index === selectedImage ? 'active' : ''}`}
+                      style={{
+                        width: 60, height: 40, objectFit: 'cover', margin: 2,
+                        border: index === selectedImage ? '2px solid #007bff' : '1px solid #ccc', cursor: 'pointer'
+                      }}
+                      onClick={() => setSelectedImage(index)}
+                      alt={`thumbnail-${index}`}
+                    />
+                  );
+                }
+              })}
             </div>
+          </div>
 
           {/* Columna derecha */}
           <div className="col-md-6">
-            <h4>Descripción</h4>
+            <h4>Description</h4>
             <p>{game.description}</p>
 
-            <h4>Reseñas de usuarios</h4>
+            <h4>User Reviews</h4>
             <div id="gameReviews" style={{ maxHeight: '200px', overflowY: 'auto' }}>
               {reviews.length > 0 ? (
                 reviews.map((r, i) => (
@@ -156,20 +161,20 @@ const GameModal: React.FC<GameModalProps> = ({ game, onClose, onAddToCart }) => 
                   </div>
                 ))
               ) : (
-                <p>No hay reseñas aún.</p>
+                <p>No reviews yet.</p>
               )}
             </div>
 
-            <h5 className="mt-4">Agregar tu reseña</h5>
+            <h5 className="mt-4">Add Your Review</h5>
             <input
               type="text"
-              placeholder="Tu nombre"
+              placeholder="Your Name"
               className="form-control mb-2"
               value={userName}
               onChange={(e) => setUserName(e.target.value)}
             />
             <textarea
-              placeholder="Tu reseña"
+              placeholder="Your Review"
               className="form-control mb-2"
               value={userComment}
               onChange={(e) => setUserComment(e.target.value)}
@@ -188,7 +193,7 @@ const GameModal: React.FC<GameModalProps> = ({ game, onClose, onAddToCart }) => 
               ))}
             </div>
             <button className="btn btn-primary w-100" onClick={handleSubmit}>
-              Enviar reseña
+              Submit Review
             </button>
           </div>
         </div>

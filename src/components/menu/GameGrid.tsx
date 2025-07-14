@@ -1,5 +1,5 @@
 import React from 'react';
-import type { Game } from '../types';
+import type { Game } from '../admin/AdminGameModal';
 import '../../assets/juego.css';
 
 interface GameGridProps {

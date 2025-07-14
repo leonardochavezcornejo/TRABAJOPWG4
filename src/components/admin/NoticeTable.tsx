@@ -1,10 +1,11 @@
 import React, {useState, useEffect} from 'react';
 import type { Noticia } from '../data/noticias';
-import type { Game } from '../types';
+import type { Game } from './AdminGameModal';
 
 interface TablaNoticiasProps {
-  onEditar: (id: string) => void;
-  onBorrar: (id: string) => void;
+  noticias: Noticia[];    // Lista de noticias
+  onEditar: (id: string) => void;  // Función para editar
+  onBorrar: (id: string) => void;  // Función para borrar
 }
 
 const TablaNoticias: React.FC<TablaNoticiasProps> = ({ onEditar, onBorrar }) => {

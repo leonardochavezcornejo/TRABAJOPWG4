@@ -2,15 +2,13 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import EditNotice from './EditNotice';
 import '../../assets/estiloAdminNoticias.css';
-import { noticiasIniciales } from '../data/noticias';
 import type { Noticia } from '../data/noticias';
 import NoticeTable from './NoticeTable';
 import DeleteNotice from './DeleteNotice';
 import AddNotice from './AddNotice';
 import FilterGamesModal from './FilterGamesModal';
-import AdminGameModal, { type GameData } from './AdminGameModal';
+import AdminGameModal, { type Game } from './AdminGameModal';
 import MonthlyEarningsChart from './MonthlyEarningsChart';
-import type { Game } from '../types';
 
 
 type FilterData = {
@@ -28,14 +26,25 @@ const AdminPanel: React.FC = () => {
   const userCount = 3;
   const [editModalVisible, setEditModalVisible] = useState(false);
   const [noticeToEdit, setNoticeToEdit] = useState({ id: '', title: '', content: '' });
-  const [noticias, setNoticias] = useState<Noticia[]>(noticiasIniciales);
   const [deleteModalVisible, setDeleteModalVisible] = useState(false);
   const [noticeToDelete, setNoticeToDelete] = useState<{ id: string }>({ id: '' });
   const [addModalVisible, setAddModalVisible] = useState(false);
   const [filterModalVisible, setFilterModalVisible] = useState(false);
   const [gameModalVisible, setGameModalVisible] = useState(false);
-  const [gameToEdit, setGameToEdit] = useState<GameData | null>(null);
+  const [gameToEdit, setGameToEdit] = useState<Game | null>(null);
   const [games, setGames] = useState<Game[]>([]);
+  const [noticias, setNoticias] = useState<Noticia[]>([]);
+
+  useEffect(() => {
+    const fetchNoticias = async () => {
+      const response = await fetch("/api/admin/news");
+      const data = await response.json();
+      setNoticias(data);
+    };
+
+    fetchNoticias();
+  }, []);
+
 
 
   // Función para obtener los juegos desde el backend
@@ -69,7 +78,7 @@ const AdminPanel: React.FC = () => {
 
 
   // Guardar (agregar o editar) juego
-  const handleSaveGame = async (game: GameData) => {
+  const handleSaveGame = async (game: Game) => {
     try {
       if (game.id) {
         // Editar juego
@@ -310,6 +319,7 @@ const AdminPanel: React.FC = () => {
                               platform: game.platform,
                               releaseDate: game.releaseDate,
                               images: game.images,
+                              onSale: game.onSale ?? false,  // Asegúrate de incluir `onSale`, con un valor por defecto si no existe
                             });
                             setGameModalVisible(true);
                           }}
