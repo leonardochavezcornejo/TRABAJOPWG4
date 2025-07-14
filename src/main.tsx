@@ -8,7 +8,7 @@ import 'bootstrap/dist/js/bootstrap.bundle.min.js';
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <StrictMode>
-    <BrowserRouter basename="/TRABAJOPWG4">
+    <BrowserRouter basename='/TRABAJOPWG4'>
       <MainRouter />
     </BrowserRouter>
   </StrictMode>
