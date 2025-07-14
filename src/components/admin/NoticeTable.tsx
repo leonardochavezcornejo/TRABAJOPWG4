@@ -1,14 +1,46 @@
-import React from 'react';
+import React, {useState, useEffect} from 'react';
 import type { Noticia } from '../data/noticias';
-import { games } from '../data/games';
+import type { Game } from '../types';
 
 interface TablaNoticiasProps {
-  noticias: Noticia[];
   onEditar: (id: string) => void;
   onBorrar: (id: string) => void;
 }
 
-const TablaNoticias: React.FC<TablaNoticiasProps> = ({ noticias, onEditar, onBorrar }) => {
+const TablaNoticias: React.FC<TablaNoticiasProps> = ({ onEditar, onBorrar }) => {
+
+  const [noticias, setNoticias] = useState<Noticia[]>([]); // Estado para noticias
+  const [games, setGames] = useState<Game[]>([]); // Estado para juegos
+
+  // Función para obtener las noticias desde la API
+  const fetchNoticias = async () => {
+    try {
+      const response = await fetch('/api/admin/news');
+      const data: Noticia[] = await response.json();
+      setNoticias(data); // Actualiza el estado de noticias
+    } catch (error) {
+      console.error('Error al obtener las noticias:', error);
+    }
+  };
+
+  // Función para obtener los juegos desde la API
+  const fetchGames = async () => {
+    try {
+      const response = await fetch('/api/games');
+      const data: Game[] = await response.json();
+      setGames(data); // Actualiza el estado de juegos
+    } catch (error) {
+      console.error('Error al obtener los juegos:', error);
+    }
+  };
+
+  // Cargar noticias y juegos al montar el componente
+  useEffect(() => {
+    fetchNoticias();
+    fetchGames();
+  }, []);
+
+
   return (
     <div className="table-responsive">
       {/* Mostrar la primera noticia como tarjeta con encabezado e imagen del juego */}
@@ -52,6 +84,7 @@ const TablaNoticias: React.FC<TablaNoticiasProps> = ({ noticias, onEditar, onBor
           </div>
         );
       })()}
+
       {/* Mostrar el resto de noticias como tarjetas debajo */}
       {noticias.slice(1).map(noticia => {
         const juegoRelacionado = games.find(g => noticia.title.toLowerCase().includes(g.title.toLowerCase()));
