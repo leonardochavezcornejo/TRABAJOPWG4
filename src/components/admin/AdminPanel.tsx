@@ -26,9 +26,9 @@ const AdminPanel: React.FC = () => {
   const navigate = useNavigate();
   
   const [editModalVisible, setEditModalVisible] = useState(false);
-  const [noticeToEdit, setNoticeToEdit] = useState({ id: '', title: '', content: '' });
+  const [noticeToEdit, setNoticeToEdit] = useState<Noticia | null>(null); 
   const [deleteModalVisible, setDeleteModalVisible] = useState(false);
-  const [noticeToDelete, setNoticeToDelete] = useState<{ id: string }>({ id: '' });
+  const [noticeToDelete, setNoticeToDelete] = useState<{ id: number }>({ id: 0 });
   const [addModalVisible, setAddModalVisible] = useState(false);
   const [filterModalVisible, setFilterModalVisible] = useState(false);
   const [gameModalVisible, setGameModalVisible] = useState(false);
@@ -141,17 +141,19 @@ const AdminPanel: React.FC = () => {
 
 
   
-  const handleDeleteRequest = (id: string) => {
+  const handleDeleteRequest = (id: number) => { 
     setNoticeToDelete({ id });
     setDeleteModalVisible(true);
   };
 
   const handleConfirmDelete = async () => {
     try {
-      await fetch(`http://localhost:5000/api/admin/news/${noticeToDelete.id}`, {
+      const numericId = Number(noticeToDelete.id);  // Asegurarse de que el id sea un número
+      await fetch(`http://localhost:5000/api/admin/news/${numericId}`, {
         method: 'DELETE',
       });
-      setNoticias(prev => prev.filter(n => n.id !== noticeToDelete.id));
+
+      setNoticias(prev => prev.filter(n => n.id !== numericId));  // Comparar con el id numérico
       setDeleteModalVisible(false);
     } catch (error) {
       console.error('Error al eliminar la noticia:', error);
@@ -182,28 +184,35 @@ const AdminPanel: React.FC = () => {
   };
 
 
-  const handleOpenEdit = (id: string) => {
+  const handleOpenEdit = (id: number) => {
     const noticia = noticias.find(n => n.id === id);
     if (noticia) {
-      setNoticeToEdit({ id: noticia.id, title: noticia.title, content: noticia.content });
-      setEditModalVisible(true);
+      setNoticeToEdit({
+        id: noticia.id,
+        title: noticia.title,
+        content: noticia.content,
+        image: noticia.image,
+        createdAt: noticia.createdAt,  // Asignamos createdAt
+        updatedAt: noticia.updatedAt,  // Asignamos updatedAt
+      });
+      setEditModalVisible(true); // Asegúrate de que el estado esté configurado en true
     }
   };
 
-  const handleEditSubmit = async (id: string, title: string, content: string) => {
+  const handleEditSubmit = async (id: number, title: string, content: string, image: string) => {
     try {
       const response = await fetch(`http://localhost:5000/api/admin/news/${id}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ title, content }),
+        body: JSON.stringify({ title, content, image }), // Ahora enviamos 'image'
       });
 
       const data = await response.json();
       if (response.ok) {
         setNoticias(prev =>
-          prev.map(n => (n.id === id ? { ...n, title, content } : n))
+          prev.map(n => (n.id === id ? { ...n, title, content, image } : n))  // Actualizamos también la imagen
         );
       } else {
         alert(data.message || 'Error al editar la noticia');
@@ -401,11 +410,12 @@ const AdminPanel: React.FC = () => {
 
       {/* Modals de noticias */}
       <EditNotice
-        visible={editModalVisible}
+        visible={editModalVisible}  // Asegúrate de que visible esté correctamente configurado
         onClose={() => setEditModalVisible(false)}
         onSubmit={handleEditSubmit}
-        initialData={noticeToEdit}
+        initialData={noticeToEdit ? noticeToEdit : { id: 0, title: "", content: "", image: "" }}
       />
+
       <DeleteNotice
         visible={deleteModalVisible}
         onClose={() => setDeleteModalVisible(false)}

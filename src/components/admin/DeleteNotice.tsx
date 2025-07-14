@@ -5,7 +5,7 @@ interface DeleteNoticeProps {
   visible: boolean;
   onClose: () => void;
   onConfirm: () => void;
-  id: string;
+  id: number; 
 }
 
 const DeleteNotice: React.FC<DeleteNoticeProps> = ({ visible, onClose, onConfirm, id }) => {

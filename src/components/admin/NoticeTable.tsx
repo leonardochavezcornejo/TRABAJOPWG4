@@ -3,9 +3,9 @@ import type { Noticia } from '../data/noticias';
 
 
 interface TablaNoticiasProps {
-  noticias: Noticia[];    // Lista de noticias
-  onEditar: (id: string) => void;  // Función para editar
-  onBorrar: (id: string) => void;  // Función para borrar
+  noticias: Noticia[];
+  onEditar: (id: number) => void;
+  onBorrar: (id: number) => void; 
 }
 
 const TablaNoticias: React.FC<TablaNoticiasProps> = ({ onEditar, onBorrar }) => {
@@ -58,13 +58,13 @@ const TablaNoticias: React.FC<TablaNoticiasProps> = ({ onEditar, onBorrar }) => 
                 <td>
                   <button
                     className="btn btn-sm btn-primary me-2"
-                    onClick={() => onEditar(noticia.id)}
+                    onClick={() => onEditar(Number(noticia.id))}  // Convierte id a number si es necesario
                   >
                     Editar
                   </button>
                   <button
                     className="btn btn-sm btn-danger"
-                    onClick={() => onBorrar(noticia.id)}
+                    onClick={() => onBorrar(Number(noticia.id))}  // Convierte id a number si es necesario
                   >
                     Borrar
                   </button>

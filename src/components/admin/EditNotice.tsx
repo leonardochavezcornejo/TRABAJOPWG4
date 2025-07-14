@@ -1,14 +1,15 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import '../../assets/estiloAdminNoticias.css';
 
 interface EditNoticeProps {
   visible: boolean;
   onClose: () => void;
-  onSubmit: (id: string, title: string, content: string) => void;
+  onSubmit: (id: number, title: string, content: string, image: string) => void;
   initialData: {
-    id: string;
+    id: number;
     title: string;
     content: string;
+    image: string;
   };
 }
 
@@ -18,19 +19,25 @@ const EditNotice: React.FC<EditNoticeProps> = ({
   onSubmit,
   initialData,
 }) => {
-  const [title, setTitle] = React.useState(initialData.title);
-  const [content, setContent] = React.useState(initialData.content);
+  // Estado local para los valores del formulario
+  const [title, setTitle] = useState(initialData.title || '');
+  const [content, setContent] = useState(initialData.content || '');
+  const [image, setImage] = useState(initialData.image || ''); // Nueva propiedad para la imagen
 
-  React.useEffect(() => {
-    setTitle(initialData.title);
-    setContent(initialData.content);
+  // Si los datos iniciales cambian, actualizamos los valores
+  useEffect(() => {
+    if (initialData) {
+      setTitle(initialData.title);
+      setContent(initialData.content);
+      setImage(initialData.image);
+    }
   }, [initialData]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
     // Llamada a la función onSubmit con los valores actuales
-    onSubmit(initialData.id, title, content);
+    onSubmit(initialData.id, title, content, image);
 
     // Enviar la solicitud PUT al backend
     try {
@@ -39,7 +46,7 @@ const EditNotice: React.FC<EditNoticeProps> = ({
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ title, content }), // Enviamos los nuevos datos
+        body: JSON.stringify({ title, content, image }), // Enviamos los nuevos datos
       });
 
       if (response.ok) {
@@ -55,13 +62,19 @@ const EditNotice: React.FC<EditNoticeProps> = ({
       alert('Error al editar la noticia');
     }
   };
-
+  // Si `visible` es false, no renderizamos el modal
   if (!visible) return null;
 
-
   return (
-    <div className="modal-custom" onClick={onClose}>
-      <div className="modal-content-custom" onClick={(e) => e.stopPropagation()}>
+    <div
+      className="modal-custom"
+      onClick={onClose} // Cerrar modal al hacer clic fuera del área de contenido
+      style={{ display: visible ? 'block' : 'none' }} // Mostrar el modal solo cuando 'visible' es true
+    >
+      <div
+        className="modal-content-custom"
+        onClick={(e) => e.stopPropagation()} // Prevenir que el click en el modal cierre el modal
+      >
         <h3>Editar Noticia</h3>
         <form onSubmit={handleSubmit}>
           <div className="mb-3">
@@ -84,8 +97,24 @@ const EditNotice: React.FC<EditNoticeProps> = ({
               required
             />
           </div>
-          <button type="submit" className="btn btn-primary">Guardar Cambios</button>
-          <button type="button" className="btn btn-secondary ms-2" onClick={onClose}>
+          <div className="mb-3">
+            <label className="form-label">Imagen (URL)</label>
+            <input
+              type="text"
+              className="form-control"
+              value={image}
+              onChange={(e) => setImage(e.target.value)}
+              required
+            />
+          </div>
+          <button type="submit" className="btn btn-primary">
+            Guardar Cambios
+          </button>
+          <button
+            type="button"
+            className="btn btn-secondary ms-2"
+            onClick={onClose}
+          >
             Cancelar
           </button>
         </form>
