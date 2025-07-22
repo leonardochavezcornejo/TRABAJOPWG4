@@ -4,4 +4,3 @@ export interface Review {
   stars: number;
   date: string;
 }
-

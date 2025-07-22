@@ -1,4 +1,3 @@
-
 import React, { useEffect, useState } from 'react';
 import '../../assets/juego.css';
 import type { Noticia } from '../data/noticias';

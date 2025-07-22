@@ -26,6 +26,7 @@ const Navbar: React.FC<NavbarProps> = ({
         <a className="nav-link" onClick={() => onFilterCategory('Acceso anticipado')}>Acceso anticipado</a>
       </div>
 
+
       <div className="ms-auto d-flex">
         <button className="btn btn-outline-light me-2" onClick={onToggleCart}>Carrito</button>
         <button className="btn btn-outline-light me-2" onClick={onToggleSearch}>Buscar</button>

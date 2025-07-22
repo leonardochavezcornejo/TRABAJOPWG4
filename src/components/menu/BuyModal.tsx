@@ -80,4 +80,3 @@ const BuyModal: React.FC<BuyModalProps> = ({ visible, onClose, userId }) => {
 };
 
 export default BuyModal;
-
