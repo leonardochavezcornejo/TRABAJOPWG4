@@ -23,7 +23,7 @@ interface AdminGameModalProps {
   visible: boolean;
   onClose: () => void;
   initialData?: Game | null;
-  onSave: (game: Game) => void;
+  onSave: (game: Partial<Game>) => void;
 }
 
 const AdminGameModal: React.FC<AdminGameModalProps> = ({ visible, onClose, initialData, onSave }) => {
@@ -91,57 +91,26 @@ const AdminGameModal: React.FC<AdminGameModalProps> = ({ visible, onClose, initi
     }
   }, [initialData, visible]);
 
-  
-
-
   // Función para manejar el envío del formulario
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
+ const handleSubmit = async (e: React.FormEvent) => {
+  e.preventDefault();
 
-    const game: Game = {
-      id: initialData?.id ?? Date.now(), // Use Date.now() for new game or existing ID
-      title,
-      category,
-      price,
-      discount,
-      description,
-      platform,
-      releaseDate,
-      onSale,
-      images,
-    };
-
-    try {
-      let response;
-      if (initialData?.id) {
-        // Actualizar el juego (PUT)
-        response = await fetch(`http://localhost:5000/api/admin/games/${initialData.id}`, {
-          method: 'PUT',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(game)
-        });
-      } else {
-        // Agregar nuevo juego (POST)
-        response = await fetch('http://localhost:5000/api/admin/games', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(game)
-        });
-      }
-
-      const data = await response.json();
-      if (response.ok) {
-        alert(data.message); // Mensaje de éxito
-        onSave(game); // Actualizar lista de juegos
-        onClose(); // Cerrar modal
-      } else {
-        alert(data.message || 'Error al guardar el juego');
-      }
-    } catch (error) {
-      console.error('Error al guardar el juego:', error);
-      alert('Error al guardar el juego');
-    }
+  const game: Partial<Game> = {
+    title,
+    category,
+    price,
+    discount,
+    description,
+    platform,
+    releaseDate,
+    onSale,
+    images,
   };
+
+  await onSave(game); // espera que el padre haga el fetch
+  onClose();
+};
+
 
   if (!visible) return null;
 

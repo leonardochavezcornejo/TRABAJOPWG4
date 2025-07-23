@@ -1,32 +1,15 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import type { Noticia } from '../data/noticias';
 
 
 interface TablaNoticiasProps {
-  noticias: Noticia[];    // Lista de noticias
-  onEditar: (id: string) => void;  // Función para editar
-  onBorrar: (id: string) => void;  // Función para borrar
+  noticias: Noticia[]; 
+  onEditar: (id: string) => void;
+  onBorrar: (id: string) => void;
 }
 
-const TablaNoticias: React.FC<TablaNoticiasProps> = ({ onEditar, onBorrar }) => {
-  const [noticiasData, setNoticiasData] = useState<Noticia[]>([]); // Estado para noticias
-
-  // Función para obtener las noticias desde la API
-  const fetchNoticias = async () => {
-    try {
-      const response = await fetch('http://localhost:5000/api/admin/news');
-      const data: Noticia[] = await response.json();
-      setNoticiasData(data); // Actualiza el estado de noticias
-    } catch (error) {
-      console.error('Error al obtener las noticias:', error);
-    }
-  };
-
-  // Cargar noticias al montar el componente
-  useEffect(() => {
-    fetchNoticias();
-  }, []);
-
+const TablaNoticias: React.FC<TablaNoticiasProps> = ({ noticias, onEditar, onBorrar }) => {
+  // Ya no necesitas estado interno ni useEffect
 
   return (
     <div className="table-responsive">
@@ -41,7 +24,7 @@ const TablaNoticias: React.FC<TablaNoticiasProps> = ({ onEditar, onBorrar }) => 
           </tr>
         </thead>
         <tbody>
-          {noticiasData.length > 0 && noticiasData.map((noticia) => {
+          {noticias.length > 0 && noticias.map((noticia) => {
             // Verifica que la noticia tiene los datos correctos
             console.log(noticia);  // Verifica los datos
 

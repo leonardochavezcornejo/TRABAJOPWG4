@@ -13,39 +13,19 @@ const AddNotice: React.FC<AddNoticeProps> = ({ visible, onClose, onSubmit }) => 
   const [image, setImage] = useState(''); // Campo para la URL de la imagen
   const [errorMessage, setErrorMessage] = useState('');
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (title.trim() && content.trim() && image.trim()) {  // Validar que todos los campos estén completos
-      try {
-        // Llamada a la API para agregar la noticia
-        const response = await fetch('http://localhost:5000/api/admin/news', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({ title, content, image }), // Ahora enviamos el campo `image`
-        });
+  const handleSubmit = (e: React.FormEvent) => {
+  e.preventDefault();
 
-        if (response.ok) {
-          const data = await response.json();
-          alert(data.message); // Mostrar mensaje de éxito
-          onSubmit(title, content, image); // Ahora pasamos 3 argumentos a `onSubmit`
-          setTitle('');
-          setContent('');
-          setImage(''); // Limpiar el campo de la imagen
-          onClose();
-        } else {
-          const errorData = await response.json();
-          setErrorMessage(errorData.message || 'Error al agregar noticia');
-        }
-      } catch (error) {
-        console.error('Error al hacer la solicitud:', error);
-        setErrorMessage('Error al realizar la solicitud');
-      }
-    } else {
-      setErrorMessage('Todos los campos son obligatorios'); // Agregado para validar si faltan campos
-    }
-  };
+  if (title.trim() && content.trim() && image.trim()) {
+    onSubmit(title.trim(), content.trim(), image.trim());  // Delega al padre
+    setTitle('');
+    setContent('');
+    setImage('');
+    onClose();
+  } else {
+    setErrorMessage('Todos los campos son obligatorios');
+  }
+};
 
   if (!visible) return null;
 

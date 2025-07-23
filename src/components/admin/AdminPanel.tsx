@@ -10,7 +10,6 @@ import FilterGamesModal from './FilterGamesModal';
 import AdminGameModal, { type Game } from './AdminGameModal';
 
 
-
 type FilterData = {
   categoria: string;
   precioMin: string;
@@ -34,7 +33,7 @@ const AdminPanel: React.FC = () => {
   const [gameToEdit, setGameToEdit] = useState<Game | null>(null);
   const [games, setGames] = useState<Game[]>([]);
   const [noticias, setNoticias] = useState<Noticia[]>([]);
-
+  const [noticiasDemo, setNoticiasDemo] = useState<Noticia[]>([]);
 
   useEffect(() => {
     const fetchNoticias = async () => {
@@ -50,7 +49,21 @@ const AdminPanel: React.FC = () => {
     fetchNoticias();
   }, []);
 
+const cargarNoticiasDemo = async () => {
+  try {
+    const response = await fetch('http://localhost:5000/api/news/demo');
+    const data = await response.json();
+    setNoticiasDemo(data);
+  } catch (error) {
+    console.error('Error al cargar noticias demo:', error);
+  }
+};
 
+useEffect(() => {
+  cargarNoticiasDemo();
+}, []);
+
+const noticiasCombinadas = [...noticiasDemo, ...noticias];
 
   // Función para obtener los juegos desde el backend
   const fetchGames = async () => {
@@ -83,28 +96,67 @@ const AdminPanel: React.FC = () => {
 
 
   // Guardar (agregar o editar) juego
-  const handleSaveGame = async (game: Game) => {
-    try {
-      if (game.id) {
-        // Editar juego
-        await fetch(`http://localhost:5000/api/admin/games/${game.id}`, {
-          method: 'PUT',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(game),
-        });
-      } else {
-        // Agregar nuevo juego
-        await fetch('http://localhost:5000/api/admin/games', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(game),
-        });
-      }
-      setGameModalVisible(false);
-    } catch (error) {
-      console.error('Error al guardar el juego:', error);
-    }
+const handleSaveGame = async (game: Partial<Game>) => {
+  if (!game.title || !game.price || !game.category) {
+    alert("Por favor completa todos los campos obligatorios.");
+    return;
+  }
+
+  // ✅ Paso 2: Normalizar los valores opcionales
+  const gameSanitized = {
+    ...game,
+    discount: game.discount ?? 0,
+    onSale: game.onSale ?? false,
   };
+
+  try {
+    let response;
+
+    if (game.id) {
+      // ⚙️ Edición: enviar PUT al backend
+      response = await fetch(`http://localhost:5000/api/admin/games/${game.id}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(gameSanitized),
+      });
+    } else {
+      // 🆕 Creación: enviar POST al backend
+      response = await fetch('http://localhost:5000/api/admin/games', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(gameSanitized),
+      });
+    }
+
+    const data = await response.json();
+
+    if (response.ok) {
+      alert(data.message);
+      const savedGame = data.game;
+
+      setGames(prev => {
+  const index = prev.findIndex(g => g.id === savedGame.id);
+  if (index !== -1) {
+    // Ya existía en la lista: lo reemplazamos
+    const updated = [...prev];
+    updated[index] = savedGame;
+    return updated;
+  } else {
+    // Es nuevo: lo agregamos
+    return [savedGame, ...prev];
+  }
+});
+
+    } else {
+      alert(data.message || 'Error al guardar el juego');
+    }
+  } catch (error) {
+    console.error('Error al guardar el juego:', error);
+    alert('Error inesperado al guardar el juego');
+  }
+};
+
+
 
   const handleApplyFilters = async (filters: FilterData) => {
     try {
@@ -128,40 +180,58 @@ const AdminPanel: React.FC = () => {
   };
 
   const handleConfirmDelete = async () => {
-    try {
-      await fetch(`http://localhost:5000/api/admin/news/${noticeToDelete.id}`, {
-        method: 'DELETE',
-      });
-      setNoticias(prev => prev.filter(n => n.id !== noticeToDelete.id));
-      setDeleteModalVisible(false);
-    } catch (error) {
-      console.error('Error al eliminar la noticia:', error);
+  try {
+    const response = await fetch(`http://localhost:5000/api/admin/news/${noticeToDelete.id}`, {
+      method: 'DELETE',
+    });
+
+    const data = await response.json();
+
+    if (response.ok) {
+      setNoticias(prev => prev.filter(n => n.id !== noticeToDelete.id)); // Actualiza el estado
+      setDeleteModalVisible(false); // Cierra el modal
+    } else {
+      alert(data.message || 'Error al eliminar la noticia');
     }
-  };
+  } catch (error) {
+    console.error('Error al eliminar la noticia:', error);
+    alert('Error al eliminar la noticia');
+  }
+};
+
 
   // Eliminada función no usada handleDelete
   const handleAddNotice = async (title: string, content: string, image: string) => {
-    try {
-      const response = await fetch('http://localhost:5000/api/admin/news', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ title, content, image }), // Asegúrate de enviar la imagen
-      });
+  const cleanTitle = title.trim().toLowerCase().replace(/\s+/g, ' '); // Normaliza el título
+  const cleanContent = content.trim();
+  const cleanImage = image.trim();
 
-      const data = await response.json();
-      if (response.ok) {
-        setNoticias(prev => [data.news, ...prev]); // Agregar la nueva noticia al inicio
-      } else {
-        alert(data.message || 'Error al agregar la noticia');
-      }
-    } catch (error) {
-      console.error('Error al agregar la noticia:', error);
+  try {
+    const response = await fetch('http://localhost:5000/api/admin/news', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        title: cleanTitle,
+        content: cleanContent,
+        image: cleanImage,
+      }),
+    });
+
+    const data = await response.json();
+
+    if (response.ok) {
+      setNoticias(prev => [data.news, ...prev]);
+      setAddModalVisible(false); // Cierra el modal después de éxito
+    } else {
+      alert(data.message || 'Error al agregar la noticia');
     }
-    setAddModalVisible(false);
-  };
-
+  } catch (error) {
+    console.error('Error al agregar la noticia:', error);
+    alert('Hubo un error al enviar la noticia');
+  }
+};
 
   const handleOpenEdit = (id: string) => {
     const noticia = noticias.find(n => n.id === id);
@@ -300,19 +370,24 @@ const AdminPanel: React.FC = () => {
                       <td>{game.title}</td>
                       <td>{game.category}</td>
                       <td>
-                        {game.discount && game.discount > 0 ? (
-                          <>
-                            <span style={{ textDecoration: 'line-through', color: '#888', marginRight: 8 }}>
-                              ${game.price.toFixed(2)}
-                            </span>
-                            <span>
-                              ${(game.price * (1 - game.discount / 100)).toFixed(2)}
-                            </span>
-                          </>
-                        ) : (
-                          <>${game.price.toFixed(2)}</>
-                        )}
-                      </td>
+  {(() => {
+    const descuento = game.discount ?? 0;
+
+    if (descuento > 0) {
+      const precioConDescuento = (game.price * (1 - descuento / 100)).toFixed(2);
+      return (
+        <>
+          <span style={{ textDecoration: 'line-through', color: '#888', marginRight: 8 }}>
+            ${game.price.toFixed(2)}
+          </span>
+          <span>${precioConDescuento}</span>
+        </>
+      );
+    } else {
+      return <>${game.price.toFixed(2)}</>;
+    }
+  })()}
+</td>
                       <td>
                         <button
                           className="btn btn-sm btn-warning me-2"
@@ -367,7 +442,7 @@ const AdminPanel: React.FC = () => {
             </div>
             <div style={{ maxHeight: '500px', overflowY: 'auto' }}>
               <NoticeTable
-                noticias={noticias}
+                noticias={noticiasCombinadas}
                 onEditar={handleOpenEdit}
                 onBorrar={handleDeleteRequest}
               />
